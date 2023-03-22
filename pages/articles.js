@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Parser from "rss-parser";
 import { useState } from "react";
-import TitlePage from "@/components/titlePage";
+import TitlePage from "@/components/TitlePage";
 
 async function getFeedData() {
   const parser = new Parser();
