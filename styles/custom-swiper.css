@@ -16,7 +16,7 @@
     var(--swiper-pagination-bullet-size, 5px)
   ) !important;
   border-radius: 40% !important;
-  background: #94F1A9 !important;
+  background: #94f1a9 !important;
 }
 
 .swiper-pagination-bullet-active {
