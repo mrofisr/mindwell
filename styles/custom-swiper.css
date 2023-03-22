@@ -1,0 +1,39 @@
+:root {
+  --swiper-theme-color: #1f1f1f !important;
+}
+
+.position-fixed {
+  position: fixed !important;
+}
+
+.swiper-pagination-bullet {
+  width: var(
+    --swiper-pagination-Pbullet-width,
+    var(--swiper-pagination-bullet-size, 5px)
+  ) !important;
+  height: var(
+    --swiper-pagination-bullet-height,
+    var(--swiper-pagination-bullet-size, 5px)
+  ) !important;
+  border-radius: 40% !important;
+  background: #94F1A9 !important;
+}
+
+.swiper-pagination-bullet-active {
+  width: var(
+    --swiper-pagination-bullet-width,
+    var(--swiper-pagination-bullet-size, 12px)
+  ) !important;
+  height: var(
+    --swiper-pagination-bullet-height,
+    var(--swiper-pagination-bullet-size, 5px)
+  ) !important;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal,
+.swiper-pagination-custom,
+.swiper-pagination-fraction {
+  bottom: 0px;
+  width: 100%;
+}
