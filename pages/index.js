@@ -40,19 +40,19 @@ export default function Index() {
           <span className="text-base font-thin text-gray-500 mt-10">
             Quotes of the day
           </span>
-          <div class="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1">
+          <div className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1">
             {quote ? (
-              <div class="w-full mb-4">
-                <p class="text-md text-gray-600 px-5 italic font-thin">
+              <div className="w-full mb-4">
+                <p className="text-md text-gray-600 px-5 italic font-thin">
                   "{quote.content}"
                 </p>
-                <p class="text-sm text-indigo-500 font-regular px-5">
+                <p className="text-sm text-indigo-500 font-regular px-5">
                   - {quote.author}
                 </p>
               </div>
             ) : (
-              <div class="w-full mb-4">
-                <p class="text-sm text-gray-600 px-5 italic font-thin">
+              <div className="w-full mb-4">
+                <p className="text-sm text-gray-600 px-5 italic font-thin">
                   Loading...
                 </p>
               </div>

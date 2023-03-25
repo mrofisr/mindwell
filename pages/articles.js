@@ -2,6 +2,8 @@ import Navbar from "@/components/Navbar";
 import Parser from "rss-parser";
 import { useState } from "react";
 import TitlePage from "@/components/TitlePage";
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 async function getFeedData() {
   const parser = new Parser();
@@ -15,6 +17,12 @@ async function getFeedData() {
     description: item.contentSnippet,
   }));
 }
+
+const formatDate = (dateStr) => {
+  const dateObj = new Date(dateStr);
+  return format(dateObj, 'EEEE, dd MMMM yyyy', { locale: id });
+};
+
 export default function Articles({ feedData }) {
   const [showMore, setShowMore] = useState(false);
   const visibleItems = showMore ? feedData : feedData.slice(0, 10);
@@ -29,10 +37,14 @@ export default function Articles({ feedData }) {
           >
             <a href={item.link} className="flex item-center px-5 py-8 cursor-pointer" target={"_blank"}>
               <div className="w-5/6 ite">
-                <h2 className="text-lg font-bold mb-3 capitalize">
+                <div className="mb-3">
+                <h2 className="text-lg font-bold capitalize">
                   {item.title}
                 </h2>
+                <span className="font-thin text-xs">{formatDate(item.pubDate)}</span>
+                </div>
                 <p className="text-sm text-justify truncate">{item.description}</p>
+                <span className="font-thin text-sm text-right">Read more..</span>
               </div>
             </a>
           </div>
