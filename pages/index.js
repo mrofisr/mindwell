@@ -14,6 +14,22 @@ const getTimeOfDay = (date) => {
   }
 };
 
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const cookies = req.headers.cookie;
+  if (!cookies) {
+    // If the user is not signed in, redirect to the login page
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is signed in, return an empty props object
+  return { props: {} };
+}
+
 export default function Index() {
   const date = new Date();
   const timeZoneoffset = 420; // Jakarta timezone offset in minutes
@@ -21,6 +37,7 @@ export default function Index() {
   const timeOfDay = getTimeOfDay(jakartaDate);
   const [quote, setQuote] = useState(null);
 
+  
   useEffect(() => {
     async function fetchQuote() {
       const res = await fetch(
