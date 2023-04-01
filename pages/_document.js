@@ -10,6 +10,7 @@ export default function Document() {
           @import
           url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
         </style>
+        <title>MindWell | Better Mind, Better Life</title>
       </Head>
       <body>
         <Main />

@@ -1,8 +1,8 @@
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import TitlePage from "@/components/TitlePage";
 
 export default function Profile() {
+  
   return (
     <>
       <div className="px-6">
