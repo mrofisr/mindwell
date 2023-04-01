@@ -2,10 +2,9 @@ import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
 export default function Profile() {
-  
   return (
     <>
-      <div className="px-6">
+      <div className="mx-4 my-5">
         <div className="flex flex-wrap justify-center mt-[95px]">
           <div className="w-full flex justify-center">
             <div className="relative">
@@ -24,23 +23,21 @@ export default function Profile() {
               Paris, France
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="w-full flex flex-col">
             <div className="flex flex-wrap justify-center">
               <Link
                 href="/profile/1"
-                className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full"
+                className="bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-full"
               >
                 Update Profile
               </Link>
             </div>
-            <div className="mt-10">
-              <Link
+            <Link
                 href="/quiz/history"
-                className="px-36 py-3.5 rounded-lg bg-blue-500 hover:bg-blue-700 text-white"
+                className="mt-10 text-center w-full py-3.5 rounded-lg bg-blue-500 hover:bg-blue-700 text-white"
               >
                 Quiz Results
               </Link>
-            </div>
             <div className="mt-10 flex flex-wrap justify-center">
               <Link
                 href="/quiz/history"

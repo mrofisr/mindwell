@@ -146,7 +146,7 @@ const DetailProfile = () => {
                 </select>
               </div>
             </div>
-            <button className="bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-500 w-full rounded">
+            <button className="bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-500 w-full rounded">
               Update Profile
             </button>
           </form>
