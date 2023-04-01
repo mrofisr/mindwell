@@ -16,11 +16,14 @@ export default function Document() {
         </style>
         <meta
           name="description"
-          content="MindWell | Better Mind, Better Life"
+          content="Aplikasi yang membantu pengguna merawat kesehatan mental mereka dengan memberikan saran dan rekomendasi berdasarkan hasil deteksi sistem pakar forward chaining."
         />
         <link rel="canonical" href="https://mindwell.site" />
         <meta property="og:url" content="https://mindwell.site" />
-        <meta property="og:title" content="MindWell | Better Mind, Better Life" />
+        <meta
+          property="og:title"
+          content="MindWell | Better Mind, Better Life"
+        />
         <meta
           property="og:description"
           content="MindWell | Better Mind, Better Life"
