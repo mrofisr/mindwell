@@ -44,7 +44,8 @@ export default function Profile() {
                   if (navigator.share) {
                     navigator.share({
                       title: 'Share this website',
-                      url: window.location.href
+                      url: 'https://mindwell.site',
+                      text: 'Yuk cek kesehatan mental mu dengan menggunakan MindWell'
                     })
                       .then(() => console.log('Shared successfully'))
                       .catch((error) => console.log('Error sharing', error));
