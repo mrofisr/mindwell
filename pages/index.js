@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 
 const getTimeOfDay = (date) => {
@@ -37,7 +38,6 @@ export default function Index() {
   const timeOfDay = getTimeOfDay(jakartaDate);
   const [quote, setQuote] = useState(null);
 
-  
   useEffect(() => {
     async function fetchQuote() {
       const res = await fetch(
@@ -52,6 +52,13 @@ export default function Index() {
   return (
     <>
       <div className="mx-4 my-5">
+        <Image
+          src="/next.svg"
+          className="object-center"
+          width={100}
+          height={33}
+          alt="Logo"
+        />
         <div className="flex flex-col">
           <span className="text-lg">Selamat {timeOfDay} Rofi</span>
           <span className="text-base font-thin text-gray-500 mt-10">
