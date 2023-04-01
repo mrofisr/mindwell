@@ -25,10 +25,13 @@ const data = [
   {
     category: "Fakultas Sains dan Teknologi",
     subjects: [
-      "Matematika",
-      "Fisika",
-      "Kimia",
-      "Biologi",
+      "Matematika Murni",
+      "Fisika Murni",
+      "Kimia Murni",
+      "Biologi Murni",
+      "Pendidikan Fisika",
+      "Pendidikan Kimia",
+      "Pendidikan Biologi",
       "Pendidikan Matematika",
       "Teknik Lingkungan",
       "Teknologi Informasi",
@@ -56,7 +59,7 @@ const data = [
 ];
 const DetailProfile = () => {
   const [selectedCategory, setSelectedCategory] = useState(
-    "Sains dan Teknologi"
+    "Fakultas Ekonomi dan Bisnis Islam"
   );
   const [subjects, setSubjects] = useState([]);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -75,7 +78,7 @@ const DetailProfile = () => {
     <>
       <div className="mx-4 my-5">
         <Image
-          src="/logo.svg"
+          src="/next.svg"
           className="object-center"
           width={100}
           height={33}
