@@ -85,10 +85,10 @@ export default function Index({ feedData }) {
           <div className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1">
             {quote ? (
               <div className="w-full mb-4">
-                <p className="text-md text-gray-600 px-5 italic font-thin">
+                <p className="text-md text-gray-800 px-5 italic font-thin">
                   "{quote.content}"
                 </p>
-                <p className="text-sm text-indigo-500 font-regular px-5">
+                <p className="text-sm text-indigo-300 font-regular px-5">
                   - {quote.author}
                 </p>
               </div>
@@ -134,7 +134,9 @@ export default function Index({ feedData }) {
               </SwiperSlide>
             ))}
           </Swiper>
-          <Link className="text-right text-sm" href="/articles">Show more</Link>
+          <Link className="text-right text-sm" href="/articles">
+            Show more
+          </Link>
         </div>
       </div>
       <Navbar />
