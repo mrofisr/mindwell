@@ -11,13 +11,14 @@ import {
   getDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import firebase_app from "src/firebase/config";
+import firebase_app from "@/src/firebase/config";
 import { setUserCookie } from "@/src/setCookie";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const { req } = context;
   const cookies = req.headers.cookie;
-  console.log(cookies)
   if (cookies) {
     // If the user is not signed in, redirect to the login page
     return {
@@ -32,11 +33,12 @@ export async function getServerSideProps(context) {
 }
 
 export default function Login() {
+  const router = useRouter();
+  const auth = getAuth(firebase_app);
+  const db = getFirestore(firebase_app);
+  const provider = new GoogleAuthProvider();
   const handleSignIn = async () => {
     try {
-      const auth = getAuth(firebase_app);
-      const db = getFirestore(firebase_app);
-      const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
       // Check if the user already exists in Firestore
       const userRef = doc(db, "users", user.uid);
@@ -47,9 +49,9 @@ export default function Login() {
         displayName: user.displayName,
         photoUrl: user.photoURL,
         createdAt: serverTimestamp(),
-        accessToken: user.accessToken
+        accessToken: user.accessToken,
       };
-      setUserCookie(JSON.stringify(newUser))
+      setUserCookie(JSON.stringify(newUser));
       if (!userDoc.exists()) {
         // If the user doesn't exist, create a new user document in Firestore
         try {
@@ -62,6 +64,13 @@ export default function Login() {
       console.error(error);
     }
   };
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        router.push("/");
+      } 
+    });
+  }, []);
   SwiperCore.use([Pagination]);
   return (
     <>

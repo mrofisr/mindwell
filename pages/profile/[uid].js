@@ -1,5 +1,8 @@
+import firebase_app from "@/src/firebase/config";
+import { getAuth } from "firebase/auth";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 const data = [
   {
     category: "Fakultas Ekonomi dan Bisnis Islam",
@@ -58,6 +61,23 @@ const data = [
   },
 ];
 const DetailProfile = () => {
+  const auth = getAuth(firebase_app);
+  const user = auth.currentUser;
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (!authUser) {
+        Swal.fire({
+          icon: "error",
+          title: "You must log in to view this page",
+          showConfirmButton: true,
+          timer: 2000,
+        }).then(() => {
+          // Redirect the user to the login page
+          window.location.href = "/login";
+        });
+      }
+    });
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState(
     "Fakultas Ekonomi dan Bisnis Islam"
   );

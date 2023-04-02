@@ -1,7 +1,28 @@
 import Navbar from "@/components/Navbar";
+import firebase_app from "@/src/firebase/config";
+import { getAuth } from "firebase/auth";
 import Link from "next/link";
+import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 export default function Profile() {
+  const auth = getAuth(firebase_app);
+  const user = auth.currentUser;
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (!authUser) {
+        Swal.fire({
+          icon: 'error',
+          title: 'You must log in to view this page',
+          showConfirmButton: true,
+          timer: 2000
+        }).then(() => {
+          // Redirect the user to the login page
+          window.location.href = '/login';
+        });
+      }
+    });
+  }, []);
   return (
     <>
       <div className="mx-4 my-5">
@@ -9,14 +30,14 @@ export default function Profile() {
           <div className="w-full flex justify-center">
             <div className="relative">
               <img
-                src="https://github.com/creativetimofficial/soft-ui-dashboard-tailwind/blob/main/build/assets/img/team-2.jpg?raw=true"
+                src={user.photoURL}
                 className="shadow-xl rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-[150px]"
               />
             </div>
           </div>
           <div className="w-full text-center mt-20 pt-8">
             <h3 className="text-2xl text-slate-700 font-bold leading-normal mb-1">
-              Mike Thompson
+             {user.displayName}
             </h3>
             <div className="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
               <i className="fas fa-map-marker-alt mr-2 text-slate-400 opacity-75"></i>
@@ -26,7 +47,7 @@ export default function Profile() {
           <div className="w-full flex flex-col">
             <div className="flex flex-wrap justify-center">
               <Link
-                href="/profile/1"
+                href={"/profile/"+user.uid}
                 className="bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-full"
               >
                 Update Profile
@@ -42,15 +63,16 @@ export default function Profile() {
               <button
                 onClick={() => {
                   if (navigator.share) {
-                    navigator.share({
-                      title: 'Share this website',
-                      url: 'https://mindwell.site',
-                      text: 'Yuk cek kesehatan mental mu dengan menggunakan MindWell. Yuk bisa klik link dibawa 👇👇👇\n'
-                    })
-                      .then(() => console.log('Shared successfully'))
-                      .catch((error) => console.log('Error sharing', error));
+                    navigator
+                      .share({
+                        title: "Share this website",
+                        url: "https://mindwell.site",
+                        text: "Yuk cek kesehatan mental mu dengan menggunakan MindWell. Yuk bisa klik link dibawa 👇👇👇\n",
+                      })
+                      .then(() => console.log("Shared successfully"))
+                      .catch((error) => console.log("Error sharing", error));
                   } else {
-                    console.log('Web Share API not supported on this browser');
+                    console.log("Web Share API not supported on this browser");
                   }
                 }}
                 // href="/quiz/history"

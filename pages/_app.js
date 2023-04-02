@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }) {
     <>
       <Head>
         <title>MindWell | Better Mind, Better Life</title>
+        
       </Head>
       <div className="flex flex-col">
         <div className="h-full bg-gray-100">
