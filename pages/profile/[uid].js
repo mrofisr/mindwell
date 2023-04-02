@@ -71,6 +71,8 @@ const DetailProfile = () => {
           title: "You must log in to view this page",
           showConfirmButton: true,
           timer: 2000,
+          width: 350,
+          heightAuto: true
         }).then(() => {
           // Redirect the user to the login page
           window.location.href = "/login";

@@ -1,6 +1,8 @@
 import Navbar from "@/components/Navbar";
 import firebase_app from "@/src/firebase/config";
+import { removeUserCookie } from "@/src/setCookie";
 import { getAuth } from "firebase/auth";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -8,7 +10,11 @@ import Swal from "sweetalert2";
 export default function Profile() {
   const auth = getAuth(firebase_app);
   const [user, setUser] = useState();
-
+  const [open, setOpen] = useState(false);
+  const logout = () => {
+    removeUserCookie();
+    auth.signOut();
+  };
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user) {
@@ -17,6 +23,8 @@ export default function Profile() {
           title: "You must log in to view this page",
           showConfirmButton: true,
           timer: 2000,
+          width: 350,
+          heightAuto: true,
         }).then(() => {
           // Redirect the user to the login page
           window.location.href = "/login";
@@ -30,36 +38,91 @@ export default function Profile() {
   return (
     <>
       <div className="mx-4 my-5">
-        <div className="flex flex-wrap justify-center mt-[95px]">
+        <Image
+          src="/next.svg"
+          className="object-center"
+          width={100}
+          height={33}
+          alt="Logo"
+        />
+        <div
+          className="relative flex-shrink-0 flex justify-end"
+          onClick={() => setOpen(!open)}
+          onBlur={() => setOpen(false)}
+          tabIndex="0"
+        >
+          <button
+            className={
+              "text-gray-400 hover:text-gray-500 rounded-full focus:outline-none focus-within:ring-2 " +
+              (open ? "bg-gray-100 text-gray-500" : "")
+            }
+            aria-haspopup="true"
+            aria-expanded={open}
+          >
+            <span className="sr-only">Menu</span>
+            <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
+              <circle cx="16" cy="16" r="2" />
+              <circle cx="10" cy="16" r="2" />
+              <circle cx="22" cy="16" r="2" />
+            </svg>
+          </button>
+          <div
+            className={
+              "origin-top-right z-10 absolute top-full right-0 min-w-[9rem] bg-white border border-gray-200 py-1.5 rounded shadow-lg overflow-hidden mt-1 " +
+              (open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2")
+            }
+            onClick={() => setOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setOpen(false);
+            }}
+            tabIndex="0"
+            aria-hidden={!open}
+          >
+            <ul>
+              <li>
+                <Link
+                  className="font-medium text-sm text-gray-600 hover:text-gray-800 flex py-1 px-3"
+                  href={"/profile/" + user?.uid}
+                  onClick={() => setOpen(false)}
+                >
+                  Edit Profile
+                </Link>
+              </li>
+              <li>
+                <p
+                  className="font-medium text-sm text-red-500 hover:text-red-600 flex py-1 px-3"
+                  onClick={() => {
+                    setOpen(false);
+                    logout();
+                  }}
+                >
+                  Logout
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="flex flex-wrap justify-center mt-10">
           <div className="w-full flex justify-center">
             <div className="relative">
               <img
                 src={user?.photoURL}
-                className="shadow-xl rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-[150px]"
+                className="shadow-xl rounded-full align-middle border-none object-cover w-28 h-28 rounded-full"
               />
             </div>
           </div>
-          <div className="w-full text-center mt-20 pt-8">
-            <h3 className="text-2xl text-slate-700 font-bold leading-normal mb-1">
+          <div className="w-full text-center pt-4">
+            <h3 className="text-lg text-slate-700 font-bold leading-normal mb-1 uppercase">
               {user?.displayName}
             </h3>
-            <div className="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
-              <i className="fas fa-map-marker-alt mr-2 text-slate-400 opacity-75"></i>
+            <div className="text-xs mt-0 mb-2 text-slate-400 ">
               Paris, France
             </div>
           </div>
           <div className="w-full flex flex-col">
-            <div className="flex flex-wrap justify-center">
-              <Link
-                href={"/profile/"+user?.uid}
-                className="bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-full"
-              >
-                Update Profile
-              </Link>
-            </div>
             <Link
               href="/quiz/history"
-              className="mt-10 text-center w-full py-3.5 rounded-lg bg-blue-500 hover:bg-blue-700 text-white"
+              className="mt-5 text-center w-full py-3.5 rounded-lg bg-blue-500 hover:bg-blue-700 text-white"
             >
               Quiz Results
             </Link>

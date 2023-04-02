@@ -103,7 +103,7 @@ export default function Index({ feedData }) {
           <span className="text-base font-thin text-gray-500">
             Articles for today{" "}
           </span>
-          <Swiper className="w-full mx-auto">
+          <Swiper className="w-full mx-auto" spaceBetween={20}>
             {visibleItems.map((item) => (
               <SwiperSlide
                 className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1"

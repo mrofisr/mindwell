@@ -48,7 +48,7 @@ export default function Articles({ feedData }) {
         <TitlePage title={"Articles"} />
         {visibleItems.map((item) => (
           <div
-            className="mx-auto w-11/12 bg-white mb-6 rounded shadow-content dark:bg-dark-grey border-t-2 border-l-2 border-r-4 border-b-4 transform hover:translate-y-2 transition duration-300"
+            className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1"
             key={item.guid}
           >
             <a

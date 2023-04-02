@@ -5,3 +5,17 @@
 body {
   font-family: "Work Sans", sans-serif;
 }
+
+.swal2-title {
+  font-weight: 600 !important;
+  font-size: 18px !important;
+}
+
+.swal2-html-container {
+  font-weight: 300 !important;
+  font-size: 11px !important;
+}
+
+.swal2-actions button {
+  font-size: 12px !important;
+}
