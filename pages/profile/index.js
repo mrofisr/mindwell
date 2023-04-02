@@ -2,23 +2,25 @@ import Navbar from "@/components/Navbar";
 import firebase_app from "@/src/firebase/config";
 import { getAuth } from "firebase/auth";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 export default function Profile() {
   const auth = getAuth(firebase_app);
-  const user = auth.currentUser;
+  const [user, setUser] = useState();
+
   useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
-      if (!authUser) {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+      } else {
         Swal.fire({
-          icon: 'error',
-          title: 'You must log in to view this page',
+          icon: "error",
+          title: "You must log in to view this page",
           showConfirmButton: true,
-          timer: 2000
+          timer: 2000,
         }).then(() => {
           // Redirect the user to the login page
-          window.location.href = '/login';
+          window.location.href = "/login";
         });
       }
     });
@@ -30,14 +32,14 @@ export default function Profile() {
           <div className="w-full flex justify-center">
             <div className="relative">
               <img
-                src={user.photoURL}
+                src=""
                 className="shadow-xl rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-[150px]"
               />
             </div>
           </div>
           <div className="w-full text-center mt-20 pt-8">
             <h3 className="text-2xl text-slate-700 font-bold leading-normal mb-1">
-             {user.displayName}
+              {}
             </h3>
             <div className="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
               <i className="fas fa-map-marker-alt mr-2 text-slate-400 opacity-75"></i>
@@ -47,7 +49,7 @@ export default function Profile() {
           <div className="w-full flex flex-col">
             <div className="flex flex-wrap justify-center">
               <Link
-                href={"/profile/"+user.uid}
+                href={"/profile/"}
                 className="bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-full"
               >
                 Update Profile
