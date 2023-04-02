@@ -25,7 +25,6 @@ const formatDate = (dateStr) => {
 };
 
 export default function Articles({ feedData }) {
-  const [showMore, setShowMore] = useState(false);
   const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 10));
 
   const showMoreItems = () => {

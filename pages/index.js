@@ -1,7 +1,11 @@
 import Navbar from "@/components/Navbar";
-import { checkUserCookie } from "@/src/setCookie";
+import firebase_app from "@/src/firebase/config";
+import { getAuth } from "firebase/auth";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import Parser from "rss-parser";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
 const getTimeOfDay = (date) => {
   const hours = date.getHours();
@@ -16,13 +20,39 @@ const getTimeOfDay = (date) => {
   }
 };
 
-export default function Index() {
+async function getFeedData() {
+  const parser = new Parser();
+  const feed = await parser.parseURL("https://hilman.space/blog/index.xml");
+  return feed.items.map((item) => ({
+    title: item.title,
+    link: item.link,
+    pubDate: item.pubDate,
+    guid: item.guid,
+    description: item.contentSnippet,
+  }));
+}
+
+const formatDate = (dateStr) => {
+  const dateObj = new Date(dateStr);
+  return format(dateObj, "EEEE, dd MMMM yyyy", { locale: id });
+};
+
+export default function Index({ feedData }) {
   const date = new Date();
+  const auth = getAuth(firebase_app);
+  const [user, setUser] = useState();
+  const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 3));
   const timeZoneoffset = 420; // Jakarta timezone offset in minutes
   const jakartaDate = new Date(date.getTime() + timeZoneoffset * 60 * 1000);
   const timeOfDay = getTimeOfDay(jakartaDate);
   const [quote, setQuote] = useState(null);
   useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        const { displayName } = user;
+        setUser({ displayName });
+      }
+    });
     async function fetchQuote() {
       const res = await fetch(
         "https://api.quotable.io/random?tags=happiness|life|love|self|wisdom"
@@ -44,7 +74,9 @@ export default function Index() {
           alt="Logo"
         />
         <div className="flex flex-col">
-          <span className="text-lg">Selamat {timeOfDay} Rofi</span>
+          <span className="text-lg">
+            Selamat {timeOfDay} {user?.displayName}
+          </span>
           <span className="text-base font-thin text-gray-500 mt-10">
             Quotes of the day
           </span>
@@ -69,9 +101,47 @@ export default function Index() {
           <span className="text-base font-thin text-gray-500">
             Articles for today{" "}
           </span>
+          {visibleItems.map((item) => (
+            <div
+              className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1"
+              key={item.guid}
+            >
+              <a
+                href={item.link}
+                className="flex item-center px-5 py-8 cursor-pointer"
+                target={"_blank"}
+              >
+                <div className="w-5/6 ite">
+                  <div className="mb-3">
+                    <h2 className="text-lg font-bold capitalize">
+                      {item.title}
+                    </h2>
+                    <span className="font-thin text-xs">
+                      {formatDate(item.pubDate)}
+                    </span>
+                  </div>
+                  <p className="text-sm text-justify truncate">
+                    {item.description}
+                  </p>
+                  <span className="font-thin text-sm text-right">
+                    Read more..
+                  </span>
+                </div>
+              </a>
+            </div>
+          ))}
         </div>
       </div>
       <Navbar />
     </>
   );
+}
+
+export async function getStaticProps() {
+  const feedData = await getFeedData();
+  return {
+    props: {
+      feedData,
+    },
+  };
 }
