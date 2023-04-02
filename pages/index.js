@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import Parser from "rss-parser";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import { Swiper, SwiperSlide } from "swiper/react";
+import Link from "next/link";
 
 const getTimeOfDay = (date) => {
   const hours = date.getHours();
@@ -101,35 +103,38 @@ export default function Index({ feedData }) {
           <span className="text-base font-thin text-gray-500">
             Articles for today{" "}
           </span>
-          {visibleItems.map((item) => (
-            <div
-              className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1"
-              key={item.guid}
-            >
-              <a
-                href={item.link}
-                className="flex item-center px-5 py-8 cursor-pointer"
-                target={"_blank"}
+          <Swiper className="w-full mx-auto">
+            {visibleItems.map((item) => (
+              <SwiperSlide
+                className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1"
+                key={item.guid}
               >
-                <div className="w-5/6 ite">
-                  <div className="mb-3">
-                    <h2 className="text-lg font-bold capitalize">
-                      {item.title}
-                    </h2>
-                    <span className="font-thin text-xs">
-                      {formatDate(item.pubDate)}
+                <a
+                  href={item.link}
+                  className="flex item-center px-5 py-8 cursor-pointer"
+                  target={"_blank"}
+                >
+                  <div className="w-5/6 ite">
+                    <div className="mb-3">
+                      <h2 className="text-lg font-bold capitalize">
+                        {item.title}
+                      </h2>
+                      <span className="font-thin text-xs">
+                        {formatDate(item.pubDate)}
+                      </span>
+                    </div>
+                    <p className="text-sm text-justify truncate">
+                      {item.description}
+                    </p>
+                    <span className="font-thin text-sm text-right">
+                      Read more..
                     </span>
                   </div>
-                  <p className="text-sm text-justify truncate">
-                    {item.description}
-                  </p>
-                  <span className="font-thin text-sm text-right">
-                    Read more..
-                  </span>
-                </div>
-              </a>
-            </div>
-          ))}
+                </a>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <Link className="text-right text-sm" href="/articles">Show more</Link>
         </div>
       </div>
       <Navbar />

@@ -91,7 +91,7 @@ export default function Login() {
                 alt="Illustration"
               />
               <div className="text-center">
-                <h1 id="haha" className="mt-4 text-xl font-bold">
+                <h1 className="mt-4 text-xl font-bold">
                   Mental Health Test
                 </h1>
                 <p className="mb-28 mt-1  text-[14px] font-[50]">
@@ -108,7 +108,7 @@ export default function Login() {
                 alt="Illustration"
               />
               <div className="text-center">
-                <h1 id="haha" className="mt-4 text-xl font-bold">
+                <h1 className="mt-4 text-xl font-bold">
                   Read Articles about Mental Health
                 </h1>
                 <p className="mb-28 mt-1  text-[14px] font-[50]">
@@ -125,7 +125,7 @@ export default function Login() {
                 alt="Illustration"
               />
               <div className="text-center">
-                <h1 id="haha" className="mt-4 text-xl font-bold">
+                <h1 className="mt-4 text-xl font-bold">
                   Track Your Mental Health
                 </h1>
                 <p className="mb-28 mt-1 text-[14px] font-[50]">
