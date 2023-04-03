@@ -57,7 +57,7 @@ export default function Index({ feedData }) {
     });
     async function fetchQuote() {
       const res = await fetch(
-        "https://api.quotable.io/random?tags=happiness|life|love|self|wisdom"
+        "https://api.quotable.io/random?tags=happiness|life|love|self|wisdom&minLength=100&maxLength=130"
       );
       const data = await res.json();
       setQuote(data);
