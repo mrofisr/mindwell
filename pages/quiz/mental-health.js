@@ -42,7 +42,6 @@ export default function MentalHealth() {
       }
     });
   }, []);
-  console.log(currentIndex);
   return (
     <>
       <div className="mx-4 my-5">
