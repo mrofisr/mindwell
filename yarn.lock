@@ -404,6 +404,13 @@
     protobufjs "^7.0.0"
     yargs "^16.2.0"
 
+"@headlessui/react@^0.0.0-insiders.2063132":
+  version "0.0.0-insiders.2063132"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-0.0.0-insiders.2063132.tgz#b19ae4a8569a62035db024324afc3dd2012d5a8e"
+  integrity sha512-tQ9RpLtM2jtCv606/lSXJ0VQPDhbuNdoR0IIv4qyH3QYGKy79wzEBmGWNmbnj/eL0VFViUMZ+R1ZJhDOUn8eaA==
+  dependencies:
+    client-only "^0.0.1"
+
 "@next/env@13.2.4":
   version "13.2.4"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-13.2.4.tgz#8b763700262b2445140a44a8c8d088cef676dbae"
@@ -668,7 +675,7 @@ chokidar@^3.5.3:
   optionalDependencies:
     fsevents "~2.3.2"
 
-client-only@0.0.1:
+client-only@0.0.1, client-only@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
   integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
