@@ -15,11 +15,45 @@ export default function MentalHealth() {
   const handleAnswer = (answer) => {
     // Move to the next question based on the answer chosen
     if (answer === "yes") {
-      setCurrentIndex(currentQuestion.yes);
+      if (Number.isInteger(currentQuestion.yes)) {
+        setCurrentIndex(currentQuestion.yes);
+      } else {
+        const result = quizData.results.find(
+          (r) => r.code === currentQuestion.yes
+        );
+        Swal.fire({
+          icon: "info",
+          title: "Result",
+          text: result.description,
+          showConfirmButton: true,
+          width: 350,
+          heightAuto: true,
+        }).then(() => {
+          // Reset the quiz back to the beginning
+          setCurrentIndex(0);
+        });
+        console.log(currentQuestion.yes);
+      }
     } else if (answer === "no") {
-      setCurrentIndex(currentQuestion.no);
-    } else {
-      // Handle invalid answer
+      if (Number.isInteger(currentQuestion.no)) {
+        setCurrentIndex(currentQuestion.no);
+      } else {
+        const result = quizData.results.find(
+          (r) => r.code === currentQuestion.no
+        );
+        Swal.fire({
+          icon: "info",
+          title: "Result",
+          text: result.description,
+          showConfirmButton: true,
+          width: 350,
+          heightAuto: true,
+        }).then(() => {
+          // Reset the quiz back to the beginning
+          setCurrentIndex(0);
+        });
+        console.log(currentQuestion.no);
+      }
     }
   };
   const handlePrev = () => {
