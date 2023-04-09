@@ -48,26 +48,26 @@ export default function Articles({ feedData }) {
         <TitlePage title={"Articles"} />
         {visibleItems.map((item) => (
           <div
-            className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1"
+            className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border-2"
             key={item.guid}
           >
             <a
               href={item.link}
-              className="flex item-center px-5 py-8 cursor-pointer"
+              className="flex item-center px-5 py-4 cursor-pointer"
               target={"_blank"}
             >
-              <div className="w-5/6 ite">
+              <div className="w-full">
                 <div className="mb-3">
                   <h2 className="text-lg font-bold capitalize">{item.title}</h2>
                   <span className="font-thin text-xs">
                     {formatDate(item.pubDate)}
                   </span>
                 </div>
-                <p className="text-sm text-justify truncate">
+                <p className="text-sm text-justify line-clamp-3">
                   {item.description}
                 </p>
-                <span className="font-thin text-sm text-right">
-                  Read more..
+                <span className="font-thin text-sm text-right text-sky-500">
+                  Read More →
                 </span>
               </div>
             </a>

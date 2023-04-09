@@ -3,66 +3,67 @@ import { getAuth } from "firebase/auth";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-const data = [
-  {
-    category: "Fakultas Ekonomi dan Bisnis Islam",
-    subjects: [
-      "Akuntansi",
-      "Manajemen",
-      "Ekonomi Syariah",
-      "Perbankan Syariah",
-    ],
-  },
-  {
-    category: "Fakultas Dakwah dan Komunikasi",
-    subjects: ["Manajemen", "Ilmu Komunikasi", "Bimbingan dan Konseling"],
-  },
-  {
-    category: "Fakultas Ilmu Sosial dan Politik",
-    subjects: ["Sosiologi", "Ilmu Politik"],
-  },
-  {
-    category: "Fakultas Psikologi dan Kesehatan",
-    subjects: ["Gizi", "Psikologi"],
-  },
-  {
-    category: "Fakultas Sains dan Teknologi",
-    subjects: [
-      "Matematika Murni",
-      "Fisika Murni",
-      "Kimia Murni",
-      "Biologi Murni",
-      "Pendidikan Fisika",
-      "Pendidikan Kimia",
-      "Pendidikan Biologi",
-      "Pendidikan Matematika",
-      "Teknik Lingkungan",
-      "Teknologi Informasi",
-    ],
-  },
-  {
-    category: "Fakultas Syariah dan Hukum",
-    subjects: ["Ilmu Hukum", "Ilmu Politik"],
-  },
-  {
-    category: "Fakultas Usluhudin dan Humaniora",
-    subjects: ["Filsafat", "Ilmu Agama Islam"],
-  },
-  {
-    category: "Fakultas Ilmu Tarbiyah dan Keguruan",
-    subjects: [
-      "Ilmu Agama Islam",
-      "Pendidikan Bahasa Inggris",
-      "Pendidikan Anak Usia Dini (PAUD)",
-      "Pendidikan Guru Sekolah Dasar",
-      "Sastra Arab",
-      "Manajemen Pendidikan",
-    ],
-  },
-];
+
 const DetailProfile = () => {
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
+  const data = [
+    {
+      category: "Fakultas Ekonomi dan Bisnis Islam",
+      subjects: [
+        "Akuntansi",
+        "Manajemen",
+        "Ekonomi Syariah",
+        "Perbankan Syariah",
+      ],
+    },
+    {
+      category: "Fakultas Dakwah dan Komunikasi",
+      subjects: ["Manajemen", "Ilmu Komunikasi", "Bimbingan dan Konseling"],
+    },
+    {
+      category: "Fakultas Ilmu Sosial dan Politik",
+      subjects: ["Sosiologi", "Ilmu Politik"],
+    },
+    {
+      category: "Fakultas Psikologi dan Kesehatan",
+      subjects: ["Gizi", "Psikologi"],
+    },
+    {
+      category: "Fakultas Sains dan Teknologi",
+      subjects: [
+        "Matematika Murni",
+        "Fisika Murni",
+        "Kimia Murni",
+        "Biologi Murni",
+        "Pendidikan Fisika",
+        "Pendidikan Kimia",
+        "Pendidikan Biologi",
+        "Pendidikan Matematika",
+        "Teknik Lingkungan",
+        "Teknologi Informasi",
+      ],
+    },
+    {
+      category: "Fakultas Syariah dan Hukum",
+      subjects: ["Ilmu Hukum", "Ilmu Politik"],
+    },
+    {
+      category: "Fakultas Usluhudin dan Humaniora",
+      subjects: ["Filsafat", "Ilmu Agama Islam"],
+    },
+    {
+      category: "Fakultas Ilmu Tarbiyah dan Keguruan",
+      subjects: [
+        "Ilmu Agama Islam",
+        "Pendidikan Bahasa Inggris",
+        "Pendidikan Anak Usia Dini (PAUD)",
+        "Pendidikan Guru Sekolah Dasar",
+        "Sastra Arab",
+        "Manajemen Pendidikan",
+      ],
+    },
+  ];
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser) {
@@ -72,7 +73,7 @@ const DetailProfile = () => {
           showConfirmButton: true,
           timer: 2000,
           width: 350,
-          heightAuto: true
+          heightAuto: true,
         }).then(() => {
           // Redirect the user to the login page
           window.location.href = "/login";

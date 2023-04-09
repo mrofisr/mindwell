@@ -30,8 +30,8 @@ export default function Profile() {
           window.location.href = "/login";
         });
       } else {
-        const { uid, email, displayName, photoURL } = user;
-        setUser({ uid, email, displayName, photoURL });
+        const { uid, email, displayName, photoURL, faculty, majority, year } = user;
+        setUser({ uid, email, displayName, photoURL, faculty, majority, year });
       }
     });
   }, []);
@@ -116,7 +116,7 @@ export default function Profile() {
               {user?.displayName}
             </h3>
             <div className="text-xs mt-0 mb-2 text-slate-400 ">
-              Paris, France
+              {user?.majority + "," + user?.year}
             </div>
           </div>
           <div className="w-full flex flex-col">
@@ -143,7 +143,7 @@ export default function Profile() {
                   }
                 }}
                 // href="/quiz/history"
-                className="text-white rounded-full border-2 px-1 py-1"
+                className="text-white rounded-full px-1 py-1"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

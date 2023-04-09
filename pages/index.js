@@ -7,6 +7,8 @@ import Parser from "rss-parser";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation } from "swiper";
+
 import Link from "next/link";
 
 const getTimeOfDay = (date) => {
@@ -43,7 +45,7 @@ export default function Index({ feedData }) {
   const date = new Date();
   const auth = getAuth(firebase_app);
   const [user, setUser] = useState();
-  const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 3));
+  const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 5));
   const timeZoneoffset = 420; // Jakarta timezone offset in minutes
   const jakartaDate = new Date(date.getTime() + timeZoneoffset * 60 * 1000);
   const timeOfDay = getTimeOfDay(jakartaDate);
@@ -76,20 +78,17 @@ export default function Index({ feedData }) {
           alt="Logo"
         />
         <div className="flex flex-col">
-          <span className="text-lg">
-            Selamat {timeOfDay} {user?.displayName}
+          <span className="text-lg mt-8">
+            Selamat {timeOfDay}, {user?.displayName}!
           </span>
           <span className="text-base font-thin text-gray-500 mt-10">
             Quotes of the day
           </span>
-          <div className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1">
+          <div className="w-full mx-auto rounded-lg bg-gray-200 px-5 pt-5 my-5 text-gray-800">
             {quote ? (
               <div className="w-full mb-4">
                 <p className="text-md text-gray-800 px-5 italic font-thin">
                   "{quote.content}"
-                </p>
-                <p className="text-sm text-indigo-300 font-regular px-5">
-                  - {quote.author}
                 </p>
               </div>
             ) : (
@@ -103,18 +102,29 @@ export default function Index({ feedData }) {
           <span className="text-base font-thin text-gray-500">
             Articles for today{" "}
           </span>
-          <Swiper className="w-full mx-auto" spaceBetween={20}>
+          <Swiper
+            className="w-full mx-auto"
+            slidesPerView={"auto"}
+            spaceBetween={30}
+            loop={true}
+            autoplay={{
+              delay: 10000,
+              disableOnInteraction: false,
+            }}
+            navigation={true}
+            modules={[Autoplay]}
+          >
             {visibleItems.map((item) => (
               <SwiperSlide
-                className="w-full mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 my-5 text-gray-800 border-1"
+                className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border-2"
                 key={item.guid}
               >
                 <a
                   href={item.link}
-                  className="flex item-center px-5 py-8 cursor-pointer"
+                  className="flex item-center px-5 py-4 cursor-pointer"
                   target={"_blank"}
                 >
-                  <div className="w-5/6 ite">
+                  <div className="w-full">
                     <div className="mb-3">
                       <h2 className="text-lg font-bold capitalize">
                         {item.title}
@@ -123,11 +133,11 @@ export default function Index({ feedData }) {
                         {formatDate(item.pubDate)}
                       </span>
                     </div>
-                    <p className="text-sm text-justify truncate">
+                    <p className="text-sm text-justify line-clamp-3">
                       {item.description}
                     </p>
-                    <span className="font-thin text-sm text-right">
-                      Read more..
+                    <span className="font-thin text-sm text-right text-sky-500">
+                      Read More →
                     </span>
                   </div>
                 </a>

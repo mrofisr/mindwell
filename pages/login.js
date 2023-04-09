@@ -48,6 +48,9 @@ export default function Login() {
         email: user.email,
         displayName: user.displayName,
         photoUrl: user.photoURL,
+        faculty:"",
+        majority:"",
+        year:"",
         createdAt: serverTimestamp(),
         accessToken: user.accessToken,
       };
