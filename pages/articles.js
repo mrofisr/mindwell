@@ -48,36 +48,35 @@ export default function Articles({ feedData }) {
         <TitlePage title={"Articles"} />
         {visibleItems.map((item) => (
           <div
-            className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border-2"
+            className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border border-gray-100 rounded-3xl"
             key={item.guid}
           >
-            <a
-              href={item.link}
-              className="flex item-center px-5 py-4 cursor-pointer"
-              target={"_blank"}
-            >
-              <div className="w-full">
-                <div className="mb-3">
-                  <h2 className="text-lg font-bold capitalize">{item.title}</h2>
-                  <span className="font-thin text-xs">
-                    {formatDate(item.pubDate)}
-                  </span>
-                </div>
-                <p className="text-sm text-justify line-clamp-3">
-                  {item.description}
-                </p>
-                <span className="font-thin text-sm text-right text-sky-500">
+            <a href={item.link} target={"_blank"}>
+              <div className="mb-3">
+                <h2 className="text-lg font-semibold text-gray-800 capitalize">{item.title}</h2>
+                <span className="font-thin text-xs">
+                  {formatDate(item.pubDate)}
+                </span>
+              </div>
+              <p className="text-sm text-justify line-clamp-3 text-gray-600">
+                {item.description}
+              </p>
+              <div className="mt-2 text-right">
+                <span className="font-thin text-sm text-sky-500">
                   Read More →
                 </span>
               </div>
             </a>
           </div>
         ))}
+        {visibleItems.length < feedData.length && (
+          <div className="mb-20 text-primary ">
+            <button onClick={showMoreItems} className="w-full py-2 border rounded-full border-gray-200 hover:bg-blue-50 hover:border-blue-400 focus:outline-none">
+              <span className="text-sky-600">Show More</span>
+            </button>
+          </div>
+        )}
       </div>
-      {visibleItems.length < feedData.length && (
-        <button onClick={showMoreItems}>Show More</button>
-      )}
-      <div className="mb-24" />
       <Navbar />
     </>
   );
