@@ -3,8 +3,23 @@ import { getAuth } from "firebase/auth";
 import { useEffect, useState } from "react";
 import quizData from "@/pages/quiz/data/quizData.json";
 import Swal from "sweetalert2";
-import TitlePage from "@/components/TitlePage";
 import { Transition } from "@headlessui/react";
+
+// export async function getServerSideProps(context) {
+//   const { req } = context;
+//   const cookies = req.headers.cookie;
+//   if (cookies) {
+//     // If the user is not signed in, redirect to the login page
+//     return {
+//       redirect: {
+//         destination: "/login",
+//         permanent: false,
+//       },
+//     };
+//   }
+//   // If the user is signed in, return an empty props object
+//   return { props: {} };
+// }
 
 export default function MentalHealth() {
   const auth = getAuth(firebase_app);
@@ -63,17 +78,7 @@ export default function MentalHealth() {
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser) {
-        Swal.fire({
-          icon: "error",
-          title: "You must log in to view this page",
-          showConfirmButton: true,
-          timer: 2000,
-          width: 350,
-          heightAuto: true,
-        }).then(() => {
-          // Redirect the user to the login page
-          window.location.href = "/login";
-        });
+        window.location.href = "/login";
       }
     });
   }, []);

@@ -3,9 +3,23 @@ import firebase_app from "@/src/firebase/config";
 import { removeUserCookie } from "@/src/setCookie";
 import { getAuth } from "firebase/auth";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+
+// export async function getServerSideProps(context) {
+//   const { req } = context;
+//   const cookies = req.headers.cookie;
+//   if (cookies) {
+//     // If the user is not signed in, redirect to the login page
+//     return {
+//       redirect: {
+//         destination: "/login",
+//         permanent: false,
+//       },
+//     };
+//   }
+//   // If the user is signed in, return an empty props object
+//   return { props: {} };
+// }
 
 export default function Profile() {
   const auth = getAuth(firebase_app);
@@ -18,17 +32,7 @@ export default function Profile() {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user) {
-        Swal.fire({
-          icon: "error",
-          title: "You must log in to view this page",
-          showConfirmButton: true,
-          timer: 2000,
-          width: 350,
-          heightAuto: true,
-        }).then(() => {
-          // Redirect the user to the login page
-          window.location.href = "/login";
-        });
+        window.location.href = "/login";
       } else {
         const { uid, email, displayName, photoURL, faculty, majority, year } = user;
         setUser({ uid, email, displayName, photoURL, faculty, majority, year });
@@ -39,7 +43,7 @@ export default function Profile() {
     <>
       <div className="mx-4 my-5">
         <Image
-          src="/next.svg"
+          src="/mindwell.png"
           className="object-center"
           width={100}
           height={33}
@@ -80,13 +84,13 @@ export default function Profile() {
           >
             <ul>
               <li>
-                <Link
+                <a
                   className="font-medium text-sm text-gray-600 hover:text-gray-800 flex py-1 px-3"
                   href={"/profile/" + user?.uid}
                   onClick={() => setOpen(false)}
                 >
                   Edit Profile
-                </Link>
+                </a>
               </li>
               <li>
                 <p
@@ -120,12 +124,12 @@ export default function Profile() {
             </div>
           </div>
           <div className="w-full flex flex-col">
-            <Link
+            <a
               href="/quiz/history"
-              className="mt-5 text-center w-full py-3.5 rounded-lg bg-blue-500 hover:bg-blue-700 text-white"
+              className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400   border-b-4 border-rose-500 text-white"
             >
               Quiz Results
-            </Link>
+            </a>
             <div className="mt-10 flex flex-wrap justify-center">
               <button
                 onClick={() => {

@@ -7,10 +7,9 @@ import Parser from "rss-parser";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper";
+import { Autoplay } from "swiper";
 
-import Link from "next/link";
-
+// Crete a function to get the time of day in Jakarta
 const getTimeOfDay = (date) => {
   const hours = date.getHours();
   if (hours >= 5 && hours < 11) {
@@ -42,13 +41,13 @@ const formatDate = (dateStr) => {
 };
 
 export default function Index({ feedData }) {
-  const date = new Date();
+  const date = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
+  );
   const auth = getAuth(firebase_app);
   const [user, setUser] = useState();
   const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 5));
-  const timeZoneoffset = 420; // Jakarta timezone offset in minutes
-  const jakartaDate = new Date(date.getTime() + timeZoneoffset * 60 * 1000);
-  const timeOfDay = getTimeOfDay(jakartaDate);
+  const timeOfDay = getTimeOfDay(date);
   const [quote, setQuote] = useState(null);
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -64,30 +63,32 @@ export default function Index({ feedData }) {
       const data = await res.json();
       setQuote(data);
     }
-
     fetchQuote();
   }, []);
   return (
     <>
       <div className="mx-4 my-5">
         <Image
-          src="/next.svg"
+          src="/mindwell.png"
           className="object-center"
           width={100}
           height={33}
           alt="Logo"
         />
         <div className="flex flex-col">
-          <span className="text-lg mt-8">
-            Selamat {timeOfDay}, {user?.displayName}!
+          <span className="text-xl mt-8">
+            Selamat {timeOfDay},{" "}
+            <span className="text-rose-500 font-bold">
+              {user?.displayName ?? "Teman"}!
+            </span>
           </span>
-          <span className="text-base font-thin text-gray-500 mt-10">
+          <span className="text-base text-gray-800 mt-10 font-semibold">
             Quotes of the day
           </span>
-          <div className="w-full mx-auto rounded-lg bg-gray-200 px-5 pt-5 my-5 text-gray-800">
+          <div className="w-full mx-auto rounded-lg bg-rose-200 px-5 pt-5 my-5 shadow-md">
             {quote ? (
               <div className="w-full mb-4">
-                <p className="text-md text-gray-800 px-5 italic font-thin">
+                <p className="text-md text-gray-800 text-justify px-5 italic font-normal">
                   "{quote.content}"
                 </p>
               </div>
@@ -99,11 +100,11 @@ export default function Index({ feedData }) {
               </div>
             )}
           </div>
-          <span className="text-base font-thin text-gray-500">
+          <span className="text-base text-gray-800 font-semibold">
             Articles for today{" "}
           </span>
           <Swiper
-            className="w-full mx-auto"
+            className="w-full"
             slidesPerView={"auto"}
             spaceBetween={30}
             loop={true}
@@ -115,34 +116,33 @@ export default function Index({ feedData }) {
             modules={[Autoplay]}
           >
             {visibleItems.map((item) => (
-              <SwiperSlide
-                className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border border-gray-100 rounded-3xl"
-                key={item.guid}
-              >
-                <a href={item.link} target={"_blank"}>
-                  <div className="mb-3">
-                    <h2 className="text-lg font-semibold text-gray-800 capitalize">
-                      {item.title}
-                    </h2>
-                    <span className="font-thin text-xs">
-                      {formatDate(item.pubDate)}
-                    </span>
-                  </div>
-                  <p className="text-sm text-justify line-clamp-3 text-gray-600">
-                    {item.description}
-                  </p>
-                  <div className="mt-2 text-right">
-                    <span className="font-thin text-sm text-sky-500">
-                      Read More →
-                    </span>
-                  </div>
-                </a>
+              <SwiperSlide key={item.guid}>
+                <div
+                  className="w-full rounded-lg bg-white px-5 py-5 my-5 text-gray-800 shadow-md static border border-gray-200"
+                  key={item.guid}
+                >
+                  <a href={item.link} target={"_blank"}>
+                    <div className="mb-3">
+                      <h2 className="text-lg font-semibold text-gray-800 capitalize">
+                        {item.title}
+                      </h2>
+                      <span className="font-thin text-xs">
+                        {formatDate(item.pubDate)}
+                      </span>
+                    </div>
+                    <p className="text-sm text-justify line-clamp-3 text-gray-600">
+                      {item.description}
+                    </p>
+                    <div className="mt-2 text-right">
+                      <span className="font-thin text-sm text-rose-600 hover:text-rose-800">
+                        Read More →
+                      </span>
+                    </div>
+                  </a>
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
-          <Link className="text-right text-sm" href="/articles">
-            Show more
-          </Link>
         </div>
       </div>
       <Navbar />
