@@ -100,7 +100,7 @@ export default function Articles({ feedData }) {
                 <h2 className="text-lg font-semibold text-gray-800 capitalize">
                   {item.title}
                 </h2>
-                <span className="font-thin text-xs">
+                <span className=" text-xs">
                   {formatDate(item.pubDate)}
                 </span>
               </div>
@@ -108,7 +108,7 @@ export default function Articles({ feedData }) {
                 {item.description}
               </p>
               <div className="mt-2 text-right">
-                <span className="font-thin text-sm text-rose-600 hover:text-rose-800">
+                <span className="text-sm text-rose-800">
                   Read More →
                 </span>
               </div>
