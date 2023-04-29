@@ -5,22 +5,6 @@ import { getAuth } from "firebase/auth";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export async function getServerSideProps(context) {
-  const { req } = context;
-  const cookies = req.headers.cookie;
-  if (cookies) {
-    // If the user is not signed in, redirect to the login page
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-  // If the user is signed in, return an empty props object
-  return { props: {} };
-}
-
 export default function Profile() {
   const auth = getAuth(firebase_app);
   const [user, setUser] = useState();
@@ -34,7 +18,8 @@ export default function Profile() {
       if (!user) {
         window.location.href = "/login";
       } else {
-        const { uid, email, displayName, photoURL, faculty, majority, year } = user;
+        const { uid, email, displayName, photoURL, faculty, majority, year } =
+          user;
         setUser({ uid, email, displayName, photoURL, faculty, majority, year });
       }
     });
