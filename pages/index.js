@@ -46,7 +46,7 @@ export default function Index({ feedData }) {
   );
   const auth = getAuth(firebase_app);
   const [user, setUser] = useState();
-  const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 5));
+  const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 10));
   const timeOfDay = getTimeOfDay(date);
   const [quote, setQuote] = useState(null);
   useEffect(() => {
