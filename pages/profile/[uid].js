@@ -1,8 +1,9 @@
 import firebase_app from "@/src/firebase/config";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 export async function getServerSideProps(context) {
   const { req } = context;
@@ -23,20 +24,6 @@ export async function getServerSideProps(context) {
 const DetailProfile = () => {
   const auth = getAuth(firebase_app);
   const db = getFirestore(firebase_app);
-  const [user, setUser] = useState();
-  const fetchUser = async (uid) => {
-    try {
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setUser(docSnap.data());
-      } else {
-        console.log("Document does not exist");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const data = [
     {
       category: "Fakultas Ekonomi dan Bisnis Islam",
@@ -94,20 +81,10 @@ const DetailProfile = () => {
       ],
     },
   ];
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        window.location.href = "/login";
-      } else {
-        // Get data from firestore
-        fetchUser(user.uid);
-      }
-    });
-  }, []);
-  const [selectedCategory, setSelectedCategory] = useState(
-    "Fakultas Ekonomi dan Bisnis Islam"
-  );
+  const [selectedCategory, setSelectedCategory] = useState();
+  const [selectedSubject, setSelectedSubject] = useState();
   const [subjects, setSubjects] = useState([]);
+  const [userId, setUserId] = useState();
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const years = Array.from(
     { length: 8 },
@@ -117,9 +94,58 @@ const DetailProfile = () => {
     const selectedData = data.find((x) => x.category === selectedCategory);
     setSubjects(selectedData ? selectedData.subjects : []);
   }, [selectedCategory]);
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
+  const fetchUser = async (uid) => {
+    try {
+      const docRef = doc(db, "users", uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setSelectedCategory(
+          docSnap.data().faculty ?? "Fakultas Ekonomi dan Bisnis Islam"
+        );
+        setSelectedSubject(docSnap.data().majority);
+        setSelectedYear(docSnap.data().year);
+        setUserId(docSnap.data().uid);
+      } else {
+        console.log("Document does not exist");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+  async function updateUserProfile(userId, faculty, majority, year) {
+    try {
+      const docRef = doc(db, "users", userId);
+      const data = {
+        faculty: faculty,
+        majority: majority,
+        year: year,
+      };
+      setDoc(docRef, data, { merge: true });
+      Swal.fire({
+        icon: "info",
+        title: "Update Profile",
+        text: "Profil berhasil diperbarui!",
+        showConfirmButton: true,
+        width: 350,
+        heightAuto: true,
+      }).then(() => {
+        // Reset the quiz back to the beginning
+        window.location.href = "/profile";
+      });
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+    }
+  }
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (!authUser) {
+        window.location.href = "/login";
+      } else {
+        // Get data from firestore
+        fetchUser(authUser.uid);
+      }
+    });
+  }, []);
   return (
     <>
       <div className="mx-4 my-5">
@@ -141,12 +167,16 @@ const DetailProfile = () => {
                   Fakultas
                 </label>
                 <select
-                  onChange={handleCategoryChange}
+                  onChange={(event) => setSelectedCategory(event.target.value)}
                   className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-state"
                 >
                   {data.map((item) => (
-                    <option key={item.category} value={item.category}>
+                    <option
+                      key={item.category}
+                      value={item.category}
+                      selected={item.category === selectedCategory}
+                    >
                       {item.category}
                     </option>
                   ))}
@@ -162,11 +192,16 @@ const DetailProfile = () => {
                   Program Studi
                 </label>
                 <select
+                  onChange={(event) => setSelectedSubject(event.target.value)}
                   className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-state"
                 >
                   {subjects.map((subject) => (
-                    <option key={subject} value={subject}>
+                    <option
+                      key={subject}
+                      value={subject}
+                      selected={subject === selectedSubject}
+                    >
                       {subject}
                     </option>
                   ))}
@@ -188,14 +223,29 @@ const DetailProfile = () => {
                   id="grid-state"
                 >
                   {years.map((year) => (
-                    <option key={year} value={year}>
+                    <option
+                      key={year}
+                      value={year}
+                      selected={year === selectedYear}
+                    >
                       {year}
                     </option>
                   ))}
                 </select>
               </div>
             </div>
-            <button className="bg-rose-400 text-white font-bold py-2 px-4 border-b-4 border-rose-500 w-full rounded-lg">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                updateUserProfile(
+                  userId,
+                  selectedCategory,
+                  selectedSubject,
+                  selectedYear
+                );
+              }}
+              className="bg-rose-400 text-white font-bold py-2 px-4 border-b-4 border-rose-500 w-full rounded-lg"
+            >
               Update Profile
             </button>
           </form>

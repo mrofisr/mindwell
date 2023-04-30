@@ -72,7 +72,7 @@ export default function Articles({ feedData }) {
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
-              setShowMoreVisible(false);
+              searchQuery === "" ? setShowMoreVisible(false) : setShowMoreVisible(true)
             }}
           />
           <span className="absolute left-3 top-3">

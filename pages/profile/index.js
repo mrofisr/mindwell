@@ -148,6 +148,7 @@ export default function Profile() {
             <div className="mt-10 flex flex-wrap justify-center">
               <button
                 onClick={() => {
+                  console.log(process.env.BASE_URL)
                   if (navigator.share) {
                     navigator
                       .share({
@@ -161,7 +162,6 @@ export default function Profile() {
                     console.log("Web Share API not supported on this browser");
                   }
                 }}
-                // href="/quiz/history"
                 className="text-white rounded-full px-1 py-1"
               >
                 <svg

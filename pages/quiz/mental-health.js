@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import quizData from "@/pages/quiz/data/quizData.json";
 import Swal from "sweetalert2";
 import { Transition } from "@headlessui/react";
+import TitlePage from "@/components/TitlePage";
 
 export async function getServerSideProps(context) {
   const { req } = context;
@@ -83,10 +84,11 @@ export default function MentalHealth() {
     });
   }, []);
   return (
-    <>
+    <div className="relative">
       <div className="mx-4 my-5">
-        <div className="flex flex-col items-center justify-center h-screen">
-          <h1 className="text-4xl font-bold mb-8">Quiz</h1>
+        <div className="flex flex-col">
+          {/* */}
+          <TitlePage title={"Mental Health Quiz"} />
           <Transition
             show={!!currentQuestion}
             enter="transition-opacity duration-500"
@@ -97,34 +99,39 @@ export default function MentalHealth() {
             leaveTo="opacity-0"
           >
             {currentQuestion && (
-              <div className="flex flex-col items-center">
-                <h2 className="text-2xl mb-4">{currentQuestion.question}</h2>
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full"
-                  onClick={() => handleAnswer("yes")}
-                >
-                  Yes
-                </button>
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2 w-full"
-                  onClick={() => handleAnswer("no")}
-                >
-                  No
-                </button>
-                {currentIndex !== 0 && (
+              <div className="flex flex-col">
+                <h2 className="text-xl mb-4">{currentQuestion.question}</h2>
+                <p className="mb-4 text-gray-500">
+                  Jawab untuk lanjut ke pertanyaan berikutnya
+                </p>
+                <div className="mt-10">
                   <button
-                    className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mt-4 w-full"
-                    onClick={handlePrev}
-                    disabled={currentQuestion.prev === 0}
+                    className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
+                    onClick={() => handleAnswer("yes")}
                   >
-                    Previous
+                    Yes
                   </button>
-                )}
+                  <button
+                    className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
+                    onClick={() => handleAnswer("no")}
+                  >
+                    No
+                  </button>
+                  {currentIndex !== 0 && (
+                    <button
+                    className="mt-40 text-center w-full py-3.5 rounded-lg bg-gray-400 border-b-4 border-gray-500 text-white"
+                      onClick={handlePrev}
+                      disabled={currentQuestion.prev === 0}
+                    >
+                      Previous
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </Transition>
         </div>
       </div>
-    </>
+    </div>
   );
 }
