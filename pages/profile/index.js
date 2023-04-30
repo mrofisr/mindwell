@@ -2,13 +2,44 @@ import Navbar from "@/components/Navbar";
 import firebase_app from "@/src/firebase/config";
 import { removeUserCookie } from "@/src/setCookie";
 import { getAuth } from "firebase/auth";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const cookies = req.headers.cookie;
+  if (!cookies) {
+    // If the user is not signed in, redirect to the login page
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is signed in, return an empty props object
+  return { props: {} };
+}
+
 export default function Profile() {
   const auth = getAuth(firebase_app);
+  const db = getFirestore(firebase_app);
   const [user, setUser] = useState();
   const [open, setOpen] = useState(false);
+  const fetchUser = async (uid) => {
+    try {
+      const docRef = doc(db, "users", uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setUser(docSnap.data());
+      } else {
+        console.log("Document does not exist");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const logout = () => {
     removeUserCookie();
     auth.signOut();
@@ -18,9 +49,8 @@ export default function Profile() {
       if (!user) {
         window.location.href = "/login";
       } else {
-        const { uid, email, displayName, photoURL, faculty, majority, year } =
-          user;
-        setUser({ uid, email, displayName, photoURL, faculty, majority, year });
+        // Get data from firestore
+        fetchUser(user.uid);
       }
     });
   }, []);
@@ -95,7 +125,7 @@ export default function Profile() {
           <div className="w-full flex justify-center">
             <div className="relative">
               <img
-                src={user?.photoURL}
+                src={user?.photoUrl}
                 className="shadow-xl rounded-full align-middle border-none object-cover w-28 h-28 rounded-full"
               />
             </div>

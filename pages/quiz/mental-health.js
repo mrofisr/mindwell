@@ -5,6 +5,22 @@ import quizData from "@/pages/quiz/data/quizData.json";
 import Swal from "sweetalert2";
 import { Transition } from "@headlessui/react";
 
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const cookies = req.headers.cookie;
+  if (!cookies) {
+    // If the user is not signed in, redirect to the login page
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is signed in, return an empty props object
+  return { props: {} };
+}
+
 export default function MentalHealth() {
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;

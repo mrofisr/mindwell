@@ -1,11 +1,42 @@
 import firebase_app from "@/src/firebase/config";
 import { getAuth } from "firebase/auth";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const cookies = req.headers.cookie;
+  if (!cookies) {
+    // If the user is not signed in, redirect to the login page
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is signed in, return an empty props object
+  return { props: {} };
+}
+
 const DetailProfile = () => {
   const auth = getAuth(firebase_app);
-  const user = auth.currentUser;
+  const db = getFirestore(firebase_app);
+  const [user, setUser] = useState();
+  const fetchUser = async (uid) => {
+    try {
+      const docRef = doc(db, "users", uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setUser(docSnap.data());
+      } else {
+        console.log("Document does not exist");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const data = [
     {
       category: "Fakultas Ekonomi dan Bisnis Islam",
@@ -64,9 +95,12 @@ const DetailProfile = () => {
     },
   ];
   useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
-      if (!authUser) {
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
         window.location.href = "/login";
+      } else {
+        // Get data from firestore
+        fetchUser(user.uid);
       }
     });
   }, []);
