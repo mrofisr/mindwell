@@ -1,28 +1,32 @@
 import Navbar from "@/components/Navbar";
 import firebase_app from "@/src/firebase/config";
-import { removeUserCookie } from "@/src/setCookie";
+import { getUserFromCookie, removeUserCookie } from "@/src/setCookie";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context) {
-  const { req } = context;
-  const cookies = req.headers.cookie;
-  if (!cookies) {
-    // If the user is not signed in, redirect to the login page
+  const user = getUserFromCookie(context.req);
+  if (!user) {
     return {
       redirect: {
-        destination: "/login",
+        destination: '/login',
         permanent: false,
       },
     };
   }
-  // If the user is signed in, return an empty props object
-  return { props: {} };
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: 'Some data for authenticated users',
+    },
+  };
 }
 
 export default function Profile() {
+  const router = useRouter();
   const auth = getAuth(firebase_app);
   const db = getFirestore(firebase_app);
   const [user, setUser] = useState();
@@ -45,12 +49,11 @@ export default function Profile() {
     auth.signOut();
   };
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        window.location.href = "/login";
+    auth.onAuthStateChanged((authUser) => {
+      if (!authUser) {
+        // router.push("/login");
       } else {
-        // Get data from firestore
-        fetchUser(user.uid);
+        fetchUser(authUser.uid);
       }
     });
   }, []);

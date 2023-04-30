@@ -2,23 +2,26 @@ import firebase_app from "@/src/firebase/config";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
 export async function getServerSideProps(context) {
-  const { req } = context;
-  const cookies = req.headers.cookie;
-  if (!cookies) {
-    // If the user is not signed in, redirect to the login page
+  const user = getUserFromCookie(context.req);
+  if (!user) {
     return {
       redirect: {
-        destination: "/login",
+        destination: '/login',
         permanent: false,
       },
     };
   }
-  // If the user is signed in, return an empty props object
-  return { props: {} };
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: 'Some data for authenticated users',
+    },
+  };
 }
 
 const DetailProfile = () => {
@@ -81,6 +84,7 @@ const DetailProfile = () => {
       ],
     },
   ];
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedSubject, setSelectedSubject] = useState();
   const [subjects, setSubjects] = useState([]);
@@ -139,7 +143,7 @@ const DetailProfile = () => {
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser) {
-        window.location.href = "/login";
+        // router.push("/login");
       } else {
         // Get data from firestore
         fetchUser(authUser.uid);

@@ -1,31 +1,36 @@
 import firebase_app from "@/src/firebase/config";
+import { getUserFromCookie } from "@/src/setCookie";
 import { getAuth } from "firebase/auth";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export async function getServerSideProps(context) {
-  const { req } = context;
-  const cookies = req.headers.cookie;
-  if (!cookies) {
-    // If the user is not signed in, redirect to the login page
+  const user = getUserFromCookie(context.req);
+  if (!user) {
     return {
       redirect: {
-        destination: "/login",
+        destination: '/login',
         permanent: false,
       },
     };
   }
-  // If the user is signed in, return an empty props object
-  return { props: {} };
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: 'Some data for authenticated users',
+    },
+  };
 }
 
 export default function HistoryQuiz() {
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
+  const router = useRouter();
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser) {
-        window.location.href = "/login";
+        // router.push("/login");
       }
     });
   }, []);

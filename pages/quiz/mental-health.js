@@ -5,22 +5,26 @@ import quizData from "@/pages/quiz/data/quizData.json";
 import Swal from "sweetalert2";
 import { Transition } from "@headlessui/react";
 import TitlePage from "@/components/TitlePage";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getFirestore, setDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
+import { getUserFromCookie } from "@/src/setCookie";
 
 export async function getServerSideProps(context) {
-  const { req } = context;
-  const cookies = req.headers.cookie;
-  if (!cookies) {
-    // If the user is not signed in, redirect to the login page
+  const user = getUserFromCookie(context.req);
+  if (!user) {
     return {
       redirect: {
-        destination: "/login",
+        destination: '/login',
         permanent: false,
       },
     };
   }
-  // If the user is signed in, return an empty props object
-  return { props: {} };
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: 'Some data for authenticated users',
+    },
+  };
 }
 
 export default function MentalHealth() {
@@ -29,30 +33,17 @@ export default function MentalHealth() {
   const db = getFirestore(firebase_app);
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentQuestion = quizData.questions[currentIndex];
-  async function updateResultQuiz(userId, faculty, majority, year) {
-    try {
-      const docRef = doc(db, "users", userId);
-      const data = {
-        faculty: faculty,
-        majority: majority,
-        year: year,
-      };
-      setDoc(docRef, data, { merge: true });
-      Swal.fire({
-        icon: "info",
-        title: "Update Profile",
-        text: "Profil berhasil diperbarui!",
-        showConfirmButton: true,
-        width: 350,
-        heightAuto: true,
-      }).then(() => {
-        // Reset the quiz back to the beginning
-        window.location.href = "/profile";
-      });
-    } catch (error) {
-      console.error("Error updating user profile:", error);
-    }
-  }
+  const dbRef = collection(db, "results");
+  const router = useRouter();
+  const addResult = async (result) => {
+    const data = {
+      uid: "",
+      result_id: "",
+      penyakit: "",
+      description: "",
+   };
+    await setDoc(doc(dbRef, user.uid), data);
+  };
   const handleAnswer = (answer) => {
     // Move to the next question based on the answer chosen
     if (answer === "yes") {
@@ -104,7 +95,7 @@ export default function MentalHealth() {
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser) {
-        window.location.href = "/login";
+        // router.push("/login");
       }
     });
   }, []);
@@ -145,7 +136,9 @@ export default function MentalHealth() {
                   {currentIndex !== 0 && (
                     <button
                       className="mt-40 text-center w-full py-3.5 rounded-lg bg-gray-400 border-b-4 border-gray-500 text-white"
-                      onClick={handlePrev}
+                      onClick={() => {
+                        handlePrev();
+                      }}
                       disabled={currentQuestion.prev === 0}
                     >
                       Previous
