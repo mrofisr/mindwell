@@ -5,6 +5,7 @@ import quizData from "@/pages/quiz/data/quizData.json";
 import Swal from "sweetalert2";
 import { Transition } from "@headlessui/react";
 import TitlePage from "@/components/TitlePage";
+import { doc, setDoc } from "firebase/firestore";
 
 export async function getServerSideProps(context) {
   const { req } = context;
@@ -25,9 +26,33 @@ export async function getServerSideProps(context) {
 export default function MentalHealth() {
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
+  const db = getFirestore(firebase_app);
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentQuestion = quizData.questions[currentIndex];
-
+  async function updateResultQuiz(userId, faculty, majority, year) {
+    try {
+      const docRef = doc(db, "users", userId);
+      const data = {
+        faculty: faculty,
+        majority: majority,
+        year: year,
+      };
+      setDoc(docRef, data, { merge: true });
+      Swal.fire({
+        icon: "info",
+        title: "Update Profile",
+        text: "Profil berhasil diperbarui!",
+        showConfirmButton: true,
+        width: 350,
+        heightAuto: true,
+      }).then(() => {
+        // Reset the quiz back to the beginning
+        window.location.href = "/profile";
+      });
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+    }
+  }
   const handleAnswer = (answer) => {
     // Move to the next question based on the answer chosen
     if (answer === "yes") {
@@ -119,7 +144,7 @@ export default function MentalHealth() {
                   </button>
                   {currentIndex !== 0 && (
                     <button
-                    className="mt-40 text-center w-full py-3.5 rounded-lg bg-gray-400 border-b-4 border-gray-500 text-white"
+                      className="mt-40 text-center w-full py-3.5 rounded-lg bg-gray-400 border-b-4 border-gray-500 text-white"
                       onClick={handlePrev}
                       disabled={currentQuestion.prev === 0}
                     >
