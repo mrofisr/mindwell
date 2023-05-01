@@ -6,23 +6,23 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
-export async function getServerSideProps(context) {
-  const user = getUserFromCookie(context.req);
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  // If the user is authenticated, return some data as props
-  return {
-    props: {
-      data: 'Some data for authenticated users',
-    },
-  };
-}
+// export async function getServerSideProps(context) {
+//   const user = getUserFromCookie(context.req);
+//   if (!user) {
+//     return {
+//       redirect: {
+//         destination: '/login',
+//         permanent: false,
+//       },
+//     };
+//   }
+//   // If the user is authenticated, return some data as props
+//   return {
+//     props: {
+//       data: 'Some data for authenticated users',
+//     },
+//   };
+// }
 
 const DetailProfile = () => {
   const auth = getAuth(firebase_app);
@@ -143,7 +143,7 @@ const DetailProfile = () => {
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser) {
-        // router.push("/login");
+        router.push("/login");
       } else {
         // Get data from firestore
         fetchUser(authUser.uid);

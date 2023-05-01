@@ -7,23 +7,23 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-export async function getServerSideProps(context) {
-  const user = getUserFromCookie(context.req);
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  // If the user is authenticated, return some data as props
-  return {
-    props: {
-      data: 'Some data for authenticated users',
-    },
-  };
-}
+// export async function getServerSideProps(context) {
+//   const user = getUserFromCookie(context.req);
+//   if (!user) {
+//     return {
+//       redirect: {
+//         destination: '/login',
+//         permanent: false,
+//       },
+//     };
+//   }
+//   // If the user is authenticated, return some data as props
+//   return {
+//     props: {
+//       data: 'Some data for authenticated users',
+//     },
+//   };
+// }
 
 export default function Test() {
   const auth = getAuth(firebase_app);
@@ -32,7 +32,7 @@ export default function Test() {
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser) {
-        // router.push("/login");
+        router.push("/login");
       }
     });
   }, []);
