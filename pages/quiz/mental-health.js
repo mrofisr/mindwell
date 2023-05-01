@@ -111,7 +111,7 @@ export default function MentalHealth() {
           heightAuto: true,
         }).then(() => {
           // Reset the quiz back to the beginning
-          setCurrentIndex(0);
+          router.push("/quiz/history");
         });
         addResult(result);
       }
@@ -129,7 +129,7 @@ export default function MentalHealth() {
           heightAuto: true,
         }).then(() => {
           // Reset the quiz back to the beginning
-          setCurrentIndex(0);
+          router.push("/quiz/history");
         });
         addResult(result);
       }

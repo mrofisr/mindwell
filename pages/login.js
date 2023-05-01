@@ -85,6 +85,7 @@ export default function Login() {
           width={100}
           height={33}
           alt="Logo"
+          onClick={() => router.push("/")}
         />
         <Swiper pagination={true} className="mySwiper ">
           <SwiperSlide>

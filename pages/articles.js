@@ -5,6 +5,7 @@ import TitlePage from "@/components/TitlePage";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 async function getFeedData(searchQuery = "") {
   const parser = new Parser();
@@ -29,6 +30,7 @@ const formatDate = (dateStr) => {
 };
 
 export default function Articles({ feedData }) {
+  const router = useRouter();
   const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 10));
   const [searchQuery, setSearchQuery] = useState("");
   const [showMoreVisible, setShowMoreVisible] = useState(true);
@@ -62,6 +64,7 @@ export default function Articles({ feedData }) {
           width={100}
           height={33}
           alt="Logo"
+          onClick={() => router.push("/")}
         />
         <TitlePage title={"Articles"} />
         <div className="relative mx-auto mb-5 border border-rose-500 rounded-3xl">

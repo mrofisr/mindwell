@@ -45,6 +45,7 @@ export default function Test() {
           width={100}
           height={33}
           alt="Logo"
+          onClick={() => router.push("/")}
         />
         <div className="flex flex-col">
           <TitlePage title={"Pick your quiz"} />

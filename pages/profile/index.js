@@ -4,6 +4,7 @@ import { getUserFromCookie, removeUserCookie } from "@/src/setCookie";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -142,12 +143,12 @@ export default function Profile() {
             </div>
           </div>
           <div className="w-full flex flex-col">
-            <a
+            <Link
               href="/quiz/history"
               className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400   border-b-4 border-rose-500 text-white"
             >
               Quiz Results
-            </a>
+            </Link>
             <div className="mt-10 flex flex-wrap justify-center">
               <button
                 onClick={() => {

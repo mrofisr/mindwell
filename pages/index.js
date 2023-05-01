@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
+import { useRouter } from "next/router";
 
 // Crete a function to get the time of day in Jakarta
 const getTimeOfDay = (date) => {
@@ -41,6 +42,7 @@ const formatDate = (dateStr) => {
 };
 
 export default function Index({ feedData }) {
+  const router = useRouter();
   const date = new Date(
     new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
   );
@@ -74,6 +76,7 @@ export default function Index({ feedData }) {
           width={100}
           height={33}
           alt="Logo"
+          onClick={() => router.push("/")}
         />
         <div className="flex flex-col">
           <span className="text-xl mt-8">
