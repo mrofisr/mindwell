@@ -6,7 +6,7 @@
   "display": "fullScreen",
   "orientation": "portrait",
   "scope": "/",
-  "start_url": "/",
+  "start_url": "https://mindwell.site",
   "icons": [
     {
       "src": "images/icons/icon-72x72.png",
