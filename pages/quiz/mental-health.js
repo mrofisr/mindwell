@@ -1,11 +1,16 @@
 import firebase_app from "@/src/firebase/config";
 import { getAuth } from "firebase/auth";
 import { useEffect, useState } from "react";
-import quizData from "@/pages/quiz/data/quizData.json";
 import Swal from "sweetalert2";
 import { Transition } from "@headlessui/react";
 import TitlePage from "@/components/TitlePage";
-import { collection, doc, getFirestore, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
 import { useRouter } from "next/router";
 import { getUserFromCookie } from "@/src/setCookie";
 
@@ -32,7 +37,27 @@ export default function MentalHealth() {
   const user = auth.currentUser;
   const db = getFirestore(firebase_app);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentQuestion = quizData.questions[currentIndex];
+  const [gejala, setGejala] = useState([]);
+  const [penyakit, setPenyakit] = useState([]);
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (!authUser) {
+        router.push("/login");
+      }
+    });
+    const getData = async () => {
+      const docRef = doc(db, "sistem-pakar", "mental-health");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setGejala(docSnap.data().gejala);
+        setPenyakit(docSnap.data().penyakit);
+      } else {
+        console.log("Document does not exist");
+      }
+    };
+    getData();
+  }, []);
+  const currentQuestion = gejala[currentIndex];
   const dbRef = collection(db, "results");
   const router = useRouter();
   const addResult = async (result) => {
@@ -41,7 +66,7 @@ export default function MentalHealth() {
       result_id: "",
       penyakit: "",
       description: "",
-   };
+    };
     await setDoc(doc(dbRef, user.uid), data);
   };
   const handleAnswer = (answer) => {
@@ -50,13 +75,11 @@ export default function MentalHealth() {
       if (Number.isInteger(currentQuestion.yes)) {
         setCurrentIndex(currentQuestion.yes);
       } else {
-        const result = quizData.results.find(
-          (r) => r.code === currentQuestion.yes
-        );
+        const result = penyakit.find((r) => r.code === currentQuestion.yes);
         Swal.fire({
           icon: "info",
           title: "Result",
-          text: result.description,
+          text: result.name,
           showConfirmButton: true,
           width: 350,
           heightAuto: true,
@@ -70,13 +93,11 @@ export default function MentalHealth() {
       if (Number.isInteger(currentQuestion.no)) {
         setCurrentIndex(currentQuestion.no);
       } else {
-        const result = quizData.results.find(
-          (r) => r.code === currentQuestion.no
-        );
+        const result = penyakit.find((r) => r.code === currentQuestion.no);
         Swal.fire({
           icon: "info",
           title: "Result",
-          text: result.description,
+          text: result.name,
           showConfirmButton: true,
           width: 350,
           heightAuto: true,
@@ -92,13 +113,7 @@ export default function MentalHealth() {
     // Move to the previous question
     setCurrentIndex(currentQuestion.prev);
   };
-  useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
-      if (!authUser) {
-        router.push("/login");
-      }
-    });
-  }, []);
+
   return (
     <div className="relative">
       <div className="mx-4 my-5">
