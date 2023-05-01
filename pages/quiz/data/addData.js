@@ -26,7 +26,6 @@ let firebase_app =
 export default function Node() {
   const db = getFirestore(firebase_app);
   const dbRef = collection(db, "sistem-pakar");
-  const [currentIndex, setCurrentIndex] = useState(0);
   const addData = async () => {
     const data = {
       gejala: [
@@ -245,7 +244,6 @@ export default function Node() {
     };
     getData();
   }, []);
-  console.log(gejala[currentIndex]);
   return (
     <>
       <button onClick={addData}>Add Data</button>

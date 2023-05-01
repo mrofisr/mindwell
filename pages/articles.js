@@ -72,7 +72,9 @@ export default function Articles({ feedData }) {
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
-              searchQuery === "" ? setShowMoreVisible(false) : setShowMoreVisible(true)
+              searchQuery === ""
+                ? setShowMoreVisible(false)
+                : setShowMoreVisible(true);
             }}
           />
           <span className="absolute left-3 top-3">
@@ -100,17 +102,13 @@ export default function Articles({ feedData }) {
                 <h2 className="text-lg font-semibold text-gray-800 capitalize">
                   {item.title}
                 </h2>
-                <span className=" text-xs">
-                  {formatDate(item.pubDate)}
-                </span>
+                <span className="text-xs">{formatDate(item.pubDate)}</span>
               </div>
               <p className="text-sm text-justify line-clamp-3 text-gray-600">
                 {item.description}
               </p>
               <div className="mt-2 text-right">
-                <span className="text-sm text-rose-800">
-                  Read More →
-                </span>
+                <span className="text-sm text-rose-800">Read More →</span>
               </div>
             </a>
           </div>

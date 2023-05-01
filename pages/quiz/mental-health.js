@@ -5,11 +5,13 @@ import Swal from "sweetalert2";
 import { Transition } from "@headlessui/react";
 import TitlePage from "@/components/TitlePage";
 import {
+  arrayUnion,
   collection,
   doc,
   getDoc,
   getFirestore,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { getUserFromCookie } from "@/src/setCookie";
@@ -58,16 +60,40 @@ export default function MentalHealth() {
     getData();
   }, []);
   const currentQuestion = gejala[currentIndex];
-  const dbRef = collection(db, "results");
+  const dbRef = collection(db, "sistem-pakar");
   const router = useRouter();
   const addResult = async (result) => {
-    const data = {
-      uid: "",
-      result_id: "",
-      penyakit: "",
-      description: "",
-    };
-    await setDoc(doc(dbRef, user.uid), data);
+    const docRef = doc(db, "sistem-pakar", "mental-health");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      if (!docSnap.data().result) {
+        const data = {
+          result: [
+            {
+              uid: user.uid,
+              result_id: Math.random().toString(36).substring(2, 16), // random id
+              penyakit: result.name,
+              description: result.description,
+              createdAt: new Date(),
+            },
+          ],
+        };
+        await setDoc(doc(dbRef, "mental-health"), data, { merge: true });
+      } else {
+        const newData = {
+          result: arrayUnion({
+            uid: user.uid,
+            result_id: Math.random().toString(36).substring(2, 16),
+            penyakit: result.name,
+            description: result.description,
+            createdAt: new Date(),
+          }),
+        };
+        await updateDoc(doc(dbRef, "mental-health"), newData);
+      }
+    } else {
+      console.log("Document does not exist");
+    }
   };
   const handleAnswer = (answer) => {
     // Move to the next question based on the answer chosen
@@ -87,7 +113,7 @@ export default function MentalHealth() {
           // Reset the quiz back to the beginning
           setCurrentIndex(0);
         });
-        console.log(currentQuestion.yes);
+        addResult(result);
       }
     } else if (answer === "no") {
       if (Number.isInteger(currentQuestion.no)) {
@@ -105,7 +131,7 @@ export default function MentalHealth() {
           // Reset the quiz back to the beginning
           setCurrentIndex(0);
         });
-        console.log(currentQuestion.no);
+        addResult(result);
       }
     }
   };
@@ -113,7 +139,7 @@ export default function MentalHealth() {
     // Move to the previous question
     setCurrentIndex(currentQuestion.prev);
   };
-
+  // console.log(existingData.map((data) => data.uid));
   return (
     <div className="relative">
       <div className="mx-4 my-5">
