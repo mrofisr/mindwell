@@ -4,7 +4,8 @@ export default function LoadingPage() {
       <div className="h-screen bg-white">
         <div className="flex justify-center items-center h-full">
           <img
-            src="https://icons8.com/preloaders/preloaders/1476/Rocket.gif"
+            className="animate-bounce w-1/3"
+            src="/mindwell.png"
           />
         </div>
       </div>

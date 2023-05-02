@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import LoadingPage from "@/components/Loading";
+import { Transition } from "@headlessui/react";
 
 async function getFeedData(searchQuery = "") {
   const parser = new Parser();
@@ -34,10 +36,10 @@ export default function Articles({ feedData }) {
   const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 10));
   const [searchQuery, setSearchQuery] = useState("");
   const [showMoreVisible, setShowMoreVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     setVisibleItems(feedData.slice(0, 10));
   }, [feedData]);
-
   useEffect(() => {
     setVisibleItems([]);
     setVisibleItems(
@@ -47,6 +49,7 @@ export default function Articles({ feedData }) {
         )
         .slice(0, 10)
     );
+    setIsLoading(false);
   }, [searchQuery]);
   const showMoreItems = () => {
     const nextItems = feedData.slice(
@@ -58,76 +61,94 @@ export default function Articles({ feedData }) {
   return (
     <>
       <div className="mx-4 my-5">
-        <Image
-          src="/mindwell.png"
-          className="object-center"
-          width={100}
-          height={33}
-          alt="Logo"
-          onClick={() => router.push("/")}
-        />
-        <TitlePage title={"Articles"} />
-        <div className="relative mx-auto mb-5 border border-rose-500 rounded-3xl">
-          <input
-            type="text"
-            placeholder="Search by title"
-            className="w-full py-2 pl-10 pr-3 rounded-full border-rose-500 focus:border-primary focus:outline-none"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              searchQuery === ""
-                ? setShowMoreVisible(false)
-                : setShowMoreVisible(true);
-            }}
-          />
-          <span className="absolute left-3 top-3">
-            <svg
-              className="w-5 h-5 text-rose-400"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
-            </svg>
-          </span>
-        </div>
-        {visibleItems.map((item) => (
-          <div
-            className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 shadow-md border border-gray-200"
-            key={item.guid}
-          >
-            <a href={item.link} target={"_blank"}>
-              <div className="mb-3">
-                <h2 className="text-lg font-semibold text-gray-800 capitalize">
-                  {item.title}
-                </h2>
-                <span className="text-xs">{formatDate(item.pubDate)}</span>
-              </div>
-              <p className="text-sm text-justify line-clamp-3 text-gray-600">
-                {item.description}
-              </p>
-              <div className="mt-2 text-right">
-                <span className="text-sm text-rose-800">Read More →</span>
-              </div>
-            </a>
-          </div>
-        ))}
-        {!searchQuery &&
-          visibleItems.length < feedData.length &&
-          showMoreVisible && (
-            <div className="mb-20 text-primary ">
-              <button
-                onClick={showMoreItems}
-                className="w-full py-2 border rounded-full border-gray-200 hover:bg-rose-50 hover:border-rose-400 focus:outline-none"
-              >
-                <span className="text-rose-600">Show More</span>
-              </button>
+        {!isLoading ? (
+          <div>
+            <Image
+              src="/mindwell.png"
+              className="object-center"
+              width={100}
+              height={33}
+              alt="Logo"
+              onClick={() => router.push("/")}
+            />
+            <TitlePage title={"Articles"} />
+            <div className="relative mx-auto mb-5 border border-rose-500 rounded-3xl">
+              <input
+                type="text"
+                placeholder="Search by title"
+                className="w-full py-2 pl-10 pr-3 rounded-full border-rose-500 focus:border-primary focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  searchQuery === ""
+                    ? setShowMoreVisible(false)
+                    : setShowMoreVisible(true);
+                }}
+              />
+              <span className="absolute left-3 top-3">
+                <svg
+                  className="w-5 h-5 text-rose-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="M21 21l-4.35-4.35" />
+                </svg>
+              </span>
             </div>
-          )}
+            <Transition
+              show={true}
+              enter="transition-opacity duration-500"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="transition-opacity duration-500"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              {visibleItems.map((item) => (
+                <div
+                  className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 shadow-md border border-gray-200"
+                  key={item.guid}
+                >
+                  <a href={item.link} target={"_blank"}>
+                    <div className="mb-3">
+                      <h2 className="text-lg font-semibold text-gray-800 capitalize">
+                        {item.title}
+                      </h2>
+                      <span className="text-xs">
+                        {formatDate(item.pubDate)}
+                      </span>
+                    </div>
+                    <p className="text-sm text-justify line-clamp-3 text-gray-600">
+                      {item.description}
+                    </p>
+                    <div className="mt-2 text-right">
+                      <span className="text-sm text-rose-800">Read More →</span>
+                    </div>
+                  </a>
+                </div>
+              ))}
+            </Transition>
+            {!searchQuery &&
+              visibleItems.length < feedData.length &&
+              showMoreVisible && (
+                <div className="mb-20 text-primary ">
+                  <button
+                    onClick={showMoreItems}
+                    className="w-full py-2 border rounded-full border-gray-200 hover:bg-rose-50 hover:border-rose-400 focus:outline-none"
+                  >
+                    <span className="text-rose-600">Show More</span>
+                  </button>
+                </div>
+              )}
+          </div>
+        ) : (
+          <LoadingPage />
+        )}
       </div>
       <Navbar />
     </>

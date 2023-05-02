@@ -67,6 +67,7 @@ export default function Profile() {
           width={100}
           height={33}
           alt="Logo"
+          onClick={() => router.push("/")}
         />
         <div
           className="relative flex-shrink-0 flex justify-end"

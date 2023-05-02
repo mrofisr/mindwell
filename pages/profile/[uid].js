@@ -159,6 +159,7 @@ const DetailProfile = () => {
           width={100}
           height={33}
           alt="Logo"
+          onClick={() => router.push("/")}
         />
         <div className="mt-12">
           <form className="w-full max-w-lg">
