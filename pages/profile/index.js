@@ -152,13 +152,12 @@ export default function Profile() {
             <div className="mt-10 flex flex-wrap justify-center">
               <button
                 onClick={() => {
-                  console.log(process.env.BASE_URL)
                   if (navigator.share) {
                     navigator
                       .share({
                         title: "Share this website",
-                        url: process.env.BASE_URL,
-                        text: "Yuk cek kesehatan mental mu dengan menggunakan MindWell. Yuk bisa klik link dibawa 👇👇👇\n",
+                        url: "https://mindwell.site",
+                        text: "Cek kesehatan mental mu dengan MindWell. Yuk bisa klik link dibawa 👇👇👇\n",
                       })
                       .then(() => console.log("Shared successfully"))
                       .catch((error) => console.log("Error sharing", error));

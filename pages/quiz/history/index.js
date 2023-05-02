@@ -1,14 +1,15 @@
 import TitlePage from "@/components/TitlePage";
 import firebase_app from "@/src/firebase/config";
 import { getUserFromCookie } from "@/src/setCookie";
-import { format, parseISO } from "date-fns";
-import { id } from "date-fns/locale";
+import { Timestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
 // export async function getServerSideProps(context) {
 //   const user = getUserFromCookie(context.req);
@@ -32,6 +33,11 @@ import { useEffect, useState } from "react";
 //   // const dateObj = parseISO(dateStr);
 //   // return format(dateObj, "EEEE, dd MMMM yyyy", { locale: id });
 // };
+
+const formatDate = (dateStr) => {
+  const dateObj = new Date(dateStr);
+  return format(dateObj, "EEEE, dd MMMM yyyy", { locale: id });
+};
 
 export default function HistoryQuiz() {
   const auth = getAuth(firebase_app);
@@ -85,6 +91,18 @@ export default function HistoryQuiz() {
                     <h2 className="text-lg font-semibold text-gray-800 capitalize">
                       {item?.penyakit}
                     </h2>
+                    {console.log(
+                      item?.createdAt.seconds,
+                      item?.createdAt.nanoseconds
+                    )}
+                    <p className="text-sm text-gray-500">
+                      {formatDate(
+                        new Timestamp(
+                          item?.createdAt.seconds,
+                          item?.createdAt.nanoseconds
+                        ).toDate()
+                      )}
+                    </p>
                   </div>
                   <p className="text-sm text-justify line-clamp-4 text-gray-600">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
