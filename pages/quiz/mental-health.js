@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { getUserFromCookie } from "@/src/setCookie";
+import Image from "next/image";
 
 // export async function getServerSideProps(context) {
 //   const user = getUserFromCookie(context.req);
@@ -143,6 +144,14 @@ export default function MentalHealth() {
   return (
     <div className="relative">
       <div className="mx-4 my-5">
+        <Image
+          src="/mindwell.png"
+          className="object-center"
+          width={100}
+          height={33}
+          alt="Logo"
+          onClick={() => router.push("/")}
+        />
         <div className="flex flex-col">
           {/* */}
           <TitlePage title={"Mental Health Quiz"} />
