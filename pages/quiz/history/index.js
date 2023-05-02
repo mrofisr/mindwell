@@ -64,10 +64,7 @@ export default function HistoryQuiz() {
         console.log("Document does not exist");
       }
     };
-    if (user) {
-      console.log(user);
-      getData();
-    }
+    getData();
   }, [user]);
   return (
     <>

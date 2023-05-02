@@ -10,6 +10,7 @@ export default function HistoryQuizId() {
   const auth = getAuth(firebase_app);
   const [result, setResult] = useState([]);
   const db = getFirestore(firebase_app);
+  
   //same name as name of your file, can be [slug].js; [specialId].js - any name you want
   const { id } = router.query;
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function HistoryQuizId() {
       }
     };
     getData();
-  }, []);
+  }, [id]);
   return (
     <div className="mx-4 my-5">
       <Image
