@@ -53,7 +53,6 @@ export default function HistoryQuizId() {
             >
               <Image
                 src="/mindwell.png"
-                className="object-center"
                 width={100}
                 height={33}
                 alt="Logo"
@@ -62,11 +61,13 @@ export default function HistoryQuizId() {
               <h1 className="font-bold text-2xl text-center">
                 {result[0]?.penyakit}
               </h1>
-              <img
-                className="my-6"
-                src={"/ilustrations/image.png"}
-                alt={result[0]?.penyakit}
-              />
+              <div className="flex justify-center">
+                <img
+                  className="my-6"
+                  src={"/ilustrations/image.png"}
+                  alt={result[0]?.penyakit}
+                />
+              </div>
               <p className="text-sm text-justify text-gray-600">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
                 vestibulum odio erat, facilisis mollis neque varius nec. Ut mi
