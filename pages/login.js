@@ -72,7 +72,8 @@ export default function Login() {
   };
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      if (authUser && getCookie("auth")) {
+      if (authUser) {
+        console.log("Login success");
         router.push("/");
       }
     });

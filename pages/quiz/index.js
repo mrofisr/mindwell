@@ -31,7 +31,7 @@ export default function Test() {
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser && !getCookie("auth")) {
-        deleteCookie();
+        deleteCookie("auth");
         auth.signOut();
         router.push("/login");
       }

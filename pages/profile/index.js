@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -45,14 +46,10 @@ export default function Profile() {
       console.log(error);
     }
   };
-  const logout = () => {
-    deleteCookie();
-    auth.signOut();
-  };
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser && !getCookie("auth")) {
-        deleteCookie();
+        deleteCookie("auth");
         auth.signOut();
         router.push("/login");
       } else {
@@ -117,9 +114,18 @@ export default function Profile() {
               <li>
                 <a
                   className="font-medium text-sm text-red-500 hover:text-red-600 flex py-1 px-3"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     setOpen(false);
-                    logout();
+                    deleteCookie("auth");
+                    auth.signOut();
+                    Swal.fire({
+                      title: "Logout",
+                      text: "Logout berhasil",
+                      icon: "success",
+                      heightAuto: true,
+                      width: 350,
+                    }).then(() => router.push("/login"));  
                   }}
                 >
                   Logout
