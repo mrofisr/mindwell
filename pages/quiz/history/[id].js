@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { deleteCookie, getCookie } from "cookies-next";
+import {Layout} from "@/components/Layout";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -60,7 +61,8 @@ export default function HistoryQuizId() {
   }, [id]);
   return (
     <>
-      <div className="mx-4 my-5">
+      <Layout>
+        <div className="mx-4 my-5">
         {!isLoading ? (
           <div>
             <Transition
@@ -117,6 +119,7 @@ export default function HistoryQuizId() {
           <LoadingPage />
         )}
       </div>
+      </Layout>
     </>
   );
 }

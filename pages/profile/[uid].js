@@ -1,3 +1,4 @@
+import { Layout } from "@/components/Layout";
 import firebase_app from "@/src/firebase/config";
 import { deleteCookie, getCookie } from "cookies-next";
 import { getAuth } from "firebase/auth";
@@ -127,12 +128,15 @@ const DetailProfile = () => {
       };
       setDoc(docRef, data, { merge: true });
       Swal.fire({
-        icon: "info",
+        icon: "success",
+        timer: 1000,
+        heightAuto: true,
+        width: 350,
+        showCancelButton: false,
+        showConfirmButton: false,
+        showCloseButton: false,
         title: "Update Profile",
         text: "Profil berhasil diperbarui!",
-        showConfirmButton: true,
-        width: 350,
-        heightAuto: true,
       }).then(() => {
         // Reset the quiz back to the beginning
         window.location.href = "/profile";
@@ -155,110 +159,104 @@ const DetailProfile = () => {
   }, [auth]);
   return (
     <>
-      <div className="mx-4 my-5">
-        <Image
-          src="/mindwell.png"
-          className="object-center"
-          width={100}
-          height={33}
-          alt="Logo"
-          onClick={() => router.push("/")}
-        />
-        <div className="mt-12">
-          <form className="w-full max-w-lg">
-            <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full px-3">
-                <label
-                  className="block capitalize tracking-wide text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="grid-password"
-                >
-                  Fakultas
-                </label>
-                <select
-                  onChange={(event) => setSelectedCategory(event.target.value)}
-                  className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-state"
-                >
-                  {data.map((item) => (
-                    <option
-                      key={item.category}
-                      value={item.category}
-                      selected={item.category === selectedCategory}
-                    >
-                      {item.category}
-                    </option>
-                  ))}
-                </select>
+      <Layout>
+        <div className="mx-4 my-5">
+          <Image
+            src="/mindwell.png"
+            className="object-center"
+            width={100}
+            height={33}
+            alt="Logo"
+            onClick={() => router.push("/")}
+          />
+          <div className="mt-12">
+            <form className="w-full max-w-lg">
+              <div className="flex flex-wrap -mx-3 mb-6">
+                <div className="w-full px-3">
+                  <label
+                    className="block capitalize tracking-wide text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                    Fakultas
+                  </label>
+                  <select
+                    onChange={(event) =>
+                      setSelectedCategory(event.target.value)
+                    }
+                    className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-state"
+                    value={selectedCategory}
+                  >
+                    {data.map((item) => (
+                      <option key={item.category} value={item.category}>
+                        {item.category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full px-3">
-                <label
-                  className="block capitalize tracking-wide text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="grid-password"
-                >
-                  Program Studi
-                </label>
-                <select
-                  onChange={(event) => setSelectedSubject(event.target.value)}
-                  className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-state"
-                >
-                  {subjects.map((subject) => (
-                    <option
-                      key={subject}
-                      value={subject}
-                      selected={subject === selectedSubject}
-                    >
-                      {subject}
-                    </option>
-                  ))}
-                </select>
+              <div className="flex flex-wrap -mx-3 mb-6">
+                <div className="w-full px-3">
+                  <label
+                    className="block capitalize tracking-wide text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                    Program Studi
+                  </label>
+                  <select
+                    value={selectedSubject}
+                    onChange={(event) => setSelectedSubject(event.target.value)}
+                    className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-state"
+                  >
+                    {subjects.map((subject) => (
+                      <option key={subject} value={subject}>
+                        {subject}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full px-3 ">
-                <label
-                  className="block capitalize tracking-wide text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="grid-password"
-                >
-                  Angkatan
-                </label>
-                <select
-                  value={selectedYear}
-                  onChange={(event) => setSelectedYear(event.target.value)}
-                  className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-state"
-                >
-                  {years.map((year) => (
-                    <option
-                      key={year}
-                      value={year}
-                      selected={year === selectedYear}
-                    >
-                      {year}
-                    </option>
-                  ))}
-                </select>
+              <div className="flex flex-wrap -mx-3 mb-6">
+                <div className="w-full px-3 ">
+                  <label
+                    className="block capitalize tracking-wide text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                    Angkatan
+                  </label>
+                  <select
+                    value={selectedYear}
+                    onChange={(event) => setSelectedYear(event.target.value)}
+                    className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-state"
+                  >
+                    {years.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                updateUserProfile(
-                  userId,
-                  selectedCategory,
-                  selectedSubject,
-                  selectedYear
-                );
-              }}
-              className="bg-rose-400 text-white font-bold py-2 px-4 border-b-4 border-rose-500 w-full rounded-lg"
-            >
-              Update Profile
-            </button>
-          </form>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  updateUserProfile(
+                    userId,
+                    selectedCategory,
+                    selectedSubject,
+                    selectedYear
+                  );
+                }}
+                className="bg-rose-400 text-white font-bold py-2 px-4 border-b-4 border-rose-500 w-full rounded-lg"
+              >
+                Update Profile
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
+      </Layout>
     </>
   );
 };

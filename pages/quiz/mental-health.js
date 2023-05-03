@@ -16,6 +16,7 @@ import {
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { deleteCookie, getCookie } from "cookies-next";
+import {Layout} from "@/components/Layout";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -144,64 +145,66 @@ export default function MentalHealth() {
   };
   // console.log(existingData.map((data) => data.uid));
   return (
-    <div className="relative">
-      <div className="mx-4 my-5">
-        <Image
-          src="/mindwell.png"
-          className="object-center"
-          width={100}
-          height={33}
-          alt="Logo"
-          onClick={() => router.push("/")}
-        />
-        <div className="flex flex-col">
-          {/* */}
-          <TitlePage title={"Mental Health Quiz"} />
-          <Transition
-            show={!!currentQuestion}
-            enter="transition-all ease-in-out duration-500 delay-[200ms]"
-            enterFrom="opacity-0 translate-y-6"
-            enterTo="opacity-100 translate-y-0"
-            leave="transition-all ease-in-out duration-300"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            {currentQuestion && (
-              <div className="flex flex-col">
-                <h2 className="text-xl mb-4">{currentQuestion.question}</h2>
-                <p className="mb-4 text-gray-500">
-                  Jawab untuk lanjut ke pertanyaan berikutnya
-                </p>
-                <div className="mt-10">
-                  <button
-                    className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
-                    onClick={() => handleAnswer("yes")}
-                  >
-                    Yes
-                  </button>
-                  <button
-                    className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
-                    onClick={() => handleAnswer("no")}
-                  >
-                    No
-                  </button>
-                  {currentIndex !== 0 && (
+    <Layout>
+      <div className="relative">
+        <div className="mx-4 my-5">
+          <Image
+            src="/mindwell.png"
+            className="object-center"
+            width={100}
+            height={33}
+            alt="Logo"
+            onClick={() => router.push("/")}
+          />
+          <div className="flex flex-col">
+            {/* */}
+            <TitlePage title={"Mental Health Quiz"} />
+            <Transition
+              show={!!currentQuestion}
+              enter="transition-all ease-in-out duration-500 delay-[200ms]"
+              enterFrom="opacity-0 translate-y-6"
+              enterTo="opacity-100 translate-y-0"
+              leave="transition-all ease-in-out duration-300"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              {currentQuestion && (
+                <div className="flex flex-col">
+                  <h2 className="text-xl mb-4">{currentQuestion.question}</h2>
+                  <p className="mb-4 text-gray-500">
+                    Jawab untuk lanjut ke pertanyaan berikutnya
+                  </p>
+                  <div className="mt-10">
                     <button
-                      className="mt-40 text-center w-full py-3.5 rounded-lg bg-gray-400 border-b-4 border-gray-500 text-white"
-                      onClick={() => {
-                        handlePrev();
-                      }}
-                      disabled={currentQuestion.prev === 0}
+                      className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
+                      onClick={() => handleAnswer("yes")}
                     >
-                      Previous
+                      Yes
                     </button>
-                  )}
+                    <button
+                      className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
+                      onClick={() => handleAnswer("no")}
+                    >
+                      No
+                    </button>
+                    {currentIndex !== 0 && (
+                      <button
+                        className="mt-40 text-center w-full py-3.5 rounded-lg bg-gray-400 border-b-4 border-gray-500 text-white"
+                        onClick={() => {
+                          handlePrev();
+                        }}
+                        disabled={currentQuestion.prev === 0}
+                      >
+                        Previous
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-          </Transition>
+              )}
+            </Transition>
+          </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

@@ -1,3 +1,4 @@
+import {Layout} from "@/components/Layout";
 import Navbar from "@/components/Navbar";
 import TitlePage from "@/components/TitlePage";
 import firebase_app from "@/src/firebase/config";
@@ -39,37 +40,39 @@ export default function Test() {
   }, []);
   return (
     <>
-      <div className="mx-4 my-5">
-        <Image
-          src="/mindwell.png"
-          className="object-center"
-          width={100}
-          height={33}
-          alt="Logo"
-          onClick={() => router.push("/")}
-        />
-        <div className="flex flex-col">
-          <TitlePage title={"Pick your quiz"} />
-          <a href="/quiz/mental-health">
-            <div className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border border-gray-200 flex flex-row shadow-md">
-              <img src="/ilustrations/psychology.png" className="h-28 w-28" />
-              <div className="ml-4">
-                <div className="mb-3">
-                  <h2 className="text-lg font-semibold text-gray-800 capitalize">
-                    Mental Health
-                  </h2>
+      <Layout>
+        <div className="mx-4 my-5">
+          <Image
+            src="/mindwell.png"
+            className="object-center"
+            width={100}
+            height={33}
+            alt="Logo"
+            onClick={() => router.push("/")}
+          />
+          <div className="flex flex-col">
+            <TitlePage title={"Pick your quiz"} />
+            <a href="/quiz/mental-health">
+              <div className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border border-gray-200 flex flex-row shadow-md">
+                <img src="/ilustrations/psychology.png" className="h-28 w-28" />
+                <div className="ml-4">
+                  <div className="mb-3">
+                    <h2 className="text-lg font-semibold text-gray-800 capitalize">
+                      Mental Health
+                    </h2>
+                  </div>
+                  <p className="text-sm text-justify line-clamp-4 text-gray-600">
+                    A mental health quiz is a brief assessment tool designed to
+                    help individuals identify potential symptoms or signs of
+                    mental health concerns.
+                  </p>
                 </div>
-                <p className="text-sm text-justify line-clamp-4 text-gray-600">
-                  A mental health quiz is a brief assessment tool designed to
-                  help individuals identify potential symptoms or signs of
-                  mental health concerns.
-                </p>
               </div>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
-      </div>
-      <Navbar />
+        <Navbar />
+      </Layout>
     </>
   );
 }
