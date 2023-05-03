@@ -122,7 +122,7 @@ export default function Profile() {
                       title: "Logout",
                       text: "Logout berhasil",
                       icon: "success",
-                      timer: 200,
+                      timer: 1000,
                       heightAuto: true,
                       width: 350,
                       showCancelButton: false,
