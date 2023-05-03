@@ -149,10 +149,10 @@ const DetailProfile = () => {
         router.push("/login");
       } else {
         // Get data from firestore
-        fetchUser(authUser?.uid);
+        fetchUser(authUser.uid);
       }
     });
-  }, []);
+  }, [auth]);
   return (
     <>
       <div className="mx-4 my-5">
