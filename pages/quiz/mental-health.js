@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { deleteCookie, getCookie } from "cookies-next";
 
-export async function getServerSideProps({ req, res }) {
+export function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
   if (!auth) {
     return {

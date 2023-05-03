@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
 import { getCookie, setCookie } from "cookies-next";
 
-export async function getServerSideProps({ req, res }) {
+export function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
   if (!auth) {
     return {
