@@ -19,7 +19,7 @@ import { getCookie, setCookie } from "cookies-next";
 
 export function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
-  if (!auth) {
+  if (auth) {
     return {
       redirect: {
         destination: "/",
