@@ -5,6 +5,24 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+export async function getServerSideProps({ req, res }) {
+  const auth = getCookie("admin", { req, res });
+  if (auth) {
+    return {
+      redirect: {
+        destination: "/admin",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: "Some data for authenticated users",
+    },
+  };
+}
+
 export default function LoginPage() {
   const db = getFirestore(firebase_app);
   const [dataAdmin, setAdmin] = useState();
@@ -32,7 +50,6 @@ export default function LoginPage() {
       }
     };
     getAdmin();
-    console.log("Data admin:", dataAdmin);
   }, []);
   const CheckLogin = (username, password) => {
     if (username === dataAdmin.username && password === dataAdmin.password) {
