@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
 import { getCookie, setCookie } from "cookies-next";
 
-export function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
   if (auth) {
     return {
@@ -44,28 +44,24 @@ export default function Login() {
     try {
       const { user } = await signInWithPopup(auth, provider);
       // Check if the user already exists in Firestore
-      const userRef = doc(db, "users", user.uid);
+      const userRef = doc(db, "users", user?.uid);
       const userDoc = await getDoc(userRef);
       const newUser = {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoUrl: user.photoURL,
+        uid: user?.uid,
+        email: user?.email,
+        displayName: user?.displayName,
+        photoUrl: user?.photoURL,
         faculty: "",
         majority: "",
         year: "",
         createdAt: serverTimestamp(),
-        accessToken: user.accessToken,
+        accessToken: user?.accessToken,
       };
-      setCookie("auth", newUser.accessToken, {
-        expires: 1 / 24,
-        secure: true,
-        sameSite: "strict",
-      });
+      setCookie("auth", newUser?.accessToken, { maxAge: 60 * 6 * 24 });
       if (!userDoc.exists()) {
         // If the user doesn't exist, create a new user document in Firestore
         try {
-          await setDoc(doc(collection(db, "users"), user.uid), newUser);
+          await setDoc(doc(collection(db, "users"), user?.uid), newUser);
         } catch (error) {
           console.error(error);
         }

@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { deleteCookie, getCookie } from "cookies-next";
 
-export function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
   if (!auth) {
     return {
@@ -73,7 +73,7 @@ export default function MentalHealth() {
         const data = {
           result: [
             {
-              uid: user.uid,
+              uid: user?.uid,
               result_id: Math.random().toString(36).substring(2, 16), // random id
               penyakit: result.name,
               description: result.description,
@@ -85,7 +85,7 @@ export default function MentalHealth() {
       } else {
         const newData = {
           result: arrayUnion({
-            uid: user.uid,
+            uid: user?.uid,
             result_id: Math.random().toString(36).substring(2, 16),
             penyakit: result.name,
             description: result.description,

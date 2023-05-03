@@ -1,5 +1,5 @@
 import firebase_app from "@/src/firebase/config";
-import { deleteCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import Image from "next/image";
@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
-export function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
   if (!auth) {
     return {
@@ -149,7 +149,7 @@ const DetailProfile = () => {
         router.push("/login");
       } else {
         // Get data from firestore
-        fetchUser(authUser.uid);
+        fetchUser(authUser?.uid);
       }
     });
   }, []);

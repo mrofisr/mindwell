@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { deleteCookie, getCookie } from "cookies-next";
 
-export function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
   if (!auth) {
     return {

@@ -13,7 +13,7 @@ import LoadingPage from "@/components/Loading";
 import { Transition } from "@headlessui/react";
 import { deleteCookie, getCookie } from "cookies-next";
 
-export function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
   if (!auth) {
     return {
