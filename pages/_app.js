@@ -6,6 +6,7 @@ import "swiper/css/autoplay";
 import Head from "next/head";
 
 export default function App({ Component, pageProps }) {
+  
   return (
     <>
       <Head>
@@ -23,7 +24,7 @@ export default function App({ Component, pageProps }) {
         <div className="h-full bg-gray-100">
           <div className="block box-border bg-white max-w-md w-full mx-auto h-full">
             <div className="flex flex-col min-h-screen max-h-full">
-              <Component {...pageProps} />
+                <Component {...pageProps} />
             </div>
           </div>
         </div>
