@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import firebase_app from "@/src/firebase/config";
-import { getUserFromCookie, removeUserCookie } from "@/src/setCookie";
 import { deleteCookie, getCookie } from "cookies-next";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
