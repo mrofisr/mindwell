@@ -15,23 +15,25 @@ import firebase_app from "@/src/firebase/config";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 
-// export async function getServerSideProps(context) {
-//   const { req } = context;
-//   const cookies = req.headers.cookie;
-//   if (cookies) {
-//     // If the user is not signed in, redirect to the login page
-//     return {
-//       redirect: {
-//         destination: "/",
-//         permanent: false,
-//       },
-//     };
-//   }
-//   // If the user is signed in, return an empty props object
-//   return { props: {} };
-// }
+export async function getServerSideProps({ req, res }) {
+  const auth = getCookie("auth", { req, res });
+  if (!auth) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: "Some data for authenticated users",
+    },
+  };
+}
 
 export default function Login() {
   const router = useRouter();
@@ -55,7 +57,11 @@ export default function Login() {
         createdAt: serverTimestamp(),
         accessToken: user.accessToken,
       };
-      setCookie("auth", JSON.stringify(newUser.accessToken));
+      setCookie("auth", newUser.accessToken, {
+        expires: 1 / 24,
+        secure: true,
+        sameSite: "strict",
+      });
       if (!userDoc.exists()) {
         // If the user doesn't exist, create a new user document in Firestore
         try {
@@ -70,7 +76,7 @@ export default function Login() {
   };
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
+      if (authUser && getCookie("auth")) {
         router.push("/");
       }
     });
