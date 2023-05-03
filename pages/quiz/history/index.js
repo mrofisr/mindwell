@@ -1,6 +1,5 @@
 import TitlePage from "@/components/TitlePage";
 import firebase_app from "@/src/firebase/config";
-import { getUserFromCookie } from "@/src/setCookie";
 import { Timestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
@@ -12,28 +11,26 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import LoadingPage from "@/components/Loading";
 import { Transition } from "@headlessui/react";
+import { deleteCookie, getCookie } from "cookies-next";
 
-// export async function getServerSideProps(context) {
-//   const user = getUserFromCookie(context.req);
-//   if (!user) {
-//     return {
-//       redirect: {
-//         destination: '/login',
-//         permanent: false,
-//       },
-//     };
-//   }
-//   // If the user is authenticated, return some data as props
-//   return {
-//     props: {
-//       data: 'Some data for authenticated users',
-//     },
-//   };
-// }
-// const formatDate = (dateStr) => {
-//   // const dateObj = parseISO(dateStr);
-//   // return format(dateObj, "EEEE, dd MMMM yyyy", { locale: id });
-// };
+export function getServerSideProps({ req, res }) {
+  const auth = getCookie("auth", { req, res });
+  console.log(auth);
+  if (!auth) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: "Some data for authenticated users",
+    },
+  };
+}
 
 const formatDate = (dateStr) => {
   const dateObj = new Date(dateStr);
@@ -49,7 +46,9 @@ export default function HistoryQuiz() {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      if (!authUser) {
+      if (!authUser && !getCookie("auth")) {
+        deleteCookie();
+        auth.signOut();
         router.push("/login");
       }
     });

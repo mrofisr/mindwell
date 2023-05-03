@@ -6,6 +6,26 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { deleteCookie, getCookie } from "cookies-next";
+
+export function getServerSideProps({ req, res }) {
+  const auth = getCookie("auth", { req, res });
+  console.log(auth);
+  if (!auth) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: "Some data for authenticated users",
+    },
+  };
+}
 
 export default function HistoryQuizId() {
   const router = useRouter();
@@ -17,7 +37,9 @@ export default function HistoryQuizId() {
   const { id } = router.query;
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      if (!authUser) {
+      if (!authUser && !getCookie("auth")) {
+        deleteCookie();
+        auth.signOut();
         router.push("/login");
       }
     });

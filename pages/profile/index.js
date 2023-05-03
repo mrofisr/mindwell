@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import firebase_app from "@/src/firebase/config";
 import { getUserFromCookie, removeUserCookie } from "@/src/setCookie";
+import { deleteCookie, getCookie } from "cookies-next";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import Image from "next/image";
@@ -8,23 +9,23 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-// export async function getServerSideProps(context) {
-//   const user = getUserFromCookie(context.req);
-//   if (!user) {
-//     return {
-//       redirect: {
-//         destination: '/login',
-//         permanent: false,
-//       },
-//     };
-//   }
-//   // If the user is authenticated, return some data as props
-//   return {
-//     props: {
-//       data: 'Some data for authenticated users',
-//     },
-//   };
-// }
+export function getServerSideProps({ req, res }) {
+  const auth = getCookie("auth", { req, res });
+  if (!auth) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: "Some data for authenticated users",
+    },
+  };
+}
 
 export default function Profile() {
   const router = useRouter();
@@ -46,12 +47,14 @@ export default function Profile() {
     }
   };
   const logout = () => {
-    removeUserCookie();
+    deleteCookie();
     auth.signOut();
   };
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      if (!authUser) {
+      if (!authUser && !getCookie("auth")) {
+        deleteCookie();
+        auth.signOut();
         router.push("/login");
       } else {
         fetchUser(authUser.uid);
@@ -113,7 +116,7 @@ export default function Profile() {
                 </a>
               </li>
               <li>
-                <p
+                <a
                   className="font-medium text-sm text-red-500 hover:text-red-600 flex py-1 px-3"
                   onClick={() => {
                     setOpen(false);
@@ -121,7 +124,7 @@ export default function Profile() {
                   }}
                 >
                   Logout
-                </p>
+                </a>
               </li>
             </ul>
           </div>

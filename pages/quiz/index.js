@@ -1,37 +1,38 @@
 import Navbar from "@/components/Navbar";
 import TitlePage from "@/components/TitlePage";
 import firebase_app from "@/src/firebase/config";
-import { getUserFromCookie } from "@/src/setCookie";
+import { deleteCookie, getCookie } from "cookies-next";
 import { getAuth } from "firebase/auth";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-// export async function getServerSideProps(context) {
-//   const user = getUserFromCookie(context.req);
-//   if (!user) {
-//     return {
-//       redirect: {
-//         destination: '/login',
-//         permanent: false,
-//       },
-//     };
-//   }
-//   // If the user is authenticated, return some data as props
-//   return {
-//     props: {
-//       data: 'Some data for authenticated users',
-//     },
-//   };
-// }
+export function getServerSideProps({ req, res }) {
+  const auth = getCookie("auth", { req, res });
+  if (!auth) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: "Some data for authenticated users",
+    },
+  };
+}
 
 export default function Test() {
   const auth = getAuth(firebase_app);
   const router = useRouter();
-  const user = auth.currentUser;
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      if (!authUser) {
+      if (!authUser && !getCookie("auth")) {
+        deleteCookie();
+        auth.signOut();
         router.push("/login");
       }
     });

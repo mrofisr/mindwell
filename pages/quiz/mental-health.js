@@ -14,26 +14,27 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { getUserFromCookie } from "@/src/setCookie";
 import Image from "next/image";
+import { deleteCookie, getCookie } from "cookies-next";
 
-// export async function getServerSideProps(context) {
-//   const user = getUserFromCookie(context.req);
-//   if (!user) {
-//     return {
-//       redirect: {
-//         destination: '/login',
-//         permanent: false,
-//       },
-//     };
-//   }
-//   // If the user is authenticated, return some data as props
-//   return {
-//     props: {
-//       data: 'Some data for authenticated users',
-//     },
-//   };
-// }
+export function getServerSideProps({ req, res }) {
+  const auth = getCookie("auth", { req, res });
+  console.log(auth);
+  if (!auth) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // If the user is authenticated, return some data as props
+  return {
+    props: {
+      data: "Some data for authenticated users",
+    },
+  };
+}
 
 export default function MentalHealth() {
   const auth = getAuth(firebase_app);
@@ -44,7 +45,9 @@ export default function MentalHealth() {
   const [penyakit, setPenyakit] = useState([]);
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      if (!authUser) {
+      if (!authUser && !getCookie("auth")) {
+        deleteCookie();
+        auth.signOut();
         router.push("/login");
       }
     });

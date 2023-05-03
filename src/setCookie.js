@@ -1,22 +1,16 @@
 import firebase_app from "@/src/firebase/config";
 import { getAuth } from "firebase/auth";
 import Cookies from "js-cookie";
+import { cookies } from 'next/headers';
 
-// export const getUserFromCookie = () => {
-//   const cookie = Cookies.get();
-//   if (!cookie) {
-//     return;
-//   }
-//   return JSON.parse(cookie);
-// };
-
-export const getUserFromCookie = (req) => {
-  const cookie = req.headers.cookie ? req.headers.cookie.split(';').find(c => c.trim().startsWith('auth=')) : null;
-  if (!cookie) {
-    console.log("Cookie not found");
-    return null;
+export const getUserFromCookie = () => {
+  const cookieStore = cookies();
+  const auth = cookieStore.get('auth');
+  console.log(auth);
+  if (!auth) {
+    return;
   }
-  return cookie;
+  return JSON.parse(auth);
 };
 
 export const setUserCookie = (data) => {

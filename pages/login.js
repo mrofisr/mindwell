@@ -12,26 +12,26 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import firebase_app from "@/src/firebase/config";
-import { setUserCookie } from "@/src/setCookie";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
+import { setCookie } from "cookies-next";
 
-export async function getServerSideProps(context) {
-  const { req } = context;
-  const cookies = req.headers.cookie;
-  if (cookies) {
-    // If the user is not signed in, redirect to the login page
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-  // If the user is signed in, return an empty props object
-  return { props: {} };
-}
+// export async function getServerSideProps(context) {
+//   const { req } = context;
+//   const cookies = req.headers.cookie;
+//   if (cookies) {
+//     // If the user is not signed in, redirect to the login page
+//     return {
+//       redirect: {
+//         destination: "/",
+//         permanent: false,
+//       },
+//     };
+//   }
+//   // If the user is signed in, return an empty props object
+//   return { props: {} };
+// }
 
 export default function Login() {
   const router = useRouter();
@@ -55,7 +55,7 @@ export default function Login() {
         createdAt: serverTimestamp(),
         accessToken: user.accessToken,
       };
-      setUserCookie(JSON.stringify(newUser));
+      setCookie("auth", JSON.stringify(newUser.accessToken));
       if (!userDoc.exists()) {
         // If the user doesn't exist, create a new user document in Firestore
         try {
