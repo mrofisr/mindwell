@@ -1,6 +1,6 @@
 import { LayoutAdmin } from "@/components/Layout";
 import firebase_app from "@/src/firebase/config";
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
