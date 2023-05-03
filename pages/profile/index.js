@@ -114,8 +114,7 @@ export default function Profile() {
               <li>
                 <a
                   className="font-medium text-sm text-red-500 hover:text-red-600 flex py-1 px-3"
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={() => {
                     setOpen(false);
                     deleteCookie("auth");
                     auth.signOut();
@@ -123,8 +122,12 @@ export default function Profile() {
                       title: "Logout",
                       text: "Logout berhasil",
                       icon: "success",
+                      timer: 200,
                       heightAuto: true,
                       width: 350,
+                      showCancelButton: false,
+                      showConfirmButton: false,
+                      showCloseButton: false
                     }).then(() => router.push("/login"));  
                   }}
                 >
