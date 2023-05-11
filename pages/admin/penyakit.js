@@ -22,14 +22,13 @@ export async function getServerSideProps({ req, res }) {
 
 export default function AdminPage() {
   const db = getFirestore(firebase_app);
-  const [result, setResult] = useState();
+  const [penyakit, setPenyakit] = useState();
   useEffect(() => {
     const getData = async () => {
       const docRef = doc(db, "sistem-pakar", "mental-health");
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setResult(docSnap.data().result);
-        console.log("Document data:", docSnap.data());
+        setPenyakit(docSnap.data().penyakit);
       } else {
         console.log("Document does not exist");
       }

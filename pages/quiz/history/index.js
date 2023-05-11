@@ -46,7 +46,7 @@ export default function HistoryQuiz() {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      if (!authUser && !getCookie("auth")) {
+      if (!authUser || !getCookie("auth")) {
         deleteCookie("auth");
         auth.signOut();
         router.push("/login");

@@ -10,7 +10,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
 import { useRouter } from "next/router";
 import { Transition } from "@headlessui/react";
-import {Layout} from "@/components/Layout";
+import { Layout } from "@/components/Layout";
+import { deleteCookie, getCookie } from "cookies-next";
 // Crete a function to get the time of day in Jakarta
 const getTimeOfDay = (date) => {
   const hours = date.getHours();
@@ -54,7 +55,10 @@ export default function Index({ feedData }) {
   const [quote, setQuote] = useState(null);
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (user) {
+      if (!user || !getCookie("auth")) {
+        deleteCookie("auth");
+        auth.signOut();
+      } else {
         const { displayName } = user;
         setUser({ displayName });
       }

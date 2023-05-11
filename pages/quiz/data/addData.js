@@ -238,6 +238,19 @@ export default function Node() {
       if (docSnap.exists()) {
         setGejala(docSnap.data().gejala);
         setPenyakit(docSnap.data().penyakit);
+        // const filename = "data.json";
+        // const contentType = "application/json;charset=utf-8;";
+        // const data = JSON.stringify(docSnap.data().result);
+        // const blob = new Blob([data], { type: contentType });
+        // const url = URL.createObjectURL(blob);
+        // const link = document.createElement("a");
+        // link.href = url;
+        // link.download = filename;
+        // document.body.appendChild(link);
+        // link.click();
+        // document.body.removeChild(link);
+        // URL.revokeObjectURL(url);
+        console.log("Document data:", docSnap.data().result);
       } else {
         console.log("Document does not exist");
       }

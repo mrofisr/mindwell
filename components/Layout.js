@@ -17,7 +17,7 @@ const Layout = (props) => {
 const LayoutAdmin = (props) => {
   return (
     <>
-      <div className="bg-gray-100">{props.children}</div>
+      <div className="bg-gray-100 w-full h-full min-h-screen">{props.children}</div>
     </>
   );
 };

@@ -1,5 +1,6 @@
 import { LayoutAdmin } from "@/components/Layout";
 import SideBar from "@/components/Sidebar";
+import TitlePage from "@/components/TitlePage";
 import firebase_app from "@/src/firebase/config";
 import { getCookie } from "cookies-next";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
@@ -22,14 +23,13 @@ export async function getServerSideProps({ req, res }) {
 
 export default function AdminPage() {
   const db = getFirestore(firebase_app);
-  const [result, setResult] = useState();
+  const [gejala, setGejala] = useState();
   useEffect(() => {
     const getData = async () => {
       const docRef = doc(db, "sistem-pakar", "mental-health");
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setResult(docSnap.data().result);
-        console.log("Document data:", docSnap.data());
+        setGejala(docSnap.data().gejala);
       } else {
         console.log("Document does not exist");
       }
@@ -40,6 +40,7 @@ export default function AdminPage() {
     <>
       <LayoutAdmin>
         <SideBar />
+        <TitlePage title="Gejala" />
       </LayoutAdmin>
     </>
   );
