@@ -53,25 +53,32 @@ export default function Index({ feedData }) {
   const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 10));
   const timeOfDay = getTimeOfDay(date);
   const [quote, setQuote] = useState(null);
+
+  const fetchQuote = async () => {
+    try {
+      const res = await fetch(
+        "https://api.quotable.io/random?tags=happiness|life|love|self|wisdom&minLength=100&maxLength=130"
+      );
+      const data = await res.json();
+      setQuote(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user || !getCookie("auth")) {
         deleteCookie("auth");
         auth.signOut();
       } else {
-        const { displayName } = user;
+        const { displayName } = user || {};
         setUser({ displayName });
       }
     });
-    async function fetchQuote() {
-      const res = await fetch(
-        "https://api.quotable.io/random?tags=happiness|life|love|self|wisdom&minLength=100&maxLength=130"
-      );
-      const data = await res.json();
-      setQuote(data);
-    }
     fetchQuote();
-  }, []);
+  }, [auth]);
+
   return (
     <>
       <Layout>

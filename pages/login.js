@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
 import { getCookie, setCookie } from "cookies-next";
-import {Layout} from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -41,44 +41,55 @@ export default function Login() {
   const auth = getAuth(firebase_app);
   const db = getFirestore(firebase_app);
   const provider = new GoogleAuthProvider();
+
+  const createUserDocument = async (user) => {
+    const newUser = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoUrl: user.photoURL,
+      faculty: "",
+      majority: "",
+      year: "",
+      createdAt: serverTimestamp(),
+      accessToken: user.accessToken,
+    };
+    try {
+      await setDoc(doc(collection(db, "users"), user.uid), newUser);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleSignIn = async () => {
     try {
       const { user } = await signInWithPopup(auth, provider);
       // Check if the user already exists in Firestore
       const userRef = doc(db, "users", user?.uid);
       const userDoc = await getDoc(userRef);
-      const newUser = {
-        uid: user?.uid,
-        email: user?.email,
-        displayName: user?.displayName,
-        photoUrl: user?.photoURL,
-        faculty: "",
-        majority: "",
-        year: "",
-        createdAt: serverTimestamp(),
-        accessToken: user?.accessToken,
-      };
-      setCookie("auth", newUser?.accessToken, { maxAge: 60 * 6 * 24 });
+      const accessToken = user?.accessToken;
+      if (accessToken) {
+        setCookie("auth", accessToken, { maxAge: 60 * 6 * 24 });
+      }
       if (!userDoc.exists()) {
         // If the user doesn't exist, create a new user document in Firestore
-        try {
-          await setDoc(doc(collection(db, "users"), user?.uid), newUser);
-        } catch (error) {
-          console.error(error);
-        }
+        await createUserDocument(user);
       }
     } catch (error) {
       console.error(error);
     }
   };
+
   useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         console.log("Login success");
         router.push("/");
       }
     });
-  }, []);
+    return () => unsubscribe();
+  }, [auth, router]);
+
   SwiperCore.use([Pagination]);
   return (
     <>

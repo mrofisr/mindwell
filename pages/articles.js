@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import LoadingPage from "@/components/Loading";
 import { Transition } from "@headlessui/react";
-import {Layout} from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 
 async function getFeedData(searchQuery = "") {
   const parser = new Parser();
@@ -38,11 +38,16 @@ export default function Articles({ feedData }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showMoreVisible, setShowMoreVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+
+  const showMoreItems = () => {
+    const nextItems = feedData.slice(
+      visibleItems.length,
+      visibleItems.length + 5
+    );
+    setVisibleItems([...visibleItems, ...nextItems]);
+  };
+
   useEffect(() => {
-    setVisibleItems(feedData.slice(0, 10));
-  }, [feedData]);
-  useEffect(() => {
-    setVisibleItems([]);
     setVisibleItems(
       feedData
         .filter((item) =>
@@ -51,13 +56,10 @@ export default function Articles({ feedData }) {
         .slice(0, 10)
     );
     setIsLoading(false);
-  }, [searchQuery]);
-  const showMoreItems = () => {
-    const nextItems = feedData.slice(
-      visibleItems.length,
-      visibleItems.length + 5
-    );
-    setVisibleItems([...visibleItems, ...nextItems]);
+  }, [feedData, searchQuery]);
+
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
   };
   return (
     <>
@@ -81,7 +83,7 @@ export default function Articles({ feedData }) {
                   className="w-full py-2 pl-10 pr-3 rounded-full border-rose-500 focus:border-primary focus:outline-none"
                   value={searchQuery}
                   onChange={(e) => {
-                    setSearchQuery(e.target.value);
+                    handleSearchInputChange(e);
                     searchQuery === ""
                       ? setShowMoreVisible(false)
                       : setShowMoreVisible(true);

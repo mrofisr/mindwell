@@ -38,7 +38,7 @@ export default function LoginPage() {
   useEffect(() => {
     const getAdmin = async () => {
       try {
-        const docRef = doc(db, "users", "admin");
+        const docRef = doc(db, "admin", "16TCslUL2u1sYiDd8E4X");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setAdmin(docSnap.data());

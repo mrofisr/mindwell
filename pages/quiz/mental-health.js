@@ -16,7 +16,7 @@ import {
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { deleteCookie, getCookie } from "cookies-next";
-import {Layout} from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -40,9 +40,11 @@ export default function MentalHealth() {
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
   const db = getFirestore(firebase_app);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [gejala, setGejala] = useState([]);
   const [penyakit, setPenyakit] = useState([]);
+
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser || !getCookie("auth")) {
@@ -51,6 +53,7 @@ export default function MentalHealth() {
         router.push("/login");
       }
     });
+
     const getData = async () => {
       const docRef = doc(db, "sistem-pakar", "mental-health");
       const docSnap = await getDoc(docRef);
@@ -63,12 +66,16 @@ export default function MentalHealth() {
     };
     getData();
   }, []);
+
   const currentQuestion = gejala[currentIndex];
   const dbRef = collection(db, "sistem-pakar");
   const router = useRouter();
+
   const addResult = async (result) => {
     const docRef = doc(db, "sistem-pakar", "mental-health");
     const docSnap = await getDoc(docRef);
+    const docRefUser = doc(db, "users", user?.uid);
+    const docSnapUser = await getDoc(docRefUser);
     if (docSnap.exists()) {
       if (!docSnap.data().result) {
         const data = {
@@ -76,6 +83,10 @@ export default function MentalHealth() {
             {
               uid: user?.uid,
               result_id: Math.random().toString(36).substring(2, 16), // random id
+              displayName: docSnapUser.data()?.displayName,
+              faculty: docSnapUser.data()?.faculty,
+              majority: docSnapUser.data()?.majority,
+              year: docSnapUser.data()?.year,
               penyakit: result.name,
               description: result.description,
               createdAt: new Date(),
@@ -99,6 +110,7 @@ export default function MentalHealth() {
       console.log("Document does not exist");
     }
   };
+
   const handleAnswer = (answer) => {
     // Move to the next question based on the answer chosen
     if (answer === "yes") {
@@ -139,11 +151,11 @@ export default function MentalHealth() {
       }
     }
   };
+
   const handlePrev = () => {
     // Move to the previous question
     setCurrentIndex(currentQuestion.prev);
   };
-  // console.log(existingData.map((data) => data.uid));
   return (
     <Layout>
       <div className="relative">
