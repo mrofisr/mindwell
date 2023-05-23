@@ -1,5 +1,5 @@
 {
-  "name": "app-new",
+  "name": "mindwell",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -22,7 +22,7 @@
     "rss-parser": "^3.12.0",
     "sweetalert2": "^11.7.3",
     "swiper": "^9.1.1",
-    "webpack": "^4.46.0"
+    "webpack": "^5.83.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",

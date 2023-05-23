@@ -47,9 +47,9 @@ export default function AdminPage() {
     <>
       <LayoutAdmin>
         <SideBar />
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto">
           <div className="p-4 sm:ml-64">
-            <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
+            <div className="mx-auto max-w-screen-xl">
               <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                 <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                   <div className="w-full md:w-1/2">
@@ -76,7 +76,7 @@ export default function AdminPage() {
                         <input
                           type="text"
                           id="simple-search"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
                           placeholder="Search"
                           required=""
                           onChange={handleSearchChange}
@@ -89,9 +89,6 @@ export default function AdminPage() {
                   <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                       <tr>
-                      <th scope="col" className="px-4 py-3">
-                          Number
-                        </th>
                         <th scope="col" className="px-4 py-3">
                           Question
                         </th>
@@ -106,15 +103,27 @@ export default function AdminPage() {
                     <tbody>
                       {filteredData.map((user, index) => (
                         <tr className="border-b dark:border-gray-700">
-                          <td
-                            scope="row"
-                            className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                          >
-                            {index}
+                          <td className="px-4 py-3">
+                            <input
+                              type="text"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                              value={user.question}
+                            />
                           </td>
-                          <td className="px-4 py-3">{user.question}</td>
-                          <td className="px-4 py-3">{user.yes}</td>
-                          <td className="px-4 py-3">{user.no}</td>
+                          <td className="px-4 py-3">
+                            <input
+                              type="text"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                              value={user.yes}
+                            />
+                          </td>
+                          <td className="px-4 py-3">
+                            <input
+                              type="text"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                              value={user.no}
+                            />
+                          </td>
                         </tr>
                       ))}
                     </tbody>
