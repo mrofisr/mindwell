@@ -31,7 +31,6 @@ export default function AdminPage() {
   const db = getFirestore(firebase_app);
   const [result, setResult] = useState([]);
   const [users, setUsers] = useState([]);
-  const faculty = [...new Set(users.map((user) => user.faculty))];
   const barChartRef = useRef(null);
   let chartInstance = null;
 
@@ -61,6 +60,7 @@ export default function AdminPage() {
 
       const monthLabels = Object.keys(months);
       const userCounts = Object.values(months);
+      console.log(monthLabels, userCounts);
       if (chartInstance) {
         chartInstance.destroy();
       }
