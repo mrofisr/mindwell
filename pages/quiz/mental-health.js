@@ -40,11 +40,9 @@ export default function MentalHealth() {
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
   const db = getFirestore(firebase_app);
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [gejala, setGejala] = useState([]);
   const [penyakit, setPenyakit] = useState([]);
-
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser || !getCookie("auth")) {
@@ -98,7 +96,11 @@ export default function MentalHealth() {
         const newData = {
           result: arrayUnion({
             uid: user?.uid,
-            result_id: Math.random().toString(36).substring(2, 16),
+            result_id: Math.random().toString(36).substring(2, 16), // random id
+            displayName: docSnapUser.data()?.displayName,
+            faculty: docSnapUser.data()?.faculty,
+            majority: docSnapUser.data()?.majority,
+            year: docSnapUser.data()?.year,
             penyakit: result.name,
             description: result.description,
             createdAt: new Date(),

@@ -15,7 +15,7 @@ const SideBar = () => {
         data-drawer-toggle="default-sidebar"
         aria-controls="default-sidebar"
         type="button"
-        className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
       >
         <span className="sr-only">Open sidebar</span>
         <svg
@@ -37,50 +37,50 @@ const SideBar = () => {
         className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-          <ul className="space-y-2 font-medium">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
+          <ul className="space-y-2 font-medium space-y-6">
             <li>
               <a
                 href="/admin"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 "
               >
-                <AiFillHome className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <AiFillHome className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" />
                 <span className="ml-3">Dashboard</span>
               </a>
             </li>
             <li>
               <a
                 href="/admin/user"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 "
               >
-                <BsFillPersonFill className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <BsFillPersonFill className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" />
                 <span className="flex-1 ml-3 whitespace-nowrap">User</span>
               </a>
             </li>
             <li>
               <a
                 href="/admin/gejala"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 "
               >
-                <GiAerialSignal className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <GiAerialSignal className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Gejala</span>
               </a>
             </li>
             <li>
               <a
                 href="/admin/penyakit"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 "
               >
-                <AiFillAlert className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <AiFillAlert className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Penyakit</span>
               </a>
             </li>
             <li>
               <a
                 href="/admin/hasil"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 "
               >
-                <TbChecklist className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <TbChecklist className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Hasil</span>
               </a>
             </li>
@@ -100,9 +100,9 @@ const SideBar = () => {
                     showCloseButton: false,
                   }).then(() => router.push("/admin/login"));
                 }}
-                className="flex items-center p-2 text-red-500 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center p-2 text-red-500 rounded-lg hover:bg-gray-100 "
               >
-                <GoSignOut className="flex-shrink-0 w-6 h-6 text-red-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <GoSignOut className="flex-shrink-0 w-6 h-6 text-red-500 transition duration-75 group-hover:text-gray-900" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Sign Out</span>
               </a>
             </li>

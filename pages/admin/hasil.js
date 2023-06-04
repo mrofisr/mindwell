@@ -52,10 +52,10 @@ export default function AdminPage() {
     <>
       <LayoutAdmin>
         <SideBar />
-        <div className="container mx-auto px-4 py-8">
-          <div className="p-4 sm:ml-64">
-            <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-              <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+        <div className="container mx-auto">
+          <div className="p-4 sm:ml-36">
+            <div className="mx-auto max-w-screen-xl px-12">
+              <div className="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
                 <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                   <div className="w-full md:w-1/2">
                     <form className="flex items-center">
@@ -66,7 +66,7 @@ export default function AdminPage() {
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                           <svg
                             ariaHidden="true"
-                            className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                            className="w-5 h-5 text-gray-500"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg"
@@ -91,9 +91,12 @@ export default function AdminPage() {
                   </div>
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <table className="w-full text-sm text-left text-gray-500">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                       <tr>
+                        <th scope="col" className="px-4 py-3">
+                          No
+                        </th>
                         <th scope="col" className="px-4 py-3">
                           Nama
                         </th>
@@ -115,11 +118,14 @@ export default function AdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredData.map((user) => (
-                        <tr className="border-b dark:border-gray-700">
+                      {filteredData.map((user, index) => (
+                        <tr>
+                          <td className="px-4 py-3">
+                            {index+1}
+                          </td>
                           <td
                             scope="row"
-                            className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
                           >
                             {user.displayName}
                           </td>
