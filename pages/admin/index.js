@@ -84,6 +84,8 @@ export default function AdminPage() {
               precision: 0,
             },
           },
+          maintainAspectRatio: false,
+          responsive: true,
         },
       });
     }

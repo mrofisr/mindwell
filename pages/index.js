@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { Transition } from "@headlessui/react";
 import { Layout } from "@/components/Layout";
 import { deleteCookie, getCookie } from "cookies-next";
+
 // Crete a function to get the time of day in Jakarta
 const getTimeOfDay = (date) => {
   const hours = date.getHours();
@@ -65,7 +66,15 @@ export default function Index({ feedData }) {
       console.error(error);
     }
   };
-
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (!authUser || !getCookie("auth")) {
+        deleteCookie("auth");
+        auth.signOut();
+        router.push("/login");
+      }
+    });
+  }, [auth]);
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user || !getCookie("auth")) {

@@ -9,6 +9,9 @@ import { useRouter } from "next/router";
 import LoadingPage from "@/components/Loading";
 import { Transition } from "@headlessui/react";
 import { Layout } from "@/components/Layout";
+import { deleteCookie, getCookie } from "cookies-next";
+import { getAuth } from "firebase/auth";
+import firebase_app from "@/src/firebase/config";
 
 async function getFeedData(searchQuery = "") {
   const parser = new Parser();
@@ -34,6 +37,7 @@ const formatDate = (dateStr) => {
 
 export default function Articles({ feedData }) {
   const router = useRouter();
+  const auth = getAuth(firebase_app);
   const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 10));
   const [searchQuery, setSearchQuery] = useState("");
   const [showMoreVisible, setShowMoreVisible] = useState(true);
@@ -46,7 +50,15 @@ export default function Articles({ feedData }) {
     );
     setVisibleItems([...visibleItems, ...nextItems]);
   };
-
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (!authUser || !getCookie("auth")) {
+        deleteCookie("auth");
+        auth.signOut();
+        router.push("/login");
+      }
+    });
+  }, [auth]);
   useEffect(() => {
     setVisibleItems(
       feedData
@@ -57,7 +69,6 @@ export default function Articles({ feedData }) {
     );
     setIsLoading(false);
   }, [feedData, searchQuery]);
-
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
   };
