@@ -13,6 +13,7 @@ import LoadingPage from "@/components/Loading";
 import { Transition } from "@headlessui/react";
 import { deleteCookie, getCookie } from "cookies-next";
 import {Layout} from "@/components/Layout";
+import Navbar from "@/components/Navbar";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -116,36 +117,7 @@ export default function HistoryQuiz() {
                             </p>
                           </div>
                           <p className="text-sm text-justify line-clamp-4 text-gray-600">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Duis vestibulum odio erat, facilisis mollis
-                            neque varius nec. Ut mi nisi, sodales ut orci eget,
-                            commodo gravida lorem. Praesent facilisis ex libero,
-                            vitae blandit metus imperdiet id. Sed fermentum
-                            suscipit arcu, placerat imperdiet quam tincidunt
-                            vitae. Morbi efficitur imperdiet dui, non feugiat
-                            quam iaculis nec. Vestibulum dapibus libero faucibus
-                            mauris tempus suscipit. Vivamus mauris mi, ultrices
-                            eget lacus ac, eleifend pharetra nulla. Pellentesque
-                            vel tempor ligula. Morbi augue urna, tincidunt sit
-                            amet sapien at, maximus rutrum nulla. In sodales
-                            hendrerit eleifend. Donec vestibulum fermentum orci
-                            eget feugiat. Cras scelerisque facilisis nibh vel
-                            varius. Sed lobortis dolor at rutrum bibendum. Nunc
-                            lacinia sodales ipsum. Vivamus efficitur egestas
-                            dolor, id blandit lorem ullamcorper ac. Pellentesque
-                            a convallis dui. Curabitur nec felis sagittis diam
-                            interdum egestas. Mauris facilisis dictum
-                            scelerisque. Praesent cursus finibus nunc. Aenean a
-                            sem sed mauris hendrerit luctus et eu augue. Mauris
-                            hendrerit condimentum malesuada. Pellentesque
-                            habitant morbi tristique senectus et netus et
-                            malesuada fames ac turpis egestas. Maecenas
-                            facilisis dui sed dignissim malesuada. Phasellus
-                            porttitor odio ac euismod semper. Donec ultrices
-                            posuere sapien eu egestas. Vestibulum mauris urna,
-                            ornare ut sagittis et, sollicitudin pellentesque
-                            justo. Duis a erat diam. Curabitur id purus dolor.
-                            Nullam ut tempor dui.
+                            {item?.description}
                           </p>
                         </div>
                       </div>
@@ -158,6 +130,7 @@ export default function HistoryQuiz() {
             <LoadingPage />
           )}
         </div>
+        <Navbar/>
       </Layout>
     </>
   );

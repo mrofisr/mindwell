@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { deleteCookie, getCookie } from "cookies-next";
-import {Layout} from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -63,62 +63,51 @@ export default function HistoryQuizId() {
     <>
       <Layout>
         <div className="mx-4 my-5">
-        {!isLoading ? (
-          <div>
-            <Transition
-              show={true}
-              enter="transition-all ease-in-out duration-500 delay-[200ms]"
-              enterFrom="opacity-0 translate-y-6"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition-all ease-in-out duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Image
-                src="/mindwell.png"
-                width={100}
-                height={33}
-                alt="Logo"
-                onClick={() => router.push("/")}
-              />
-              <h1 className="font-bold text-2xl text-center">
-                {result[0]?.penyakit}
-              </h1>
-              <div className="flex justify-center">
-                <img
-                  className="my-6"
-                  src={"/ilustrations/image.png"}
-                  alt={result[0]?.penyakit}
+          {!isLoading ? (
+            <div>
+              <Transition
+                show={true}
+                enter="transition-all ease-in-out duration-500 delay-[200ms]"
+                enterFrom="opacity-0 translate-y-6"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition-all ease-in-out duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Image
+                  src="/mindwell.png"
+                  width={100}
+                  height={33}
+                  alt="Logo"
+                  onClick={() => router.push("/")}
                 />
-              </div>
-              <p className="text-sm text-justify text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-                vestibulum odio erat, facilisis mollis neque varius nec. Ut mi
-                nisi, sodales ut orci eget, commodo gravida lorem. Praesent
-                facilisis ex libero, vitae blandit metus imperdiet id. Sed
-                fermentum suscipit arcu, placerat imperdiet quam tincidunt
-                vitae. Morbi efficitur imperdiet dui, non feugiat quam iaculis
-                nec. Vestibulum dapibus libero faucibus mauris tempus suscipit.
-                Vivamus mauris mi, ultrices eget lacus ac, eleifend pharetra
-                nulla. Pellentesque vel tempor ligula. Morbi augue urna,
-                tincidunt sit amet sapien at, maximus rutrum nulla. In sodales
-                hendrerit eleifend. Donec vestibulum fermentum orci eget
-                feugiat. Cras scelerisque facilisis nibh vel varius. Sed
-                lobortis dolor at rutrum bibendum. Nunc lacinia sodales ipsum.
-                Vivamus efficitur egestas dolor, id blandit lorem ullamcorper
-                ac. Pellentesque a convallis dui. Curabitur nec felis sagittis
-                diam interdum egestas. Mauris facilisis dictum scelerisque.
-                Praesent cursus finibus nunc. Aenean a sem sed mauris hendrerit
-                luctus et eu augue. Mauris hendrerit condimentum malesuada.
-                Pellentesque habitant morbi tristique senectus et netus et
-                malesuada fames ac turpis egestas.
-              </p>
-            </Transition>
-          </div>
-        ) : (
-          <LoadingPage />
-        )}
-      </div>
+                <h1 className="font-bold text-2xl text-center">
+                  {result[0]?.penyakit}
+                </h1>
+                <div className="flex justify-center">
+                  <img
+                    className="my-6 h-32 w-32"
+                    src={"/ilustrations/psychology.png"}
+                    alt={result[0]?.penyakit}
+                  />
+                </div>
+                <p className="text-md text-justify text-gray-600 leading-7 indent-8 prose-stone">
+                  {result[0]?.description}
+                </p>
+                <button
+                  className="mt-10 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
+                  onClick={(e) => {
+                    router.push("/quiz/history")
+                  }}
+                >
+                  Back to History Quiz
+                </button>
+              </Transition>
+            </div>
+          ) : (
+            <LoadingPage />
+          )}
+        </div>
       </Layout>
     </>
   );

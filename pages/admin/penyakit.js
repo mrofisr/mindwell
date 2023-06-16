@@ -3,7 +3,9 @@ import SideBar from "@/components/Sidebar";
 import firebase_app from "@/src/firebase/config";
 import { getCookie } from "cookies-next";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("admin", { req, res });
@@ -23,6 +25,7 @@ export async function getServerSideProps({ req, res }) {
 export default function AdminPage() {
   const db = getFirestore(firebase_app);
   const [penyakit, setPenyakit] = useState([]);
+  const router = useRouter();
   useEffect(() => {
     const getData = async () => {
       const docRef = doc(db, "sistem-pakar", "mental-health");
@@ -40,11 +43,11 @@ export default function AdminPage() {
     <>
       <LayoutAdmin>
         <SideBar />
-        <div className="container mx-auto">
-          <div className="p-4 sm:ml-36">
-            <div className="mx-auto max-w-screen-xl px-12">
-              <div className="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
-                <div className="overflow-x-auto">
+        <div className="container mx-auto h-full">
+          <div className="p-4 sm:ml-52">
+            <div className="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <div className="table-wrapper">
                   <table className="w-full text-sm text-left text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                       <tr>
@@ -109,11 +112,28 @@ export default function AdminPage() {
                       ))}
                     </tbody>
                   </table>
+                  <button
+                    className="my-10 mx-auto block w-[904px] py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
+                    onClick={(e) => {
+                      Swal.fire({
+                        title: "Success",
+                        text: "Data Berhasil Disimpan",
+                        icon: "success",
+                        timer: 1000,
+                        heightAuto: true,
+                        width: 350,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        showCloseButton: false,
+                      }).then(() => router.push("/admin"));
+                    }}
+                  >
+                    Save Data
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-          ;
         </div>
       </LayoutAdmin>
     </>
