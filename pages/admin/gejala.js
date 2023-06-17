@@ -2,7 +2,7 @@ import { LayoutAdmin } from "@/components/Layout";
 import SideBar from "@/components/Sidebar";
 import firebase_app from "@/src/firebase/config";
 import { getCookie } from "cookies-next";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -38,7 +38,21 @@ export default function AdminPage() {
     };
     getData();
   }, []);
-
+  function saveDataGejala() {
+    const docRef = doc(db, "sistem-pakar", "mental-health");
+    setDoc(docRef, { gejala: gejala }, { merge: true });
+    Swal.fire({
+      title: "Success",
+      text: "Data Berhasil Disimpan",
+      icon: "success",
+      timer: 1000,
+      heightAuto: true,
+      width: 350,
+      showCancelButton: false,
+      showConfirmButton: false,
+      showCloseButton: false,
+    }).then(() => router.push("/admin"));
+  }
   useEffect(() => {}, [gejala]);
   return (
     <>
@@ -131,17 +145,7 @@ export default function AdminPage() {
                 <button
                   className="my-10 mx-auto block w-[904px] py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
                   onClick={(e) => {
-                    Swal.fire({
-                      title: "Success",
-                      text: "Data Berhasil Disimpan",
-                      icon: "success",
-                      timer: 1000,
-                      heightAuto: true,
-                      width: 350,
-                      showCancelButton: false,
-                      showConfirmButton: false,
-                      showCloseButton: false,
-                    }).then(() => router.push("/admin"));
+                    saveDataGejala();
                   }}
                 >
                   Save Data

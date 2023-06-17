@@ -4,6 +4,7 @@ import { getCookie, setCookie } from "cookies-next";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("admin", { req, res });
@@ -56,7 +57,17 @@ export default function LoginPage() {
       setCookie("admin", "true", { maxAge: 60 * 6 * 24 });
       router.push("/admin");
     } else {
-      router.push("/admin/login");
+      Swal.fire({
+        title: "Failed",
+        text: "Login gagal",
+        icon: "error",
+        timer: 1000,
+        heightAuto: true,
+        width: 350,
+        showCancelButton: false,
+        showConfirmButton: false,
+        showCloseButton: false,
+      }).then(() => router.push("/admin/login"));
     }
   };
   return (

@@ -48,13 +48,13 @@ export default function AdminPage() {
                 <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                   <div className="w-full md:w-1/2">
                     <form className="flex items-center">
-                      <label for="simple-search" className="sr-only">
+                      <label htmlFor="simple-search" className="sr-only">
                         Search
                       </label>
                       <div className="relative w-full">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                           <svg
-                            ariaHidden="true"
+                            aria-hidden="true"
                             className="w-5 h-5 text-gray-500"
                             fill="currentColor"
                             viewBox="0 0 20 20"
