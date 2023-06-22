@@ -24,14 +24,14 @@ export async function getServerSideProps({ req, res }) {
 
 export default function AdminPage() {
   const db = getFirestore(firebase_app);
-  const [gejala, setGejala] = useState([]);
+  const [gejala, setGejala] = useState({});
   const router = useRouter();
   useEffect(() => {
     const getData = async () => {
       const docRef = doc(db, "sistem-pakar", "mental-health");
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setGejala(docSnap.data().gejala);
+        setGejala(docSnap.data().gejala2);
       } else {
         console.log("Document does not exist");
       }
@@ -40,7 +40,7 @@ export default function AdminPage() {
   }, []);
   function saveDataGejala() {
     const docRef = doc(db, "sistem-pakar", "mental-health");
-    setDoc(docRef, { gejala: gejala }, { merge: true });
+    setDoc(docRef, { gejala2: gejala }, { merge: true });
     Swal.fire({
       title: "Success",
       text: "Data Berhasil Disimpan",
@@ -54,6 +54,7 @@ export default function AdminPage() {
     }).then(() => router.push("/admin"));
   }
   useEffect(() => {}, [gejala]);
+  const sortedKeys = Object.keys(gejala).sort();
   return (
     <>
       <LayoutAdmin>
@@ -66,86 +67,92 @@ export default function AdminPage() {
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                       <th scope="col" className="px-4 py-3">
-                        No
+                        Code
                       </th>
                       <th scope="col" className="px-4 py-3">
-                        Question
+                        Pertanyaan Gejala
                       </th>
                       <th scope="col" className="px-4 py-3">
-                        Yes
+                        Jawaban Iya
                       </th>
                       <th scope="col" className="px-4 py-3">
-                        No
+                        Jawaban Tidak
                       </th>
                       <th scope="col" className="px-4 py-3">
-                        Previous
+                        Jawaban Sebelumnya
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {gejala.map((user, index) => (
-                      <tr>
-                        <td className="px-4 py-3">{index + 1}</td>
-                        <td className="px-4 py-3">
-                          <input
-                            type="text"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
-                            value={user.question}
-                            onChange={(e) => {
-                              const temp = [...gejala];
-                              temp[index].question = e.target.value;
-                              // console.log(temp)
-                              setGejala(temp);
-                            }}
-                          />
-                        </td>
-                        <td className="px-4 py-3">
-                          <input
-                            type="text"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
-                            value={user.yes}
-                            onChange={(e) => {
-                              const temp = [...gejala];
-                              temp[index].yes = e.target.value;
-                              // console.log(temp)
-                              setGejala(temp);
-                            }}
-                          />
-                        </td>
-                        <td className="px-4 py-3">
-                          <input
-                            type="text"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
-                            value={user.no}
-                            onChange={(e) => {
-                              const temp = [...gejala];
-                              temp[index].no = e.target.value;
-                              // console.log(temp)
-                              setGejala(temp);
-                            }}
-                          />
-                        </td>
-                        <td className="px-4 py-3">
-                          <input
-                            type="text"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
-                            value={user.prev}
-                            onChange={(e) => {
-                              const temp = [...gejala];
-                              temp[index].prev = e.target.value;
-                              // console.log(temp)
-                              setGejala(temp);
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                    {sortedKeys.map((key) => {
+                      {
+                        const item = gejala[key];
+                        return (
+                          <tr>
+                            <td className="px-4 py-3">{key}</td>
+                            <td className="px-4 py-3">
+                              <input
+                                type="text"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                                value={item.nama_gejala}
+                                onChange={(e) => {
+                                  const temp = { ...gejala };
+                                  temp[key].nama_gejala = e.target.value;
+                                  // console.log(temp)
+                                  setGejala(temp);
+                                }}
+                              />
+                            </td>
+                            <td className="px-4 py-3">
+                              <input
+                                type="text"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                                value={item.jawaban_iya}
+                                onChange={(e) => {
+                                  const temp = { ...gejala };
+                                  temp[key].jawaban_iya = e.target.value;
+                                  // console.log(temp)
+                                  setGejala(temp);
+                                }}
+                              />
+                            </td>
+                            <td className="px-4 py-3">
+                              <input
+                                type="text"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                                value={item.jawaban_tidak}
+                                onChange={(e) => {
+                                  const temp = { ...gejala };
+                                  temp[key].jawaban_tidak = e.target.value;
+                                  // console.log(temp)
+                                  setGejala(temp);
+                                }}
+                              />
+                            </td>
+                            <td className="px-4 py-3">
+                              <input
+                                type="text"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                                value={item.jawaban_sebelumnya}
+                                onChange={(e) => {
+                                  const temp = { ...gejala };
+                                  temp[key].jawaban_sebelumnya = e.target.value;
+                                  // console.log(temp)
+                                  setGejala(temp);
+                                }}
+                              />
+                            </td>
+                          </tr>
+                        );
+                      }
+                    })}
                   </tbody>
                 </table>
                 <button
                   className="my-10 mx-auto block w-[904px] py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
                   onClick={(e) => {
                     saveDataGejala();
+                    console.log(gejala);
                   }}
                 >
                   Save Data
