@@ -17,7 +17,6 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { deleteCookie, getCookie } from "cookies-next";
 import { Layout } from "@/components/Layout";
-import { add } from "date-fns";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -42,7 +41,7 @@ export default function MentalHealth() {
   const user = auth.currentUser;
   const db = getFirestore(firebase_app);
   const [currentQuestion, setCurrentQuestion] = useState();
-  const [currentPenyakit, setCurrentPenyakit] = useState(null);
+  // const [currentPenyakit, setCurrentPenyakit] = useState(null);
   const [gejala, setGejala] = useState({});
   const [penyakit, setPenyakit] = useState({});
   const [rules, setRules] = useState({});
@@ -78,7 +77,14 @@ export default function MentalHealth() {
     const docSnap = await getDoc(docRef);
     const docRefUser = doc(db, "users", user?.uid);
     const docSnapUser = await getDoc(docRefUser);
+
     if (docSnap.exists()) {
+      const penyakitData = penyakit[result] ?? {};
+      const namaPenyakit = penyakitData.nama ?? "Tidak teridentifikasi";
+      const deskripsiPenyakit =
+        penyakitData.deskripsi ?? "Tidak teridentifikasi";
+      const penyebabPenyakit = penyakitData.penyebab ?? "Tidak teridentifikasi";
+      const solusiPenyakit = penyakitData.solusi ?? "Tidak teridentifikasi";
       if (!docSnap.data().result) {
         const data = {
           result: [
@@ -90,10 +96,10 @@ export default function MentalHealth() {
               majority: docSnapUser.data()?.majority,
               year: docSnapUser.data()?.year,
               id_penyakit: result ?? "Tidak teridentifikasi",
-              nama_penyakit: penyakit[result].nama ?? "Tidak teridentifikasi",
-              deskripsi: penyakit[result].deskripsi ?? "Tidak teridentifikasi",
-              penyebab: penyakit[result].penyebab ?? "Tidak teridentifikasi",
-              solusi: penyakit[result].solusi ?? "Tidak teridentifikasi",
+              nama_penyakit: namaPenyakit,
+              deskripsi: deskripsiPenyakit,
+              penyebab: penyebabPenyakit,
+              solusi: solusiPenyakit,
               user_answers: answers,
               createdAt: new Date(),
             },
@@ -110,10 +116,10 @@ export default function MentalHealth() {
             majority: docSnapUser.data()?.majority,
             year: docSnapUser.data()?.year,
             id_penyakit: result ?? "Tidak teridentifikasi",
-            nama_penyakit: penyakit[result].nama ?? "Tidak teridentifikasi",
-            deskripsi: penyakit[result].deskripsi ?? "Tidak teridentifikasi",
-            penyebab: penyakit[result].penyebab ?? "Tidak teridentifikasi",
-            solusi: penyakit[result].solusi ?? "Tidak teridentifikasi",
+            nama_penyakit: namaPenyakit,
+            deskripsi: deskripsiPenyakit,
+            penyebab: penyebabPenyakit,
+            solusi: solusiPenyakit,
             user_answers: answers,
             createdAt: new Date(),
           }),
@@ -163,8 +169,7 @@ export default function MentalHealth() {
       );
       for (const ruleKey in rules) {
         const rule = rules[ruleKey];
-        // arraysAreEqual(yesAnswers, rule.id_gejala
-        if (yesAnswers.every((answer) => rule.id_gejala.includes(answer))) {
+        if (arraysAreEqual(yesAnswers, rule.id_gejala)) {
           addResult(rule.id_penyakit);
           Swal.fire({
             title: "Hasil",
@@ -181,7 +186,7 @@ export default function MentalHealth() {
           });
           break;
         } else {
-          addResult();
+          addResult("Tidak teridentifikasi");
           Swal.fire({
             title: "Hasil",
             text: `Gejala anda belum teridentifikasi`,
@@ -193,7 +198,7 @@ export default function MentalHealth() {
             showConfirmButton: false,
             showCloseButton: false,
           }).then(() => {
-            router.push("/");
+            router.push("/quiz/history");
           });
           break;
         }

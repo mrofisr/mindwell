@@ -1,4 +1,4 @@
-import {Layout} from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 import Navbar from "@/components/Navbar";
 import TitlePage from "@/components/TitlePage";
 import firebase_app from "@/src/firebase/config";
@@ -51,7 +51,7 @@ export default function Test() {
         deleteCookie("auth");
         auth.signOut();
         router.push("/login");
-      }else{
+      } else {
         fetchUser(authUser.uid);
       }
     });
@@ -60,9 +60,7 @@ export default function Test() {
   useEffect(() => {
     if (user) {
       if (!user.faculty || !user.majority || !user.year) {
-        router.push("/profile"+`/${user.uid}`);
-      }else{
-        console.log(user);
+        router.push("/profile" + `/${user.uid}`);
       }
     }
   }, [user]);
