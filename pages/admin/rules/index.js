@@ -47,7 +47,7 @@ export default function BasisPengetahuan() {
                         Penyakit
                       </th>
                       <th scope="col" className="px-4 py-3">
-                        Edit
+                        Action
                       </th>
                     </tr>
                     <tbody>
@@ -57,13 +57,13 @@ export default function BasisPengetahuan() {
                           const formattedString =
                             "Jika " +
                             item.id_gejala
-                              .map((item) => item + " ATAU")
+                              .map((item) => item + " DAN")
                               .join("\n") +
                             ".";
                           return (
                             <tr>
-                              <td className="px-4 py-3">{key}</td>
-                              <td className="px-4 py-3">{item.id_gejala}</td>
+                              <td className="px-4 py-3 font-bold">{key}</td>
+                              <td className="px-4 py-3">{formattedString}</td>
                               <td className="px-4 py-3">
                                 {penyakit[item.id_penyakit].nama}
                               </td>

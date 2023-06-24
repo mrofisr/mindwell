@@ -89,7 +89,6 @@ export default function AdminPage() {
                                 onChange={(e) => {
                                   const temp = { ...gejala };
                                   temp[key].nama_gejala = e.target.value;
-                                  // console.log(temp)
                                   setGejala(temp);
                                 }}
                               /> 
