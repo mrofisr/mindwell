@@ -83,6 +83,7 @@ export default function Login() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
+        console.log(authUser)
         console.log("Login success");
         router.push("/");
       }
