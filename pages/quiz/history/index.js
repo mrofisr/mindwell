@@ -126,7 +126,7 @@ export default function HistoryQuiz() {
                     ) : (
                       <div className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border border-gray-200 flex flex-row shadow-md">
                         <img
-                          src="/ilustrations/psychology.png"
+                          src={`/ilustrations/${item.nama_penyakit.toLowerCase()}.png`}
                           className="h-28 w-28"
                         />
                         <div className="ml-4">
