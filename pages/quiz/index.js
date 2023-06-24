@@ -4,9 +4,10 @@ import TitlePage from "@/components/TitlePage";
 import firebase_app from "@/src/firebase/config";
 import { deleteCookie, getCookie } from "cookies-next";
 import { getAuth } from "firebase/auth";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -29,15 +30,42 @@ export async function getServerSideProps({ req, res }) {
 export default function Test() {
   const auth = getAuth(firebase_app);
   const router = useRouter();
+  const db = getFirestore(firebase_app);
+  const [user, setUser] = useState();
+  const fetchUser = async (uid) => {
+    try {
+      const docRef = doc(db, "users", uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setUser(docSnap.data());
+      } else {
+        console.log("Document does not exist");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser || !getCookie("auth")) {
         deleteCookie("auth");
         auth.signOut();
         router.push("/login");
+      }else{
+        fetchUser(authUser.uid);
       }
     });
   }, []);
+  // Check data faculty, majority, year exist or not
+  useEffect(() => {
+    if (user) {
+      if (!user.faculty || !user.majority || !user.year) {
+        router.push("/profile"+`/${user.uid}`);
+      }else{
+        console.log(user);
+      }
+    }
+  }, [user]);
   return (
     <>
       <Layout>

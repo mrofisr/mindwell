@@ -1,5 +1,5 @@
 import { LayoutAdmin } from "@/components/Layout";
-import SideBar from "@/components/Sidebar";
+import SideBar from "../../components/Sidebar";
 import firebase_app from "@/src/firebase/config";
 import { getCookie } from "cookies-next";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
@@ -72,15 +72,6 @@ export default function AdminPage() {
                       <th scope="col" className="px-4 py-3">
                         Pertanyaan Gejala
                       </th>
-                      <th scope="col" className="px-4 py-3">
-                        Jawaban Iya
-                      </th>
-                      <th scope="col" className="px-4 py-3">
-                        Jawaban Tidak
-                      </th>
-                      <th scope="col" className="px-4 py-3">
-                        Jawaban Sebelumnya
-                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -101,46 +92,7 @@ export default function AdminPage() {
                                   // console.log(temp)
                                   setGejala(temp);
                                 }}
-                              />
-                            </td>
-                            <td className="px-4 py-3">
-                              <input
-                                type="text"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
-                                value={item.jawaban_iya}
-                                onChange={(e) => {
-                                  const temp = { ...gejala };
-                                  temp[key].jawaban_iya = e.target.value;
-                                  // console.log(temp)
-                                  setGejala(temp);
-                                }}
-                              />
-                            </td>
-                            <td className="px-4 py-3">
-                              <input
-                                type="text"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
-                                value={item.jawaban_tidak}
-                                onChange={(e) => {
-                                  const temp = { ...gejala };
-                                  temp[key].jawaban_tidak = e.target.value;
-                                  // console.log(temp)
-                                  setGejala(temp);
-                                }}
-                              />
-                            </td>
-                            <td className="px-4 py-3">
-                              <input
-                                type="text"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
-                                value={item.jawaban_sebelumnya}
-                                onChange={(e) => {
-                                  const temp = { ...gejala };
-                                  temp[key].jawaban_sebelumnya = e.target.value;
-                                  // console.log(temp)
-                                  setGejala(temp);
-                                }}
-                              />
+                              /> 
                             </td>
                           </tr>
                         );

@@ -30,6 +30,25 @@ async function getFeedData(searchQuery = "") {
   }));
 }
 
+export async function getServerSideProps({ req, res }) {
+  const searchQuery = ""; // Add your desired search query here
+  const feedData = await getFeedData(searchQuery);
+  const auth = getCookie("auth", { req, res });
+  if (!auth) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      feedData,
+    },
+  };
+}
+
 const formatDate = (dateStr) => {
   const dateObj = new Date(dateStr);
   return format(dateObj, "EEEE, dd MMMM yyyy", { locale: id });
@@ -171,13 +190,4 @@ export default function Articles({ feedData }) {
       </Layout>
     </>
   );
-}
-
-export async function getStaticProps() {
-  const feedData = await getFeedData();
-  return {
-    props: {
-      feedData,
-    },
-  };
 }

@@ -1,7 +1,7 @@
 import { BsFillPersonFill } from "react-icons/bs";
 import { GoSignOut } from "react-icons/go";
 import { TbChecklist } from "react-icons/tb";
-import { AiFillAlert } from "react-icons/ai";
+import { AiFillAlert, AiOutlineBranches } from "react-icons/ai";
 import { GiAerialSignal } from "react-icons/gi";
 import { deleteCookie } from "cookies-next";
 import { AiFillHome } from "react-icons/ai";
@@ -53,6 +53,17 @@ const SideBar = () => {
               >
                 <AiFillAlert className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" />
                 <span className="flex-1 ml-3 whitespace-nowrap">Penyakit</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/admin/rules"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 "
+              >
+                <AiOutlineBranches className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" />
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Rules Forward Chaining
+                </span>
               </a>
             </li>
             <li>

@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { deleteCookie, getCookie } from "cookies-next";
 import { Layout } from "@/components/Layout";
+import { add } from "date-fns";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
@@ -40,9 +41,12 @@ export default function MentalHealth() {
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
   const db = getFirestore(firebase_app);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [gejala, setGejala] = useState([]);
-  const [penyakit, setPenyakit] = useState([]);
+  const [currentQuestion, setCurrentQuestion] = useState();
+  const [currentPenyakit, setCurrentPenyakit] = useState(null);
+  const [gejala, setGejala] = useState({});
+  const [penyakit, setPenyakit] = useState({});
+  const [rules, setRules] = useState({});
+  const [answers, setAnswers] = useState({});
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser || !getCookie("auth")) {
@@ -56,19 +60,19 @@ export default function MentalHealth() {
       const docRef = doc(db, "sistem-pakar", "mental-health");
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setGejala(docSnap.data().gejala);
-        setPenyakit(docSnap.data().penyakit);
+        setGejala(docSnap.data().gejala2);
+        setPenyakit(docSnap.data().penyakit2);
+        setRules(docSnap.data().rules);
+        const gejalaData = docSnap.data().gejala2;
+        setCurrentQuestion(gejalaData["G01"]);
       } else {
         console.log("Document does not exist");
       }
     };
     getData();
   }, []);
-
-  const currentQuestion = gejala[currentIndex];
   const dbRef = collection(db, "sistem-pakar");
   const router = useRouter();
-
   const addResult = async (result) => {
     const docRef = doc(db, "sistem-pakar", "mental-health");
     const docSnap = await getDoc(docRef);
@@ -85,9 +89,12 @@ export default function MentalHealth() {
               faculty: docSnapUser.data()?.faculty,
               majority: docSnapUser.data()?.majority,
               year: docSnapUser.data()?.year,
-              id_penyakit: result.code,
-              penyakit: result.name,
-              description: result.description,
+              id_penyakit: result ?? "Tidak teridentifikasi",
+              nama_penyakit: penyakit[result].nama ?? "Tidak teridentifikasi",
+              deskripsi: penyakit[result].deskripsi ?? "Tidak teridentifikasi",
+              penyebab: penyakit[result].penyebab ?? "Tidak teridentifikasi",
+              solusi: penyakit[result].solusi ?? "Tidak teridentifikasi",
+              user_answers: answers,
               createdAt: new Date(),
             },
           ],
@@ -102,9 +109,12 @@ export default function MentalHealth() {
             faculty: docSnapUser.data()?.faculty,
             majority: docSnapUser.data()?.majority,
             year: docSnapUser.data()?.year,
-            id_penyakit: result.code,
-            penyakit: result.name,
-            description: result.description,
+            id_penyakit: result ?? "Tidak teridentifikasi",
+            nama_penyakit: penyakit[result].nama ?? "Tidak teridentifikasi",
+            deskripsi: penyakit[result].deskripsi ?? "Tidak teridentifikasi",
+            penyebab: penyakit[result].penyebab ?? "Tidak teridentifikasi",
+            solusi: penyakit[result].solusi ?? "Tidak teridentifikasi",
+            user_answers: answers,
             createdAt: new Date(),
           }),
         };
@@ -115,50 +125,79 @@ export default function MentalHealth() {
     }
   };
 
-  const handleAnswer = (answer) => {
-    // Move to the next question based on the answer chosen
-    if (answer === "yes") {
-      if (Number.isInteger(currentQuestion.yes)) {
-        setCurrentIndex(currentQuestion.yes);
-      } else {
-        const result = penyakit.find((r) => r.code === currentQuestion.yes);
-        Swal.fire({
-          icon: "info",
-          title: "Result",
-          text: result.name,
-          showConfirmButton: true,
-          width: 350,
-          heightAuto: true,
-        }).then(() => {
-          // Reset the quiz back to the beginning
-          router.push("/quiz/history");
-        });
-        addResult(result);
-      }
-    } else if (answer === "no") {
-      if (Number.isInteger(currentQuestion.no)) {
-        setCurrentIndex(currentQuestion.no);
-      } else {
-        const result = penyakit.find((r) => r.code === currentQuestion.no);
-        Swal.fire({
-          icon: "info",
-          title: "Result",
-          text: result.name,
-          showConfirmButton: true,
-          width: 350,
-          heightAuto: true,
-        }).then(() => {
-          // Reset the quiz back to the beginning
-          router.push("/quiz/history");
-        });
-        addResult(result);
+  useEffect(() => {}, [answers]);
+  function arraysAreEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
       }
     }
-  };
 
-  const handlePrev = () => {
-    // Move to the previous question
-    setCurrentIndex(currentQuestion.prev);
+    return true;
+  }
+  const handleAnswer = (answer) => {
+    const gejalaKeys = Object.keys(gejala).sort();
+    const currentQuestionKey = Object.keys(gejala).find(
+      (key) => gejala[key] === currentQuestion
+    );
+    const currentIndex = gejalaKeys.indexOf(currentQuestionKey);
+    if (currentIndex < gejalaKeys.length - 1) {
+      // Move to the next question
+      const nextQuestionKey = gejalaKeys[currentIndex + 1];
+      setCurrentQuestion(gejala[nextQuestionKey]);
+      if (currentQuestionKey !== undefined) {
+        setAnswers((prevAnswers) => ({
+          ...prevAnswers,
+          [currentQuestionKey]: answer,
+        }));
+      }
+    }
+    if (currentIndex === gejalaKeys.length - 1) {
+      // Answers with yes
+      const yesAnswers = Object.keys(answers).filter(
+        (key) => answers[key] === "yes"
+      );
+      for (const ruleKey in rules) {
+        const rule = rules[ruleKey];
+        if (arraysAreEqual(yesAnswers, rule.id_gejala)) {
+          addResult(rule.id_penyakit);
+          Swal.fire({
+            title: "Hasil",
+            text: `Anda mengalami ${penyakit[rule.id_penyakit].nama}`,
+            icon: "info",
+            timer: 1000,
+            heightAuto: true,
+            width: 350,
+            showCancelButton: false,
+            showConfirmButton: false,
+            showCloseButton: false,
+          }).then(() => {
+            router.push("/quiz/history");
+          });
+          break;
+        } else {
+          addResult();
+          Swal.fire({
+            title: "Hasil",
+            text: `Gejala anda belum teridentifikasi`,
+            icon: "info",
+            timer: 1000,
+            heightAuto: true,
+            width: 350,
+            showCancelButton: false,
+            showConfirmButton: false,
+            showCloseButton: false,
+          }).then(() => {
+            router.push("/");
+          });
+          break;
+        }
+      }
+    }
   };
   return (
     <Layout>
@@ -186,10 +225,9 @@ export default function MentalHealth() {
             >
               {currentQuestion && (
                 <div className="flex flex-col">
-                  <h2 className="text-xl mb-4">{currentQuestion.question}</h2>
-                  <p className="mb-4 text-gray-500">
-                    Jawab untuk lanjut ke pertanyaan berikutnya
-                  </p>
+                  <h2 className="text-xl mb-4">
+                    {currentQuestion.nama_gejala}
+                  </h2>
                   <div className="mt-10">
                     <button
                       className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
@@ -203,17 +241,6 @@ export default function MentalHealth() {
                     >
                       No
                     </button>
-                    {currentIndex !== 0 && (
-                      <button
-                        className="mt-40 text-center w-full py-3.5 rounded-lg bg-gray-400 border-b-4 border-gray-500 text-white"
-                        onClick={() => {
-                          handlePrev();
-                        }}
-                        disabled={currentQuestion.prev === 0}
-                      >
-                        Previous
-                      </button>
-                    )}
                   </div>
                 </div>
               )}

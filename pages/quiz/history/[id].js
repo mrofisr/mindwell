@@ -82,22 +82,31 @@ export default function HistoryQuizId() {
                   onClick={() => router.push("/")}
                 />
                 <h1 className="font-bold text-2xl text-center">
-                  {result[0]?.penyakit}
+                  {result[0]?.nama_penyakit}
                 </h1>
                 <div className="flex justify-center">
                   <img
                     className="my-6 h-32 w-32"
                     src={"/ilustrations/psychology.png"}
-                    alt={result[0]?.penyakit}
+                    alt={result[0]?.nama_penyakit}
                   />
                 </div>
+                <p className="font-bold">Deskripsi:</p>
                 <p className="text-md text-justify text-gray-600 leading-7 indent-8 prose-stone">
-                  {result[0]?.description}
+                  {result[0]?.deskripsi}
+                </p>
+                <p className="font-bold">Penyebab:</p>
+                <p className="text-md text-justify text-gray-600 leading-7 indent-8 prose-stone">
+                  {result[0]?.penyebab}
+                </p>
+                <p className="font-bold">Solusi:</p>
+                <p className="text-md text-justify text-gray-600 leading-7 indent-8 prose-stone">
+                  {result[0]?.solusi}
                 </p>
                 <button
                   className="mt-10 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
                   onClick={(e) => {
-                    router.push("/quiz/history")
+                    router.push("/quiz/history");
                   }}
                 >
                   Back to History Quiz

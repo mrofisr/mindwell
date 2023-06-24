@@ -12,7 +12,7 @@ import { id } from "date-fns/locale";
 import LoadingPage from "@/components/Loading";
 import { Transition } from "@headlessui/react";
 import { deleteCookie, getCookie } from "cookies-next";
-import {Layout} from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 import Navbar from "@/components/Navbar";
 
 export async function getServerSideProps({ req, res }) {
@@ -95,7 +95,35 @@ export default function HistoryQuiz() {
               >
                 {result.map((item) => (
                   <div className="flex flex-col" key={item?.result_id}>
-                    <Link href={"/quiz/history/" + item?.result_id}>
+                    {item?.nama_penyakit !== "Tidak teridentifikasi" ? (
+                      <Link href={"/quiz/history/" + item?.result_id}>
+                        <div className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border border-gray-200 flex flex-row shadow-md">
+                          <img
+                            src={`/ilustrations/${item.nama_penyakit.toLowerCase()}.png`}
+                            className="h-28 w-28"
+                          />
+                          <div className="ml-4">
+                            <div className="mb-3">
+                              <h2 className="text-lg font-semibold text-gray-800 capitalize">
+                                {item?.nama_penyakit}
+                              </h2>
+
+                              <p className="text-sm text-gray-500">
+                                {formatDate(
+                                  new Timestamp(
+                                    item?.createdAt.seconds,
+                                    item?.createdAt.nanoseconds
+                                  ).toDate()
+                                )}
+                              </p>
+                            </div>
+                            <p className="text-sm text-justify line-clamp-4 text-gray-600">
+                              {item?.deskripsi}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    ) : (
                       <div className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border border-gray-200 flex flex-row shadow-md">
                         <img
                           src="/ilustrations/psychology.png"
@@ -104,7 +132,7 @@ export default function HistoryQuiz() {
                         <div className="ml-4">
                           <div className="mb-3">
                             <h2 className="text-lg font-semibold text-gray-800 capitalize">
-                              {item?.penyakit}
+                              {item?.nama_penyakit}
                             </h2>
 
                             <p className="text-sm text-gray-500">
@@ -117,11 +145,11 @@ export default function HistoryQuiz() {
                             </p>
                           </div>
                           <p className="text-sm text-justify line-clamp-4 text-gray-600">
-                            {item?.description}
+                            {item?.deskripsi}
                           </p>
                         </div>
                       </div>
-                    </Link>
+                    )}
                   </div>
                 ))}
               </Transition>
@@ -130,7 +158,7 @@ export default function HistoryQuiz() {
             <LoadingPage />
           )}
         </div>
-        <Navbar/>
+        <Navbar />
       </Layout>
     </>
   );
