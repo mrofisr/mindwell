@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { LayoutAdmin } from "../../components/Layout";
-import SideBar from "../../components/Sidebar";
+import { LayoutAdmin } from "../../../components/Layout";
+import SideBar from "../../../components/Sidebar";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
-import firebase_app from "../../src/firebase/config";
+import firebase_app from "../../../src/firebase/config";
 
 export default function BasisPengetahuan() {
   const [penyakit, setPenyakit] = useState({});
