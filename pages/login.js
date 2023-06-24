@@ -82,7 +82,7 @@ export default function Login() {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
+      if (authUser && getCookie("auth")) {
         console.log(authUser)
         console.log("Login success");
         router.push("/");
