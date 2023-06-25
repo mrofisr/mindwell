@@ -50,37 +50,37 @@ export default function BasisPengetahuan() {
                         Action
                       </th>
                     </tr>
-                    <tbody>
-                      {sortedKeysRules.map((key) => {
-                        {
-                          const item = rules[key];
-                          const formattedString =
-                            "Jika " +
-                            item.id_gejala
-                              .map((item) => item + " DAN")
-                              .join("\n") +
-                            ".";
-                          return (
-                            <tr>
-                              <td className="px-4 py-3 font-bold">{key}</td>
-                              <td className="px-4 py-3">{formattedString}</td>
-                              <td className="px-4 py-3">
-                                {penyakit[item.id_penyakit].nama}
-                              </td>
-                              <td className="px-4 py-3">
-                                <a
-                                  href={"/admin/rules/edit/" + key}
-                                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                >
-                                  Edit
-                                </a>
-                              </td>
-                            </tr>
-                          );
-                        }
-                      })}
-                    </tbody>
                   </thead>
+                  <tbody>
+                    {sortedKeysRules.map((key) => {
+                      {
+                        const item = rules[key];
+                        const formattedString =
+                          "Jika " +
+                          item.id_gejala
+                            .map((item) => item + " DAN")
+                            .join("\n") +
+                          ".";
+                        return (
+                          <tr>
+                            <td className="px-4 py-3 font-bold">{key}</td>
+                            <td className="px-4 py-3">{formattedString}</td>
+                            <td className="px-4 py-3">
+                              {penyakit[item.id_penyakit].nama}
+                            </td>
+                            <td className="px-4 py-3">
+                              <a
+                                href={"/admin/rules/edit/" + key}
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                              >
+                                Edit
+                              </a>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    })}
+                  </tbody>
                 </table>
               </div>
             </div>
