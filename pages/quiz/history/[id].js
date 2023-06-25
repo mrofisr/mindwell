@@ -86,9 +86,8 @@ export default function HistoryQuizId() {
                 </h1>
                 <div className="flex justify-center">
                   <img
-                    className="my-6 h-32 w-32"
-                    src={"/ilustrations/psychology.png"}
-                    alt={result[0]?.nama_penyakit}
+                    src={`/ilustrations/${result[0]?.nama_penyakit.toLowerCase()}.png`}
+                    className="h-28 w-28 my-5"
                   />
                 </div>
                 <p className="font-bold">Deskripsi:</p>

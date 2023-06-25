@@ -131,7 +131,7 @@ export default function AdminPage() {
                           <td className="px-4 py-3">{user.faculty}</td>
                           <td className="px-4 py-3">{user.majority}</td>
                           <td className="px-4 py-3">{user.year}</td>
-                          <td className="px-4 py-3">{user.penyakit}</td>
+                          <td className="px-4 py-3">{user.nama_penyakit}</td>
                           <td className="px-4 py-3">
                             {formatDate(
                               new Timestamp(

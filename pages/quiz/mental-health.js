@@ -169,6 +169,7 @@ export default function MentalHealth() {
       );
       for (const ruleKey in rules) {
         const rule = rules[ruleKey];
+        console.log(arraysAreEqual(yesAnswers, rule.id_gejala));
         if (arraysAreEqual(yesAnswers, rule.id_gejala)) {
           addResult(rule.id_penyakit);
           Swal.fire({

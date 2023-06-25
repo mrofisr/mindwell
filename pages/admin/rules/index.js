@@ -6,7 +6,6 @@ import firebase_app from "../../../src/firebase/config";
 
 export default function BasisPengetahuan() {
   const [penyakit, setPenyakit] = useState({});
-  const [gejala, setGejala] = useState({});
   const [rules, setRules] = useState({});
   const db = getFirestore(firebase_app);
   useEffect(() => {
@@ -15,7 +14,6 @@ export default function BasisPengetahuan() {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setPenyakit(docSnap.data().penyakit2);
-        setGejala(docSnap.data().gejala2);
         setRules(docSnap.data().rules);
       } else {
         console.log("Document does not exist");
@@ -23,8 +21,6 @@ export default function BasisPengetahuan() {
     };
     getData();
   }, []);
-  const sortedKeysPenyakit = Object.keys(penyakit || {}).sort();
-  const sortedKeysGejala = Object.keys(gejala || {}).sort();
   const sortedKeysRules = Object.keys(rules || {}).sort();
   return (
     <>
