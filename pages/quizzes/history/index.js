@@ -38,7 +38,7 @@ const formatDate = (dateStr) => {
   return format(dateObj, "EEEE, dd MMMM yyyy", { locale: id });
 };
 
-export default function HistoryQuiz() {
+export default function HistoryTest() {
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
   const db = getFirestore(firebase_app);
@@ -83,7 +83,7 @@ export default function HistoryQuiz() {
                 alt="Logo"
                 onClick={() => router.push("/")}
               />
-              <TitlePage title={"History Quiz"} />
+              <TitlePage title={"History Quizzes"} />
               <Transition
                 show={true}
                 enter="transition-all ease-in-out duration-500 delay-[200ms]"
@@ -96,7 +96,7 @@ export default function HistoryQuiz() {
                 {result.map((item) => (
                   <div className="flex flex-col" key={item?.result_id}>
                     {item?.nama_penyakit !== "Tidak teridentifikasi" ? (
-                      <Link href={"/quiz/history/" + item?.result_id}>
+                      <Link href={"/quizzes/history/" + item?.result_id}>
                         <div className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border border-gray-200 flex flex-row shadow-md">
                           <img
                             src={`/ilustrations/${item.nama_penyakit.toLowerCase()}.png`}

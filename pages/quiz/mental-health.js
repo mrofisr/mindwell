@@ -150,10 +150,13 @@ export default function MentalHealth() {
     const currentQuestionKey = Object.keys(gejala).find(
       (key) => gejala[key] === currentQuestion
     );
-    const currentIndex = gejalaKeys.indexOf(currentQuestionKey);
-    if (currentIndex < gejalaKeys.length - 1) {
+    const currentIndex = gejalaKeys.indexOf(currentQuestionKey) + 1;
+    if (currentIndex < gejalaKeys.length) {
       // Move to the next question
       const nextQuestionKey = gejalaKeys[currentIndex + 1];
+      // console.log("nextQuestionKey: ", nextQuestionKey);
+      // console.log("currentIndex: ", currentIndex);
+      // console.log("gejalaKeys.length: ", gejalaKeys.length)
       setCurrentQuestion(gejala[nextQuestionKey]);
       if (currentQuestionKey !== undefined) {
         setAnswers((prevAnswers) => ({
@@ -162,14 +165,14 @@ export default function MentalHealth() {
         }));
       }
     }
-    if (currentIndex === gejalaKeys.length - 1) {
+    if (currentIndex === gejalaKeys.length) {
       // Answers with yes
       const yesAnswers = Object.keys(answers).filter(
         (key) => answers[key] === "yes"
       );
       for (const ruleKey in rules) {
         const rule = rules[ruleKey];
-        console.log(arraysAreEqual(yesAnswers, rule.id_gejala));
+        // yesAnswers.every((answer) => rule.id_gejala.includes(answer))
         if (arraysAreEqual(yesAnswers, rule.id_gejala)) {
           addResult(rule.id_penyakit);
           Swal.fire({
@@ -183,7 +186,7 @@ export default function MentalHealth() {
             showConfirmButton: false,
             showCloseButton: false,
           }).then(() => {
-            router.push("/quiz/history");
+            router.push("/quizzes/history");
           });
           break;
         } else {
@@ -199,7 +202,7 @@ export default function MentalHealth() {
             showConfirmButton: false,
             showCloseButton: false,
           }).then(() => {
-            router.push("/quiz/history");
+            router.push("/quizzes/history");
           });
           break;
         }
@@ -208,52 +211,54 @@ export default function MentalHealth() {
   };
   return (
     <Layout>
-      <div className="relative">
-        <div className="mx-4 my-5">
-          <Image
-            src="/mindwell.png"
-            className="object-center"
-            width={100}
-            height={33}
-            alt="Logo"
-            onClick={() => router.push("/")}
-          />
-          <div className="flex flex-col">
-            {/* */}
-            <TitlePage title={"Mental Health Quiz"} />
-            <Transition
-              show={!!currentQuestion}
-              enter="transition-all ease-in-out duration-500 delay-[200ms]"
-              enterFrom="opacity-0 translate-y-6"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition-all ease-in-out duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              {currentQuestion && (
-                <div className="flex flex-col">
-                  <h2 className="text-xl mb-4">
-                    {currentQuestion.nama_gejala}
-                  </h2>
-                  <div className="mt-10">
-                    <button
-                      className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
-                      onClick={() => handleAnswer("yes")}
-                    >
-                      Yes
-                    </button>
-                    <button
-                      className="mt-5 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
-                      onClick={() => handleAnswer("no")}
-                    >
-                      No
-                    </button>
+      <div className="mx-4 my-5 flex flex-col">
+        <Image
+          src="/mindwell.png"
+          className="object-center"
+          width={100}
+          height={33}
+          alt="Logo"
+          onClick={() => router.push("/")}
+        />
+        {/* */}
+        <TitlePage title={"Mental Health Quiz"} />
+        <Transition
+          show={!!currentQuestion}
+          enter="transition-all ease-in-out duration-500 delay-[200ms]"
+          enterFrom="opacity-0 translate-y-6"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition-all ease-in-out duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          {currentQuestion && (
+            <div className="flex-grow">
+              <div className="flex flex-col h-full">
+                <h2 className="text-xl mb-4">{currentQuestion.nama_gejala}</h2>
+                <div className="flex-grow relative">
+                  <div className="flex flex-col h-full bottom-0">
+                    <div className="mb-5">
+                      <button
+                        className="text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
+                        onClick={() => handleAnswer("yes")}
+                      >
+                        Yes
+                      </button>
+                    </div>
+                    <div className="mb-5">
+                      <button
+                        className="text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
+                        onClick={() => handleAnswer("no")}
+                      >
+                        No
+                      </button>
+                    </div>
                   </div>
                 </div>
-              )}
-            </Transition>
-          </div>
-        </div>
+              </div>
+            </div>
+          )}
+        </Transition>
       </div>
     </Layout>
   );

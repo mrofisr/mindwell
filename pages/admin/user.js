@@ -1,5 +1,5 @@
 import { LayoutAdmin } from "@/components/Layout";
-import SideBar from "../../components/Sidebar";
+import SideBar from "@/components/Sidebar";
 import firebase_app from "@/src/firebase/config";
 import { getCookie } from "cookies-next";
 import { collection, getDocs, getFirestore } from "firebase/firestore";

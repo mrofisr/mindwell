@@ -77,7 +77,7 @@ export default function Test() {
             onClick={() => router.push("/")}
           />
           <div className="flex flex-col">
-            <TitlePage title={"Pick your quiz"} />
+            <TitlePage title={"Pick your test"} />
             <a href="/quiz/mental-health">
               <div className="w-full mx-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 border border-gray-200 flex flex-row shadow-md">
                 <img src="/ilustrations/psychology.png" className="h-28 w-28" />
@@ -88,7 +88,7 @@ export default function Test() {
                     </h2>
                   </div>
                   <p className="text-sm text-justify line-clamp-4 text-gray-600">
-                    A mental health quiz is a brief assessment tool designed to
+                    A mental health test is a brief assessment tool designed to
                     help individuals identify potential symptoms or signs of
                     mental health concerns.
                   </p>

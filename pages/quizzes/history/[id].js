@@ -27,7 +27,7 @@ export async function getServerSideProps({ req, res }) {
   };
 }
 
-export default function HistoryQuizId() {
+export default function HistoryTestId() {
   const router = useRouter();
   const auth = getAuth(firebase_app);
   const [result, setResult] = useState([]);
@@ -105,10 +105,10 @@ export default function HistoryQuizId() {
                 <button
                   className="mt-10 text-center w-full py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
                   onClick={(e) => {
-                    router.push("/quiz/history");
+                    router.push("/quizzes/history");
                   }}
                 >
-                  Back to History Quiz
+                  Back to History Quizzes
                 </button>
               </Transition>
             </div>

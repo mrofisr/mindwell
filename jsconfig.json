@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "https://mindwell.site/",
+    "baseUrl": ".",
     "paths": {
       "@/*":["./*"],
     }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { LayoutAdmin } from "../../../components/Layout";
-import SideBar from "../../../components/Sidebar";
+import { LayoutAdmin } from "@/components/Layout";
+import SideBar from "@/components/Sidebar";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
-import firebase_app from "../../../src/firebase/config";
+import firebase_app from "@/src/firebase/config";
 
 export default function BasisPengetahuan() {
   const [penyakit, setPenyakit] = useState({});
@@ -57,10 +57,11 @@ export default function BasisPengetahuan() {
                             .map((item) => item + " DAN")
                             .join("\n") +
                           ".";
+                        const cleanedString = formattedString.slice(0, -4); 
                         return (
                           <tr>
                             <td className="px-4 py-3 font-bold">{key}</td>
-                            <td className="px-4 py-3">{formattedString}</td>
+                            <td className="px-4 py-3">{cleanedString}.</td>
                             <td className="px-4 py-3">
                               {penyakit[item.id_penyakit].nama}
                             </td>

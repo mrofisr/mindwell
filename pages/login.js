@@ -79,11 +79,9 @@ export default function Login() {
       console.error(error);
     }
   };
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser && getCookie("auth")) {
-        console.log("Login success");
         router.push("/");
       }
     });
@@ -112,7 +110,7 @@ export default function Login() {
                   alt="Illustration"
                 />
                 <div className="text-center">
-                  <h1 className="mt-4 text-xl font-bold">Mental Health Test</h1>
+                  <h1 className="mt-4 text-xl font-bold">Mental Health Quizzes</h1>
                   <p className="mb-28 mt-1  text-[14px] font-[50]">
                     Assess emotional and psychological well-being.
                   </p>

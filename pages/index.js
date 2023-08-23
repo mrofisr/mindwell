@@ -70,10 +70,9 @@ export default function Index({ feedData }) {
   );
   const auth = getAuth(firebase_app);
   const [user, setUser] = useState();
-  const [visibleItems, setVisibleItems] = useState(feedData.slice(0, 10));
+  const visibleItems = feedData.slice(0, 10);
   const timeOfDay = getTimeOfDay(date);
   const [quote, setQuote] = useState(null);
-
   const fetchQuote = async () => {
     try {
       const res = await fetch(
@@ -157,7 +156,7 @@ export default function Index({ feedData }) {
                 )}
               </div>
               <span className="text-base text-gray-800 font-semibold">
-                Articles for today{" "}
+                Articles for today
               </span>
               <Swiper
                 className="w-full"
@@ -174,7 +173,7 @@ export default function Index({ feedData }) {
               >
                 {visibleItems.map((item) => (
                   <SwiperSlide key={item.guid}>
-                    <div className="w-full h-[206px] rounded-lg bg-white px-5 py-5 my-5 text-gray-800 shadow-md border border-gray-200">
+                    <div className="w-full h-auto rounded-lg bg-white px-5 py-5 my-5 text-gray-800 shadow-md border border-gray-200">
                       <a href={item.link} target={"_blank"}>
                         <div className="mb-3">
                           <h2 className="text-lg font-semibold text-gray-800 capitalize">
@@ -184,13 +183,15 @@ export default function Index({ feedData }) {
                             {formatDate(item.pubDate)}
                           </span>
                         </div>
-                        <p className="text-sm text-justify line-clamp-2 text-gray-600">
-                          {item.description}
-                        </p>
-                        <div className="mt-2 text-right">
-                          <span className="text-sm text-rose-800">
-                            Read More →
-                          </span>
+                        <div>
+                          <p className="text-sm text-justify line-clamp-4 text-gray-600">
+                            {item.description}
+                          </p>
+                          <div className="mt-2 text-right">
+                            <span className="text-sm text-rose-800">
+                              Read More →
+                            </span>
+                          </div>
                         </div>
                       </a>
                     </div>

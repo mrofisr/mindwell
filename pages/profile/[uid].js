@@ -138,7 +138,7 @@ const DetailProfile = () => {
         title: "Update Profile",
         text: "Profil berhasil diperbarui!",
       }).then(() => {
-        // Reset the quiz back to the beginning
+        // Reset the test back to the beginning
         window.location.href = "/profile";
       });
     } catch (error) {

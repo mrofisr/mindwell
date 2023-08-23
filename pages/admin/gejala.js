@@ -1,5 +1,5 @@
 import { LayoutAdmin } from "@/components/Layout";
-import SideBar from "../../components/Sidebar";
+import SideBar from "@/components/Sidebar";
 import firebase_app from "@/src/firebase/config";
 import { getCookie } from "cookies-next";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
@@ -103,7 +103,6 @@ export default function AdminPage() {
                   className="my-10 mx-auto block w-[904px] py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
                   onClick={(e) => {
                     saveDataGejala();
-                    console.log(gejala);
                   }}
                 >
                   Save Data

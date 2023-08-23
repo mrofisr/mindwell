@@ -1,5 +1,5 @@
 import { LayoutAdmin } from "@/components/Layout";
-import SideBar from "../../components/Sidebar";
+import SideBar from "@/components/Sidebar";
 import firebase_app from "@/src/firebase/config";
 import { Chart } from "chart.js/auto";
 import { getCookie } from "cookies-next";
@@ -145,7 +145,7 @@ export default function AdminPage() {
                         </div>
                         <div>
                           <p className="text-teal-300 text-sm font-medium uppercase leading-4">
-                            Activity Test
+                            Activity Quizzes
                           </p>
                           <p className="text-white font-bold text-2xl inline-flex items-center space-x-2">
                             <span>{result.length}</span>
@@ -155,7 +155,7 @@ export default function AdminPage() {
                     </div>
                   </div>
                   <h1 className="font-bold py-4 uppercase">
-                    Analytic User Test
+                    Analytic User Quizzes
                   </h1>
                   <div id="stats" className="grid grid-cols-1 gap-6">
                     <canvas ref={barChartRef} className="w-full"></canvas>
