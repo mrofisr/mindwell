@@ -41,11 +41,11 @@ export default function MentalHealth() {
   const user = auth.currentUser;
   const db = getFirestore(firebase_app);
   const [currentQuestion, setCurrentQuestion] = useState();
-  // const [currentPenyakit, setCurrentPenyakit] = useState(null);
   const [gejala, setGejala] = useState({});
   const [penyakit, setPenyakit] = useState({});
   const [rules, setRules] = useState({});
   const [answers, setAnswers] = useState({});
+  const [yesAnswers, setYesAnswers] = useState([]);
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser || !getCookie("auth")) {
@@ -136,40 +136,44 @@ export default function MentalHealth() {
     if (arr1.length !== arr2.length) {
       return false;
     }
-
     for (let i = 0; i < arr1.length; i++) {
       if (arr1[i] !== arr2[i]) {
         return false;
       }
     }
-
     return true;
   }
+  const currentQuestionKey = Object.keys(gejala)
+    .sort()
+    .find((key) => gejala[key].nama_gejala === currentQuestion?.nama_gejala);
+  const gejalaKeys = Object.keys(gejala).sort();
+  const currentIndex = gejalaKeys.indexOf(currentQuestionKey);
+  // console.log("currentQuestionKey: ", currentQuestionKey);
+  // console.log("gejalaKeys.length: ", gejalaKeys.length);
+  // console.log("currentIndex: ", currentIndex);
   const handleAnswer = (answer) => {
-    const gejalaKeys = Object.keys(gejala).sort();
-    const currentQuestionKey = Object.keys(gejala).find(
-      (key) => gejala[key] === currentQuestion
-    );
-    const currentIndex = gejalaKeys.indexOf(currentQuestionKey) + 1;
-    if (currentIndex < gejalaKeys.length) {
+    if (currentIndex < gejalaKeys.length - 1) {
       // Move to the next question
       const nextQuestionKey = gejalaKeys[currentIndex + 1];
-      // console.log("nextQuestionKey: ", nextQuestionKey);
-      // console.log("currentIndex: ", currentIndex);
-      // console.log("gejalaKeys.length: ", gejalaKeys.length)
       setCurrentQuestion(gejala[nextQuestionKey]);
-      if (currentQuestionKey !== undefined) {
-        setAnswers((prevAnswers) => ({
-          ...prevAnswers,
-          [currentQuestionKey]: answer,
-        }));
-      }
+      // console.log("nextQuestionKey: ", nextQuestionKey);
+      // Update the state of answers
+      const updatedAnswers = {
+        [currentQuestionKey]: answer,
+        [nextQuestionKey]: answer,
+      };
+      setAnswers((prevAnswers) => ({
+        ...prevAnswers,
+        ...updatedAnswers,
+      }));
     }
-    if (currentIndex === gejalaKeys.length) {
-      // Answers with yes
-      const yesAnswers = Object.keys(answers).filter(
-        (key) => answers[key] === "yes"
+    console.log("answers: ", answers);
+    if (currentIndex === gejalaKeys.length - 1) {
+      setYesAnswers(
+        Object.keys(answers).filter((key) => answers[key] === "yes")
       );
+      // console.log("yesAnswers: ", yesAnswers);
+      // console.log("Yeaay");
       for (const ruleKey in rules) {
         const rule = rules[ruleKey];
         // yesAnswers.every((answer) => rule.id_gejala.includes(answer))

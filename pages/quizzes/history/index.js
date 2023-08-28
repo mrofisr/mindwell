@@ -69,6 +69,16 @@ export default function HistoryTest() {
     };
     getData();
   }, [user]);
+  result.sort((a, b) => {
+    const dateA = new Date(
+      a.createdAt.seconds * 1000 + a.createdAt.nanoseconds / 1000000
+    );
+    const dateB = new Date(
+      b.createdAt.seconds * 1000 + b.createdAt.nanoseconds / 1000000
+    );
+    // Sort in descending order (newest first)
+    return dateB - dateA;
+  });
   return (
     <>
       <Layout>

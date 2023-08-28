@@ -6,14 +6,17 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-export default function AddBasisPengetahuan() {
+export default function UpdateBasisPengetahuan() {
   const [gejala, setGejala] = useState({});
   const [penyakit, setPenyakit] = useState({}); // tambah ini
   const [rules, setRules] = useState({}); // tambah ini
+  const [rulesByID, setRulesByID] = useState({});
   const db = getFirestore(firebase_app);
   const [selectedPenyakit, setSelectedPenyakit] = useState(""); // Initialize with a default value
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]); // Initialize as an empty array
   const router = useRouter();
+  const { id } = router.query;
+
   const handleCheckboxChange = (e) => {
     const checkboxValue = e.target.value;
     const isChecked = e.target.checked;
@@ -37,8 +40,8 @@ export default function AddBasisPengetahuan() {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setGejala(docSnap.data().gejala2);
-        setPenyakit(docSnap.data().penyakit2); // tambah ini
-        setRules(docSnap.data().rules); // tambah ini
+        setPenyakit(docSnap.data().penyakit2);
+        setRules(docSnap.data().rules);
       } else {
         console.log("Document does not exist");
       }
@@ -46,27 +49,24 @@ export default function AddBasisPengetahuan() {
     getData();
   }, []);
 
-  function incrementKey(key) {
-    // Extract the numeric part of the key
-    const numericPart = parseInt(key.slice(1), 10);
+  const getRuleById = (ruleId) => {
+    const ruleByID = rules[ruleId];
+    return ruleByID;
+  };
 
-    if (!isNaN(numericPart)) {
-      // Increment the numeric part and format it back into the desired format
-      const newNumericPart = numericPart + 1;
-      const newKey = `R${newNumericPart.toString().padStart(2, "0")}`;
-      return newKey;
-    } else {
-      // If the numeric part couldn't be extracted, return the original key
-      return key;
+  useEffect(() => {
+    if (id) {
+      const rule = getRuleById(id);
+      setRulesByID(rule); // Use setRule to set the selected rule
+      setSelectedCheckboxes(rule ? rule.id_gejala : []); // Use setCheckboxes to set the selected checkboxes
+      setSelectedPenyakit(rule ? rule.id_penyakit : ""); // Use setCheckboxes to set the selected checkboxes
     }
-  }
+  }, [id, rules]);
 
-  function saveDataRules() {
+  function updateDataRules() {
     const docRef = doc(db, "sistem-pakar", "mental-health");
-    const lastKeyRules = Object.keys(rules).sort().pop();
-    const newKey = incrementKey(lastKeyRules);
     const dataSave = {
-      [newKey]: {
+      [id]: {
         id_gejala: selectedCheckboxes,
         id_penyakit: selectedPenyakit,
       },
@@ -74,7 +74,7 @@ export default function AddBasisPengetahuan() {
     setDoc(docRef, { rules: dataSave }, { merge: true });
     Swal.fire({
       title: "Success",
-      text: "Rules Berhasil Disimpan",
+      text: "Rules Berhasil Diupdate",
       icon: "success",
       timer: 1000,
       heightAuto: true,
@@ -99,17 +99,29 @@ export default function AddBasisPengetahuan() {
               </label>
               <select
                 id="countries"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                onChange={handleSelectChange}
-                value={selectedPenyakit}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                onChange={(e) => {
+                  if (e.target.value !== selectedPenyakit) {
+                    handleSelectChange(e);
+                  }
+                }}
+                value={
+                  selectedPenyakit
+                }
               >
-                <option selected disabled>
+                <option value="" hidden>
                   Pilih Penyakit Mental
                 </option>
-                {Object.keys(penyakit).sort().map((key) => {
-                  const item = penyakit[key];
-                  return <option value={key}>{item.nama}</option>;
-                })}
+                {Object.keys(penyakit)
+                  .sort()
+                  .map((key) => {
+                    const item = penyakit[key];
+                    return (
+                      <option key={key} value={key}>
+                        {item.nama}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
             <div className="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
@@ -140,8 +152,9 @@ export default function AddBasisPengetahuan() {
                               <input
                                 type="checkbox"
                                 name="gejala"
-                                onChange={handleCheckboxChange}
-                                checked={selectedCheckboxes.includes(key)}
+                                onChange={(e) => handleCheckboxChange(e)}
+                                checked={ selectedCheckboxes.includes(key)
+                                }
                                 value={key}
                                 className="form-checkbox h-5 w-5 text-gray-600"
                               />
@@ -155,10 +168,10 @@ export default function AddBasisPengetahuan() {
                 <button
                   className="my-10 mx-auto block w-[904px] py-3.5 rounded-lg bg-rose-400 border-b-4 border-rose-500 text-white"
                   onClick={(e) => {
-                    saveDataRules();
+                    updateDataRules();
                   }}
                 >
-                  Save Data
+                  Update Data
                 </button>
               </div>
             </div>
