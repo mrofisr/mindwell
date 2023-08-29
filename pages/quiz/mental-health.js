@@ -167,7 +167,6 @@ export default function MentalHealth() {
         ...updatedAnswers,
       }));
     }
-    setYesAnswers(Object.keys(answers).filter((key) => answers[key] === "yes"));
     // console.log("yesAnswers: ", yesAnswers);
     if (currentIndex === gejalaKeys.length - 1) {
       for (const ruleKey in rules) {
@@ -214,6 +213,9 @@ export default function MentalHealth() {
       }
     }
   };
+  useEffect(() => {
+    setYesAnswers(Object.keys(answers).filter((key) => answers[key] === "yes"));
+  }, [answers]);
   return (
     <Layout>
       <div className="mx-4 my-5 flex flex-col">
