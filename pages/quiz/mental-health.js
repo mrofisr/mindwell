@@ -167,47 +167,49 @@ export default function MentalHealth() {
         ...updatedAnswers,
       }));
     }
-    // console.log("yesAnswers: ", yesAnswers);
     if (currentIndex === gejalaKeys.length - 1) {
       for (const ruleKey in rules) {
-        // console.log("ruleKey: ", ruleKey);
-        // console.log("rule.id_gejala: ", rules[ruleKey].id_gejala);
-        // console.log(
-        //   "arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala): ",
-        //   arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala)
-        // );
-        // yesAnswers.every((answer) => rule.id_gejala.includes(answer))
+        console.log("ruleKey: ", ruleKey);
+        console.log("rule.id_gejala: ", rules[ruleKey].id_gejala);
+        console.log(
+          "arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala): ",
+          arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala)
+        );
         if (arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala) === true) {
-          addResult(rule.id_penyakit);
-          Swal.fire({
-            title: "Hasil",
-            text: `Anda mengalami ${penyakit[rules[ruleKey].id_penyakit].nama}`,
-            icon: "info",
-            timer: 1000,
-            heightAuto: true,
-            width: 350,
-            showCancelButton: false,
-            showConfirmButton: false,
-            showCloseButton: false,
-          }).then(() => {
-            router.push("/quizzes/history");
-          });
+          console.log(
+            "Anda mengalami: ",
+            penyakit[rules[ruleKey].id_penyakit].nama
+          );
+          // addResult(rules[ruleKey].id_penyakit);
+          // Swal.fire({
+          //   title: "Hasil",
+          //   text: `Anda mengalami ${penyakit[rules[ruleKey].id_penyakit].nama}`,
+          //   icon: "info",
+          //   timer: 1000,
+          //   heightAuto: true,
+          //   width: 350,
+          //   showCancelButton: false,
+          //   showConfirmButton: false,
+          //   showCloseButton: false,
+          // }).then(() => {
+          //   router.push("/quizzes/history");
+          // });
           break;
         } else {
-          addResult("Tidak teridentifikasi");
-          Swal.fire({
-            title: "Hasil",
-            text: `Gejala anda belum teridentifikasi`,
-            icon: "info",
-            timer: 1000,
-            heightAuto: true,
-            width: 350,
-            showCancelButton: false,
-            showConfirmButton: false,
-            showCloseButton: false,
-          }).then(() => {
-            router.push("/quizzes/history");
-          });
+          // addResult("Tidak teridentifikasi");
+          // Swal.fire({
+          //   title: "Hasil",
+          //   text: `Gejala anda belum teridentifikasi`,
+          //   icon: "info",
+          //   timer: 1000,
+          //   heightAuto: true,
+          //   width: 350,
+          //   showCancelButton: false,
+          //   showConfirmButton: false,
+          //   showCloseButton: false,
+          // }).then(() => {
+          //   router.push("/quizzes/history");
+          // });
           break;
         }
       }
@@ -216,6 +218,7 @@ export default function MentalHealth() {
   useEffect(() => {
     setYesAnswers(Object.keys(answers).filter((key) => answers[key] === "yes"));
   }, [answers]);
+  console.log("yesAnswers: ", yesAnswers);
   return (
     <Layout>
       <div className="mx-4 my-5 flex flex-col">
