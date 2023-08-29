@@ -167,21 +167,22 @@ export default function MentalHealth() {
         ...updatedAnswers,
       }));
     }
-    console.log("answers: ", answers);
+    setYesAnswers(Object.keys(answers).filter((key) => answers[key] === "yes"));
+    // console.log("yesAnswers: ", yesAnswers);
     if (currentIndex === gejalaKeys.length - 1) {
-      setYesAnswers(
-        Object.keys(answers).filter((key) => answers[key] === "yes")
-      );
-      // console.log("yesAnswers: ", yesAnswers);
-      // console.log("Yeaay");
       for (const ruleKey in rules) {
-        const rule = rules[ruleKey];
+        // console.log("ruleKey: ", ruleKey);
+        // console.log("rule.id_gejala: ", rules[ruleKey].id_gejala);
+        // console.log(
+        //   "arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala): ",
+        //   arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala)
+        // );
         // yesAnswers.every((answer) => rule.id_gejala.includes(answer))
-        if (arraysAreEqual(yesAnswers, rule.id_gejala)) {
+        if (arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala)) {
           addResult(rule.id_penyakit);
           Swal.fire({
             title: "Hasil",
-            text: `Anda mengalami ${penyakit[rule.id_penyakit].nama}`,
+            text: `Anda mengalami ${penyakit[rules[ruleKey].id_penyakit].nama}`,
             icon: "info",
             timer: 1000,
             heightAuto: true,
