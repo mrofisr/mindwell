@@ -178,7 +178,7 @@ export default function MentalHealth() {
         //   arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala)
         // );
         // yesAnswers.every((answer) => rule.id_gejala.includes(answer))
-        if (arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala)) {
+        if (arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala) === true) {
           addResult(rule.id_penyakit);
           Swal.fire({
             title: "Hasil",
