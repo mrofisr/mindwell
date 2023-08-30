@@ -46,6 +46,8 @@ export default function MentalHealth() {
   const [rules, setRules] = useState({});
   const [answers, setAnswers] = useState({});
   const [yesAnswers, setYesAnswers] = useState([]);
+  const matchingObjects = {};
+  let isMatchFound = false;
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser || !getCookie("auth")) {
@@ -77,7 +79,6 @@ export default function MentalHealth() {
     const docSnap = await getDoc(docRef);
     const docRefUser = doc(db, "users", user?.uid);
     const docSnapUser = await getDoc(docRefUser);
-
     if (docSnap.exists()) {
       const penyakitData = penyakit[result] ?? {};
       const namaPenyakit = penyakitData.nama ?? "Tidak teridentifikasi";
@@ -130,19 +131,6 @@ export default function MentalHealth() {
       console.log("Document does not exist");
     }
   };
-
-  useEffect(() => {}, [answers]);
-  function arraysAreEqual(arr1, arr2) {
-    if (arr1.length !== arr2.length) {
-      return false;
-    }
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr1[i] !== arr2[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
   const currentQuestionKey = Object.keys(gejala)
     .sort()
     .find((key) => gejala[key].nama_gejala === currentQuestion?.nama_gejala);
@@ -169,49 +157,98 @@ export default function MentalHealth() {
     }
     if (currentIndex === gejalaKeys.length - 1) {
       for (const ruleKey in rules) {
-        console.log("ruleKey: ", ruleKey);
-        console.log("rule.id_gejala: ", rules[ruleKey].id_gejala);
-        console.log(
-          "arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala): ",
-          arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala)
-        );
-        if (arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala) === true) {
-          console.log(
-            "Anda mengalami: ",
-            penyakit[rules[ruleKey].id_penyakit].nama
-          );
-          addResult(rules[ruleKey].id_penyakit);
-          Swal.fire({
-            title: "Hasil",
-            text: `Anda mengalami ${penyakit[rules[ruleKey].id_penyakit].nama}`,
-            icon: "info",
-            timer: 1000,
-            heightAuto: true,
-            width: 350,
-            showCancelButton: false,
-            showConfirmButton: false,
-            showCloseButton: false,
-          }).then(() => {
-            router.push("/quizzes/history");
-          });
-          break;
-        } else {
-          addResult("Tidak teridentifikasi");
-          Swal.fire({
-            title: "Hasil",
-            text: `Gejala anda belum teridentifikasi`,
-            icon: "info",
-            timer: 1000,
-            heightAuto: true,
-            width: 350,
-            showCancelButton: false,
-            showConfirmButton: false,
-            showCloseButton: false,
-          }).then(() => {
-            router.push("/quizzes/history");
-          });
-          break;
+        if (rules.hasOwnProperty(ruleKey)) {
+          const item = rules[ruleKey];
+          const isEqual =
+            JSON.stringify(item.id_gejala) === JSON.stringify(yesAnswers);
+          if (isEqual) {
+            matchingObjects[ruleKey] = item;
+            isMatchFound = true;
+            console.log(matchingObjects[ruleKey]);
+            console.log(item.id_gejala);
+            console.log(rules[ruleKey].id_penyakit);
+            console.log(
+              "Anda mengalami: ",
+              penyakit[rules[ruleKey].id_penyakit].nama
+            );
+            Swal.fire({
+              title: "Hasil",
+              text: `Anda mengalami ${penyakit[rules[ruleKey].id_penyakit].nama}`,
+              icon: "info",
+              timer: 1000,
+              heightAuto: true,
+              width: 350,
+              showCancelButton: false,
+              showConfirmButton: false,
+              showCloseButton: false,
+            }).then(() => {
+              router.push("/quizzes/history");
+            });
+            addResult(rules[ruleKey].id_penyakit);
+            break;
+          } else {
+            console.log("Tidak teridentifikasi");
+            Swal.fire({
+              title: "Hasil",
+              text: `Gejala anda belum teridentifikasi`,
+              icon: "info",
+              timer: 1000,
+              heightAuto: true,
+              width: 350,
+              showCancelButton: false,
+              showConfirmButton: false,
+              showCloseButton: false,
+            }).then(() => {
+              router.push("/quizzes/history");
+            });
+            addResult("Tidak teridentifikasi");
+            break;
+          }
         }
+        // console.log("ruleKey: ", ruleKey);
+        // console.log("rule.id_gejala: ", rules[ruleKey].id_gejala);
+        // console.log(
+        //   "arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala): ",
+        //   arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala)
+        // );
+
+        // if (arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala) === true) {
+        //   console.log(
+        //     "Anda mengalami: ",
+        //     penyakit[rules[ruleKey].id_penyakit].nama
+        //   );
+        //   addResult(rules[ruleKey].id_penyakit);
+        //   Swal.fire({
+        //     title: "Hasil",
+        //     text: `Anda mengalami ${penyakit[rules[ruleKey].id_penyakit].nama}`,
+        //     icon: "info",
+        //     timer: 1000,
+        //     heightAuto: true,
+        //     width: 350,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //     showCloseButton: false,
+        //   }).then(() => {
+        //     router.push("/quizzes/history");
+        //   });
+        //   break;
+        // } else {
+        //   addResult("Tidak teridentifikasi");
+        //   Swal.fire({
+        //     title: "Hasil",
+        //     text: `Gejala anda belum teridentifikasi`,
+        //     icon: "info",
+        //     timer: 1000,
+        //     heightAuto: true,
+        //     width: 350,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //     showCloseButton: false,
+        //   }).then(() => {
+        //     router.push("/quizzes/history");
+        //   });
+        //   break;
+        // }
       }
     }
   };
