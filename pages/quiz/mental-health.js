@@ -28,7 +28,6 @@ export async function getServerSideProps({ req, res }) {
       },
     };
   }
-  // If the user is authenticated, return some data as props
   return {
     props: {
       data: "Some data for authenticated users",
@@ -47,7 +46,6 @@ export default function MentalHealth() {
   const [answers, setAnswers] = useState({});
   const [yesAnswers, setYesAnswers] = useState([]);
   const matchingObjects = {};
-  let isMatchFound = false;
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (!authUser || !getCookie("auth")) {
@@ -56,7 +54,6 @@ export default function MentalHealth() {
         router.push("/login");
       }
     });
-
     const getData = async () => {
       const docRef = doc(db, "sistem-pakar", "mental-health");
       const docSnap = await getDoc(docRef);
@@ -71,7 +68,7 @@ export default function MentalHealth() {
       }
     };
     getData();
-  }, []);
+  }, [auth]);
   const dbRef = collection(db, "sistem-pakar");
   const router = useRouter();
   const addResult = async (result) => {
@@ -136,16 +133,11 @@ export default function MentalHealth() {
     .find((key) => gejala[key].nama_gejala === currentQuestion?.nama_gejala);
   const gejalaKeys = Object.keys(gejala).sort();
   const currentIndex = gejalaKeys.indexOf(currentQuestionKey);
-  // console.log("currentQuestionKey: ", currentQuestionKey);
-  // console.log("gejalaKeys.length: ", gejalaKeys.length);
-  // console.log("currentIndex: ", currentIndex);
   const handleAnswer = (answer) => {
     if (currentIndex < gejalaKeys.length - 1) {
       // Move to the next question
       const nextQuestionKey = gejalaKeys[currentIndex + 1];
       setCurrentQuestion(gejala[nextQuestionKey]);
-      // console.log("nextQuestionKey: ", nextQuestionKey);
-      // Update the state of answers
       const updatedAnswers = {
         [currentQuestionKey]: answer,
         [nextQuestionKey]: answer,
@@ -163,7 +155,6 @@ export default function MentalHealth() {
             JSON.stringify(item.id_gejala) === JSON.stringify(yesAnswers);
           if (isEqual) {
             matchingObjects[ruleKey] = item;
-            isMatchFound = true;
             console.log(matchingObjects[ruleKey]);
             console.log(item.id_gejala);
             console.log(rules[ruleKey].id_penyakit);
@@ -171,85 +162,49 @@ export default function MentalHealth() {
               "Anda mengalami: ",
               penyakit[rules[ruleKey].id_penyakit].nama
             );
-            Swal.fire({
-              title: "Hasil",
-              text: `Anda mengalami ${penyakit[rules[ruleKey].id_penyakit].nama}`,
-              icon: "info",
-              timer: 1000,
-              heightAuto: true,
-              width: 350,
-              showCancelButton: false,
-              showConfirmButton: false,
-              showCloseButton: false,
-            }).then(() => {
-              router.push("/quizzes/history");
-            });
-            addResult(rules[ruleKey].id_penyakit);
+            // Swal.fire({
+            //   title: "Hasil",
+            //   text: `Anda mengalami ${
+            //     penyakit[rules[ruleKey].id_penyakit].nama
+            //   }`,
+            //   icon: "info",
+            //   timer: 1000,
+            //   heightAuto: true,
+            //   width: 350,
+            //   showCancelButton: false,
+            //   showConfirmButton: false,
+            //   showCloseButton: false,
+            // }).then(() => {
+            //   router.push("/quizzes/history");
+            // });
+            // addResult(rules[ruleKey].id_penyakit);
             break;
           } else {
-            console.log("Tidak teridentifikasi");
-            Swal.fire({
-              title: "Hasil",
-              text: `Gejala anda belum teridentifikasi`,
-              icon: "info",
-              timer: 1000,
-              heightAuto: true,
-              width: 350,
-              showCancelButton: false,
-              showConfirmButton: false,
-              showCloseButton: false,
-            }).then(() => {
-              router.push("/quizzes/history");
-            });
-            addResult("Tidak teridentifikasi");
-
+            matchingObjects[ruleKey] = item;
+            console.log(matchingObjects[ruleKey]);
+            console.log(item.id_gejala);
+            console.log(rules[ruleKey].id_penyakit);
+            console.log(
+              "Anda mengalami: ",
+              penyakit[rules[ruleKey].id_penyakit].nama
+            );
+            // Swal.fire({
+            //   title: "Hasil",
+            //   text: `Gejala anda belum teridentifikasi`,
+            //   icon: "info",
+            //   timer: 1000,
+            //   heightAuto: true,
+            //   width: 350,
+            //   showCancelButton: false,
+            //   showConfirmButton: false,
+            //   showCloseButton: false,
+            // }).then(() => {
+            //   router.push("/quizzes/history");
+            // });
+            // addResult("Tidak teridentifikasi");
             break;
           }
         }
-        // console.log("ruleKey: ", ruleKey);
-        // console.log("rule.id_gejala: ", rules[ruleKey].id_gejala);
-        // console.log(
-        //   "arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala): ",
-        //   arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala)
-        // );
-
-        // if (arraysAreEqual(yesAnswers, rules[ruleKey].id_gejala) === true) {
-        //   console.log(
-        //     "Anda mengalami: ",
-        //     penyakit[rules[ruleKey].id_penyakit].nama
-        //   );
-        //   addResult(rules[ruleKey].id_penyakit);
-        //   Swal.fire({
-        //     title: "Hasil",
-        //     text: `Anda mengalami ${penyakit[rules[ruleKey].id_penyakit].nama}`,
-        //     icon: "info",
-        //     timer: 1000,
-        //     heightAuto: true,
-        //     width: 350,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //     showCloseButton: false,
-        //   }).then(() => {
-        //     router.push("/quizzes/history");
-        //   });
-        //   break;
-        // } else {
-        //   addResult("Tidak teridentifikasi");
-        //   Swal.fire({
-        //     title: "Hasil",
-        //     text: `Gejala anda belum teridentifikasi`,
-        //     icon: "info",
-        //     timer: 1000,
-        //     heightAuto: true,
-        //     width: 350,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //     showCloseButton: false,
-        //   }).then(() => {
-        //     router.push("/quizzes/history");
-        //   });
-        //   break;
-        // }
       }
     }
   };
@@ -282,7 +237,9 @@ export default function MentalHealth() {
           {currentQuestion && (
             <div className="flex-grow">
               <div className="flex flex-col h-full">
-                <p className="text-xl mb-4 lowercase">{currentQuestion.nama_gejala}</p>
+                <p className="text-xl mb-4 lowercase">
+                  {currentQuestion.nama_gejala}
+                </p>
                 <div className="flex-grow relative">
                   <div className="flex flex-col h-full bottom-0">
                     <div className="mb-5">
