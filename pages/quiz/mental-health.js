@@ -202,6 +202,7 @@ export default function MentalHealth() {
               router.push("/quizzes/history");
             });
             addResult("Tidak teridentifikasi");
+
             break;
           }
         }
@@ -281,7 +282,7 @@ export default function MentalHealth() {
           {currentQuestion && (
             <div className="flex-grow">
               <div className="flex flex-col h-full">
-                <h2 className="text-xl mb-4">{currentQuestion.nama_gejala}</h2>
+                <p className="text-xl mb-4 lowercase">{currentQuestion.nama_gejala}</p>
                 <div className="flex-grow relative">
                   <div className="flex flex-col h-full bottom-0">
                     <div className="mb-5">
