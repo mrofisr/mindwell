@@ -162,22 +162,22 @@ export default function MentalHealth() {
               "Anda mengalami: ",
               penyakit[rules[ruleKey].id_penyakit].nama
             );
-            // Swal.fire({
-            //   title: "Hasil",
-            //   text: `Anda mengalami ${
-            //     penyakit[rules[ruleKey].id_penyakit].nama
-            //   }`,
-            //   icon: "info",
-            //   timer: 1000,
-            //   heightAuto: true,
-            //   width: 350,
-            //   showCancelButton: false,
-            //   showConfirmButton: false,
-            //   showCloseButton: false,
-            // }).then(() => {
-            //   router.push("/quizzes/history");
-            // });
-            // addResult(rules[ruleKey].id_penyakit);
+            Swal.fire({
+              title: "Hasil",
+              text: `Anda mengalami ${
+                penyakit[rules[ruleKey].id_penyakit].nama
+              }`,
+              icon: "info",
+              timer: 1000,
+              heightAuto: true,
+              width: 350,
+              showCancelButton: false,
+              showConfirmButton: false,
+              showCloseButton: false,
+            }).then(() => {
+              router.push("/quizzes/history");
+            });
+            addResult(rules[ruleKey].id_penyakit);
             break;
           } else {
             matchingObjects[ruleKey] = item;
@@ -188,20 +188,20 @@ export default function MentalHealth() {
               "Anda mengalami: ",
               penyakit[rules[ruleKey].id_penyakit].nama
             );
-            // Swal.fire({
-            //   title: "Hasil",
-            //   text: `Gejala anda belum teridentifikasi`,
-            //   icon: "info",
-            //   timer: 1000,
-            //   heightAuto: true,
-            //   width: 350,
-            //   showCancelButton: false,
-            //   showConfirmButton: false,
-            //   showCloseButton: false,
-            // }).then(() => {
-            //   router.push("/quizzes/history");
-            // });
-            // addResult("Tidak teridentifikasi");
+            Swal.fire({
+              title: "Hasil",
+              text: `Gejala anda belum teridentifikasi`,
+              icon: "info",
+              timer: 1000,
+              heightAuto: true,
+              width: 350,
+              showCancelButton: false,
+              showConfirmButton: false,
+              showCloseButton: false,
+            }).then(() => {
+              router.push("/quizzes/history");
+            });
+            addResult("Tidak teridentifikasi");
             break;
           }
         }

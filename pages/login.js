@@ -12,7 +12,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import firebase_app from "@/src/firebase/config";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
 import { getCookie, setCookie } from "cookies-next";
@@ -20,6 +20,7 @@ import { Layout } from "@/components/Layout";
 
 export async function getServerSideProps({ req, res }) {
   const auth = getCookie("auth", { req, res });
+  console.log(auth);
   if (auth) {
     return {
       redirect: {
@@ -70,24 +71,30 @@ export default function Login() {
       const accessToken = user?.accessToken;
       if (accessToken) {
         setCookie("auth", accessToken, { maxAge: 60 * 6 * 24 });
+        auth.onAuthStateChanged((authUser) => {
+          if (authUser || getCookie("auth")) {
+            router.push("/");
+            console.log("user logged in");
+          }
+        });
       }
       if (!userDoc.exists()) {
         // If the user doesn't exist, create a new user document in Firestore
         await createUserDocument(user);
+        console.log("user created");
       }
     } catch (error) {
       console.error(error);
     }
   };
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if (authUser && getCookie("auth")) {
-        router.push("/");
-      }
-    });
-    return () => unsubscribe();
-  }, [auth, router]);
-
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((authUser) => {
+  //     if (authUser || getCookie("auth")) {
+  //       // router.push("/");
+  //       console.log("user logged in");
+  //     }
+  //   });
+  // }, [auth]);
   SwiperCore.use([Pagination]);
   return (
     <>
@@ -110,7 +117,9 @@ export default function Login() {
                   alt="Illustration"
                 />
                 <div className="text-center">
-                  <h1 className="mt-4 text-xl font-bold">Mental Health Quizzes</h1>
+                  <h1 className="mt-4 text-xl font-bold">
+                    Mental Health Quizzes
+                  </h1>
                   <p className="mb-28 mt-1  text-[14px] font-[50]">
                     Assess emotional and psychological well-being.
                   </p>

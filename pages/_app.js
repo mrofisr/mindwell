@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }) {
         {/* <!-- this sets the color of url bar  --> */}
         <meta name="theme-color" content="#f43f5e" />
         {/* <!-- this sets logo in Apple smatphones. --> */}
-        <link rel="apple-touch-icon" href="/logo-96x96.png" />
+        {/* <link rel="apple-touch-icon" href="/logo-96x96.png" /> */}
         {/* <!-- this sets the color of url bar in Apple smatphones --> */}
         <meta name="apple-mobile-web-app-status-bar" content="#f43f5e" />
       </Head>

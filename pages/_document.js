@@ -16,7 +16,7 @@ export default function Document() {
         </style>
         <meta
           name="description"
-          content="Aplikasi yang membantu pengguna merawat kesehatan mental mereka dengan memberikan saran dan rekomendasi berdasarkan hasil deteksi sistem pakar forward chaining."
+          content="Aplikasi yang membantu pengguna medeteksi gejala awal penyakit kesehatan mental mereka dengan memberikan saran dan rekomendasi menggunakan metode forward chaining."
         />
         <link rel="canonical" href="https://mindwell.site" />
         <meta property="og:url" content="https://mindwell.site" />
