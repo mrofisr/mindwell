@@ -12,7 +12,6 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import firebase_app from "@/src/firebase/config";
-// import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
 import { getCookie, setCookie } from "cookies-next";
@@ -29,7 +28,6 @@ export async function getServerSideProps({ req, res }) {
       },
     };
   }
-  // If the user is authenticated, return some data as props
   return {
     props: {
       data: "Some data for authenticated users",
@@ -79,7 +77,6 @@ export default function Login() {
         });
       }
       if (!userDoc.exists()) {
-        // If the user doesn't exist, create a new user document in Firestore
         await createUserDocument(user);
         console.log("user created");
       }
@@ -87,14 +84,6 @@ export default function Login() {
       console.error(error);
     }
   };
-  // useEffect(() => {
-  //   auth.onAuthStateChanged((authUser) => {
-  //     if (authUser || getCookie("auth")) {
-  //       // router.push("/");
-  //       console.log("user logged in");
-  //     }
-  //   });
-  // }, [auth]);
   SwiperCore.use([Pagination]);
   return (
     <>

@@ -13,7 +13,6 @@ import { Transition } from "@headlessui/react";
 import { Layout } from "@/components/Layout";
 import { deleteCookie, getCookie } from "cookies-next";
 
-// Crete a function to get the time of day in Jakarta
 const getTimeOfDay = (date) => {
   const hours = date.getHours();
   if (hours >= 5 && hours < 11) {
@@ -40,7 +39,7 @@ async function getFeedData() {
 }
 
 export async function getServerSideProps({ req, res }) {
-  const searchQuery = ""; // Add your desired search query here
+  const searchQuery = "";
   const feedData = await getFeedData(searchQuery);
   const auth = getCookie("auth", { req, res });
   if (!auth) {

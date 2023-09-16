@@ -16,7 +16,6 @@ export async function getServerSideProps({ req, res }) {
       },
     };
   }
-  // If the user is authenticated, return some data as props
   return {
     props: {
       data: "Some data for authenticated users",

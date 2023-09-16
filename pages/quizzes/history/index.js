@@ -25,7 +25,6 @@ export async function getServerSideProps({ req, res }) {
       },
     };
   }
-  // If the user is authenticated, return some data as props
   return {
     props: {
       data: "Some data for authenticated users",
@@ -76,7 +75,6 @@ export default function HistoryTest() {
     const dateB = new Date(
       b.createdAt.seconds * 1000 + b.createdAt.nanoseconds / 1000000
     );
-    // Sort in descending order (newest first)
     return dateB - dateA;
   });
   return (
